@@ -7,6 +7,7 @@
 
 body{
     background:#eceff1;
+    color:#333;
 }
 
 header{
@@ -14,9 +15,13 @@ header{
     color:white;
     text-align:center;
     padding:18px;
-    font-size:20px;
     position:sticky;
     top:0;
+    box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+
+header h1{
+    font-size:24px;
 }
 
 main{
@@ -25,10 +30,14 @@ main{
     padding:20px;
 }
 
+.oculto{
+    display:none;
+}
+
 .tarjeta{
     background:white;
-    border-radius:12px;
-    padding:20px;
+    border-radius:14px;
+    padding:18px;
     margin-bottom:15px;
     display:flex;
     align-items:center;
@@ -43,23 +52,63 @@ main{
 
 .icono{
     font-size:40px;
-    margin-right:20px;
+    margin-right:18px;
 }
-.volver{
 
+h2{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:1px solid #bbb;
+    border-radius:8px;
+    font-size:18px;
+}
+
+button{
+    width:100%;
+    margin-top:20px;
+    padding:14px;
+    border:none;
+    border-radius:8px;
     background:#ff7a00;
     color:white;
-
-    border:none;
-
-    padding:12px 20px;
-
-    border-radius:8px;
-
+    font-size:18px;
     cursor:pointer;
+}
 
+button:hover{
+    background:#e56f00;
+}
+
+.volver{
+    width:auto;
+    padding:10px 20px;
     margin-bottom:20px;
+}
 
-    font-size:16px;
+h3{
+    margin-top:30px;
+    margin-bottom:15px;
+    border-bottom:2px solid #ddd;
+    padding-bottom:8px;
+}
 
+p{
+    margin:10px 0;
+    font-size:18px;
+}
+
+span{
+    font-weight:bold;
+    color:#1565c0;
 }

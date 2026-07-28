@@ -1,110 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Cálculos del Herrero</title>
 
-<title>Los Cálculos del Soldador</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-    background:#f2f2f2;
-}
-
-header{
-    background:#0d47a1;
-    color:white;
-    padding:20px;
-    text-align:center;
-    font-size:30px;
-    font-weight:bold;
-}
-
-main{
-    max-width:900px;
-    margin:auto;
-    padding:30px;
-}
-
-.tarjeta{
-    background:white;
-    border-radius:12px;
-    padding:30px;
-    box-shadow:0 0 15px rgba(0,0,0,0.15);
-    text-align:center;
-}
-
-h2{
-    margin-bottom:15px;
-}
-
-p{
-    margin-bottom:25px;
-    color:#555;
-}
-
-button{
-    background:#1565c0;
-    color:white;
-    border:none;
-    padding:15px 40px;
-    font-size:18px;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#0d47a1;
-}
-
-</style>
-
+    <link rel="stylesheet" href="estilos.css">
 </head>
 
 <body>
 
 <header>
-
-LOS CÁLCULOS DEL SOLDADOR
-
+    <h1>Los Cálculos del Herrero</h1>
 </header>
 
 <main>
 
-<div class="tarjeta">
+<div class="tarjeta" onclick="mostrarModulo('Doblado de Planchas')">
+    <div class="icono">📏</div>
+    <div>
+        <h2>Doblado de Planchas</h2>
+        <p>45°, 90° y Machimbrados</p>
+    </div>
+</div>
 
-<h2>Bienvenido</h2>
+<div class="tarjeta" onclick="mostrarModulo('Techos')">
+    <div class="icono">📐</div>
+    <div>
+        <h2>Techos</h2>
+        <p>Un agua, dos aguas y cuatro aguas</p>
+    </div>
+</div>
 
-<p>
-Esta aplicación fue diseñada para calcular materiales de estructuras metálicas.
-</p>
+<div class="tarjeta" onclick="mostrarModulo('Puertas')">
+    <div class="icono">🚪</div>
+    <div>
+        <h2>Puertas</h2>
+        <p>Próximamente</p>
+    </div>
+</div>
 
-<button onclick="entrar()">
-Entrar
-</button>
+<div class="tarjeta" onclick="mostrarModulo('Ventanas')">
+    <div class="icono">🪟</div>
+    <div>
+        <h2>Ventanas</h2>
+        <p>Próximamente</p>
+    </div>
+</div>
 
+<div class="tarjeta" onclick="mostrarModulo('Rejas')">
+    <div class="icono">🧱</div>
+    <div>
+        <h2>Rejas</h2>
+        <p>Próximamente</p>
+    </div>
+</div>
+
+<div class="tarjeta" onclick="mostrarModulo('Materiales')">
+    <div class="icono">📋</div>
+    <div>
+        <h2>Lista de Materiales</h2>
+        <p>Próximamente</p>
+    </div>
+</div>
+
+<div class="tarjeta" onclick="mostrarModulo('Presupuestos')">
+    <div class="icono">💰</div>
+    <div>
+        <h2>Presupuestos</h2>
+        <p>Próximamente</p>
+    </div>
 </div>
 
 </main>
 
-<script>
-
-function entrar(){
-
-alert("Bienvenido. Próximamente aparecerá aquí el menú principal.");
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
-
 </html>

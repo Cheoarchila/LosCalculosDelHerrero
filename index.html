@@ -1,80 +1,69 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Los Cálculos del Herrero</title>
+<main id="contenido">
 
-    <link rel="stylesheet" href="estilos.css">
-</head>
+    <!-- MENÚ PRINCIPAL -->
 
-<body>
+    <div id="inicio">
 
-<header>
-    <h1>Los Cálculos del Herrero</h1>
-</header>
+        <div class="tarjeta" onclick="abrirAcanalado()">
+            <div class="icono">📏</div>
+            <div>
+                <h2>Acanalado</h2>
+                <p>90°, 45° y Machimbrado</p>
+            </div>
+        </div>
 
-<main>
+        <div class="tarjeta">
+            <div class="icono">📐</div>
+            <div>
+                <h2>Techos</h2>
+                <p>Próximamente</p>
+            </div>
+        </div>
 
-<div class="tarjeta" onclick="mostrarModulo('Doblado de Planchas')">
-    <div class="icono">📏</div>
-    <div>
-        <h2>Doblado de Planchas</h2>
-        <p>45°, 90° y Machimbrados</p>
+        <div class="tarjeta">
+            <div class="icono">🚪</div>
+            <div>
+                <h2>Puertas</h2>
+                <p>Próximamente</p>
+            </div>
+        </div>
+
     </div>
-</div>
 
-<div class="tarjeta" onclick="mostrarModulo('Techos')">
-    <div class="icono">📐</div>
-    <div>
-        <h2>Techos</h2>
-        <p>Un agua, dos aguas y cuatro aguas</p>
-    </div>
-</div>
+    <!-- SUBMENÚ ACANALADO -->
 
-<div class="tarjeta" onclick="mostrarModulo('Puertas')">
-    <div class="icono">🚪</div>
-    <div>
-        <h2>Puertas</h2>
-        <p>Próximamente</p>
-    </div>
-</div>
+    <div id="acanalado" style="display:none;">
 
-<div class="tarjeta" onclick="mostrarModulo('Ventanas')">
-    <div class="icono">🪟</div>
-    <div>
-        <h2>Ventanas</h2>
-        <p>Próximamente</p>
-    </div>
-</div>
+        <button class="volver" onclick="volverInicio()">
+            ← Volver
+        </button>
 
-<div class="tarjeta" onclick="mostrarModulo('Rejas')">
-    <div class="icono">🧱</div>
-    <div>
-        <h2>Rejas</h2>
-        <p>Próximamente</p>
-    </div>
-</div>
+        <h2>Acanalado</h2>
 
-<div class="tarjeta" onclick="mostrarModulo('Materiales')">
-    <div class="icono">📋</div>
-    <div>
-        <h2>Lista de Materiales</h2>
-        <p>Próximamente</p>
-    </div>
-</div>
+        <div class="tarjeta">
+            <div class="icono">📐</div>
+            <div>
+                <h2>90°</h2>
+                <p>Próximamente</p>
+            </div>
+        </div>
 
-<div class="tarjeta" onclick="mostrarModulo('Presupuestos')">
-    <div class="icono">💰</div>
-    <div>
-        <h2>Presupuestos</h2>
-        <p>Próximamente</p>
+        <div class="tarjeta">
+            <div class="icono">📏</div>
+            <div>
+                <h2>45°</h2>
+                <p>Próximamente</p>
+            </div>
+        </div>
+
+        <div class="tarjeta">
+            <div class="icono">🔩</div>
+            <div>
+                <h2>Machimbrado</h2>
+                <p>Próximamente</p>
+            </div>
+        </div>
+
     </div>
-</div>
 
 </main>
-
-<script src="script.js"></script>
-
-</body>
-</html>

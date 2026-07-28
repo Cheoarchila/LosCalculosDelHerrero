@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Los Cálculos del Herrero</title>
 
 <link rel="stylesheet" href="estilos.css">
@@ -17,13 +13,15 @@
 
 <header>
 
-<h1>Los Cálculos del Herrero</h1>
+<h1>LOS CÁLCULOS DEL HERRERO</h1>
 
 </header>
 
-<main id="contenido">
+<main>
 
-<div id="inicio">
+<!-- =================== INICIO =================== -->
+
+<section id="pantallaInicio">
 
 <div class="tarjeta" onclick="abrirAcanalado()">
 
@@ -33,7 +31,7 @@
 
 <h2>Acanalado</h2>
 
-<p>90°, 45° y Machimbrado</p>
+<p>90° - 45° - Machimbrado</p>
 
 </div>
 
@@ -41,7 +39,7 @@
 
 <div class="tarjeta">
 
-<div class="icono">📐</div>
+<div class="icono">🏠</div>
 
 <div>
 
@@ -67,9 +65,11 @@
 
 </div>
 
-</div>
+</section>
 
-<div id="acanalado" style="display:none;">
+<!-- ================= ACANALADO ================= -->
+
+<section id="pantallaAcanalado" class="oculto">
 
 <button class="volver" onclick="volverInicio()">
 
@@ -79,7 +79,7 @@
 
 <h2>Acanalado</h2>
 
-<div class="tarjeta">
+<div class="tarjeta" onclick="abrir90()">
 
 <div class="icono">📐</div>
 
@@ -87,7 +87,7 @@
 
 <h2>90°</h2>
 
-<p>Próximamente</p>
+<p>Sistema de acanalado a 90°</p>
 
 </div>
 
@@ -121,12 +121,57 @@
 
 </div>
 
-</div>
+</section>
+
+<!-- ================= 90° ================= -->
+
+<section id="pantalla90" class="oculto">
+
+<button class="volver" onclick="volverAcanalado()">
+
+← Volver
+
+</button>
+
+<h2>Acanalado 90°</h2>
+
+<label>Medida final (mm)</label>
+<input id="medidaFinal" type="number">
+
+<label>Divisiones</label>
+<input id="divisiones" type="number">
+
+<label>Profundidad (mm)</label>
+<input id="profundidad" type="number">
+
+<label>Bordes (mm)</label>
+<input id="bordes" type="number">
+
+<label>Espesor (mm)</label>
+<input id="espesor" type="number">
+
+<button class="calcular">
+
+CALCULAR
+
+</button>
+
+<h3>Resultados</h3>
+
+<p>Ancho de canal:
+<span id="anchoCanal">-</span></p>
+
+<p>Alto de canal:
+<span id="altoCanal">-</span></p>
+
+<p>Desarrollo:
+<span id="desarrollo">-</span></p>
+
+</section>
 
 </main>
 
 <script src="script.js"></script>
 
 </body>
-
 </html>

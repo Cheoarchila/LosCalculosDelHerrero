@@ -64,30 +64,43 @@ function ocultarTodo(){
 
 function calcular90(){
 
-    let medidaFinal = Number(document.getElementById("medidaFinal").value);
-
-    let divisiones = Number(document.getElementById("divisiones").value);
-
-    let profundidad = Number(document.getElementById("profundidad").value);
-
-    let bordes = Number(document.getElementById("bordes").value);
-
-    let espesor = Number(document.getElementById("espesor").value);
+    const medidaFinal = parseFloat(document.getElementById("medidaFinal").value);
+    const divisiones = parseInt(document.getElementById("divisiones").value);
+    const profundidad = parseFloat(document.getElementById("profundidad").value);
+    const bordes = parseFloat(document.getElementById("bordes").value);
+    const espesor = parseFloat(document.getElementById("espesor").value);
 
     if(
-        medidaFinal<=0 ||
-        divisiones<=0 ||
-        profundidad<=0 ||
-        bordes<0 ||
-        espesor<=0
+        isNaN(medidaFinal) ||
+        isNaN(divisiones) ||
+        isNaN(profundidad) ||
+        isNaN(bordes) ||
+        isNaN(espesor)
     ){
-
         alert("Complete todos los datos.");
-
         return;
-
     }
 
+    const anchoCanal = medidaFinal / divisiones;
+
+    const altoCanal = profundidad;
+
+    const desarrollo =
+        medidaFinal +
+        (profundidad * divisiones * 2) +
+        (bordes * 2) -
+        (espesor * divisiones * 2);
+
+    document.getElementById("anchoCanal").textContent =
+        anchoCanal.toFixed(2).replace(/\.00$/,"") + " mm";
+
+    document.getElementById("altoCanal").textContent =
+        altoCanal.toFixed(2).replace(/\.00$/,"") + " mm";
+
+    document.getElementById("desarrollo").textContent =
+        desarrollo.toFixed(2).replace(/\.00$/,"") + " mm";
+
+}
     // ==========
     // CÁLCULO PROVISIONAL
     // (Lo cambiaremos por tu fórmula real)

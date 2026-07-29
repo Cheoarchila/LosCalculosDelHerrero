@@ -1,68 +1,72 @@
-// ===============================
+// =======================================
 // LOS CÁLCULOS DEL HERRERO
 // script.js
-// Versión 2.0
-// ===============================
+// Versión 3.0
+// =======================================
 
-//------------------------------
-// INICIO
-//------------------------------
+// ---------------------
+// NAVEGACIÓN
+// ---------------------
 
-function abrirAcanalado(){
+function ocultarPantallas() {
 
-    ocultarTodo();
-
-    document.getElementById("pantallaAcanalado").style.display="block";
-
-}
-
-function volverInicio(){
-
-    ocultarTodo();
-
-    document.getElementById("pantallaInicio").style.display="block";
+    document.getElementById("pantallaInicio").style.display = "none";
+    document.getElementById("pantallaAcanalado").style.display = "none";
+    document.getElementById("pantalla90").style.display = "none";
 
 }
 
-//------------------------------
-// ACANALADO
-//------------------------------
+function abrirAcanalado() {
 
-function abrir90(){
-
-    ocultarTodo();
-
-    document.getElementById("pantalla90").style.display="block";
+    ocultarPantallas();
+    document.getElementById("pantallaAcanalado").style.display = "block";
 
 }
 
-function volverAcanalado(){
+function volverInicio() {
 
-    ocultarTodo();
-
-    document.getElementById("pantallaAcanalado").style.display="block";
-
-}
-
-//------------------------------
-// OCULTAR TODAS LAS PANTALLAS
-//------------------------------
-
-function ocultarTodo(){
-
-    document.getElementById("pantallaInicio").style.display="none";
-
-    document.getElementById("pantallaAcanalado").style.display="none";
-
-    document.getElementById("pantalla90").style.display="none";
+    ocultarPantallas();
+    document.getElementById("pantallaInicio").style.display = "block";
 
 }
 
-//------------------------------
-// ACANALADO 90°
-//------------------------------
+function abrir90() {
 
-function calcular90(){
+    ocultarPantallas();
+    document.getElementById("pantalla90").style.display = "block";
+
+}
+
+function volverAcanalado() {
+
+    ocultarPantallas();
+    document.getElementById("pantallaAcanalado").style.display = "block";
+
+}
+
+// ---------------------
+// LIMPIAR
+// ---------------------
+
+function limpiar90() {
+
+    document.getElementById("medidaFinal").value = "";
+    document.getElementById("divisiones").value = "";
+    document.getElementById("profundidad").value = "";
+    document.getElementById("bordes").value = "";
+    document.getElementById("espesor").value = "";
+
+    document.getElementById("anchoCanal").textContent = "-";
+    document.getElementById("altoCanal").textContent = "-";
+    document.getElementById("desarrollo").textContent = "-";
+
+}
+
+// ---------------------
+// CALCULAR
+// ---------------------
+
+function calcular90() {
 
     const medidaFinal = parseFloat(document.getElementById("medidaFinal").value);
     const divisiones = parseInt(document.getElementById("divisiones").value);
@@ -70,16 +74,20 @@ function calcular90(){
     const bordes = parseFloat(document.getElementById("bordes").value);
     const espesor = parseFloat(document.getElementById("espesor").value);
 
-    if(
+    if (
         isNaN(medidaFinal) ||
         isNaN(divisiones) ||
         isNaN(profundidad) ||
         isNaN(bordes) ||
         isNaN(espesor)
-    ){
-        alert("Complete todos los datos.");
+    ) {
+
+        alert("Complete todos los campos.");
         return;
+
     }
+
+    // ======= CÁLCULO PROVISIONAL =======
 
     const anchoCanal = medidaFinal / divisiones;
 
@@ -91,31 +99,15 @@ function calcular90(){
         (bordes * 2) -
         (espesor * divisiones * 2);
 
+    // ================================
+
     document.getElementById("anchoCanal").textContent =
-        anchoCanal.toFixed(2).replace(/\.00$/,"") + " mm";
+        Number(anchoCanal.toFixed(2));
 
     document.getElementById("altoCanal").textContent =
-        altoCanal.toFixed(2).replace(/\.00$/,"") + " mm";
+        Number(altoCanal.toFixed(2));
 
     document.getElementById("desarrollo").textContent =
-        desarrollo.toFixed(2).replace(/\.00$/,"") + " mm";
-
-}
-    // ==========
-    // CÁLCULO PROVISIONAL
-    // (Lo cambiaremos por tu fórmula real)
-    // ==========
-
-    let anchoCanal = Math.round(medidaFinal/divisiones);
-
-    let altoCanal = profundidad;
-
-    let desarrollo = medidaFinal;
-
-    document.getElementById("anchoCanal").innerHTML = anchoCanal + " mm";
-
-    document.getElementById("altoCanal").innerHTML = altoCanal + " mm";
-
-    document.getElementById("desarrollo").innerHTML = desarrollo + " mm";
+        Number(desarrollo.toFixed(2));
 
 }

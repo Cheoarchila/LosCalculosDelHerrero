@@ -12,16 +12,20 @@ body{
 
 header{
     background:#1565c0;
-    color:white;
+    color:#fff;
     text-align:center;
-    padding:18px;
-    position:sticky;
-    top:0;
+    padding:20px;
     box-shadow:0 2px 8px rgba(0,0,0,.2);
 }
 
 header h1{
-    font-size:24px;
+    font-size:34px;
+    letter-spacing:3px;
+}
+
+header p{
+    margin-top:5px;
+    font-size:16px;
 }
 
 main{
@@ -35,80 +39,138 @@ main{
 }
 
 .tarjeta{
-    background:white;
-    border-radius:14px;
-    padding:18px;
-    margin-bottom:15px;
+
     display:flex;
     align-items:center;
+
+    background:#fff;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    margin-bottom:15px;
+
     cursor:pointer;
-    box-shadow:0 2px 8px rgba(0,0,0,.15);
+
     transition:.2s;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+
 }
 
 .tarjeta:hover{
-    transform:scale(1.02);
+
+    transform:translateY(-2px);
+
 }
 
 .icono{
-    font-size:40px;
+
+    font-size:42px;
+
     margin-right:18px;
+
 }
 
-h2{
-    margin-bottom:15px;
+.tarjeta h2{
+
+    margin-bottom:5px;
+
 }
 
 label{
+
     display:block;
-    margin-top:15px;
+
+    margin-top:18px;
+
     margin-bottom:6px;
+
     font-weight:bold;
+
 }
 
 input{
+
     width:100%;
+
     padding:12px;
-    border:1px solid #bbb;
+
+    border:1px solid #c8c8c8;
+
     border-radius:8px;
+
     font-size:18px;
+
+    outline:none;
+
+}
+
+input:focus{
+
+    border-color:#1565c0;
+
 }
 
 button{
+
     width:100%;
+
     margin-top:20px;
+
     padding:14px;
-    border:none;
-    border-radius:8px;
+
     background:#ff7a00;
-    color:white;
+
+    color:#fff;
+
+    border:none;
+
+    border-radius:8px;
+
     font-size:18px;
+
     cursor:pointer;
+
 }
 
 button:hover{
-    background:#e56f00;
+
+    background:#e56d00;
+
 }
 
 .volver{
+
     width:auto;
+
     padding:10px 20px;
-    margin-bottom:20px;
+
+}
+
+hr{
+
+    margin:25px 0;
+
 }
 
 h3{
-    margin-top:30px;
+
     margin-bottom:15px;
-    border-bottom:2px solid #ddd;
-    padding-bottom:8px;
+
 }
 
 p{
+
     margin:10px 0;
+
     font-size:18px;
+
 }
 
-span{
-    font-weight:bold;
+strong{
+
     color:#1565c0;
+
 }

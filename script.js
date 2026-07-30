@@ -1,11 +1,11 @@
 // =======================================
 // LOS CÁLCULOS DEL HERRERO
-// script.js
+// Script.js
 // =======================================
 
-//------------------------------
+//-----------------------------------------
 // NAVEGACIÓN
-//------------------------------
+//-----------------------------------------
 
 function ocultarPantallas(){
 
@@ -43,42 +43,73 @@ function volverAcanalado(){
 
 }
 
-//------------------------------
+//-----------------------------------------
 // LIMPIAR
-//------------------------------
+//-----------------------------------------
 
 function limpiar90(){
 
-    document.getElementById("medidaFinal").value="";
-    document.getElementById("divisiones").value="";
-    document.getElementById("profundidad").value="";
-    document.getElementById("bordes").value="";
-    document.getElementById("espesor").value="";
+    document.getElementById("medidaFinal").value=1000;
+    document.getElementById("divisiones").value=3;
+    document.getElementById("profundidad").value=15;
+    document.getElementById("bordes").value=20;
+    document.getElementById("espesor").value=1;
 
-    document.getElementById("anchoCanal").textContent="-";
-    document.getElementById("altoCanal").textContent="-";
-    document.getElementById("desarrollo").textContent="-";
+    document.getElementById("anchoCanal").innerHTML="-";
+    document.getElementById("altoCanal").innerHTML="-";
+    document.getElementById("desarrollo").innerHTML="-";
+
+    validarCanales();
 
 }
 
-//------------------------------
+//-----------------------------------------
+// CANALES
+//-----------------------------------------
+
+function validarCanales(){
+
+    let canales=parseInt(document.getElementById("divisiones").value);
+
+    let profundidad=document.getElementById("profundidad");
+
+    if(canales==1){
+
+        profundidad.value=0;
+        profundidad.disabled=true;
+
+    }else{
+
+        profundidad.disabled=false;
+
+    }
+
+}
+
+//-----------------------------------------
 // CALCULAR
-//------------------------------
+//-----------------------------------------
 
 function calcular90(){
 
-    const medidaFinal=parseFloat(document.getElementById("medidaFinal").value);
-    const divisiones=parseInt(document.getElementById("divisiones").value);
-    const profundidad=parseFloat(document.getElementById("profundidad").value);
-    const bordes=parseFloat(document.getElementById("bordes").value);
-    const espesor=parseFloat(document.getElementById("espesor").value);
+    let medida=parseFloat(document.getElementById("medidaFinal").value);
+
+    let canales=parseInt(document.getElementById("divisiones").value);
+
+    let profundidad=parseFloat(document.getElementById("profundidad").value);
+
+    let bordes=parseFloat(document.getElementById("bordes").value);
+
+    let espesor=parseFloat(document.getElementById("espesor").value);
 
     if(
-        isNaN(medidaFinal)||
-        isNaN(divisiones)||
-        isNaN(profundidad)||
-        isNaN(bordes)||
+
+        isNaN(medida) ||
+        isNaN(canales) ||
+        isNaN(profundidad) ||
+        isNaN(bordes) ||
         isNaN(espesor)
+
     ){
 
         alert("Complete todos los datos.");
@@ -86,69 +117,30 @@ function calcular90(){
 
     }
 
-    const anchoCanal=medidaFinal/divisiones;
+    let anchoCanal=medida/canales;
 
-    const altoCanal=profundidad;
+    let altoCanal=profundidad;
 
-    const desarrollo=
-        medidaFinal+
-        (profundidad*divisiones*2)+
-        (bordes*2)-
-        (espesor*divisiones*2);
+    let desarrollo=
 
-    document.getElementById("anchoCanal").textContent=
-        anchoCanal.toFixed(2);
+    ((bordes*2)+
+    medida+
+    ((canales-1)*profundidad))
+    -
+    (canales*4*espesor);
 
-    document.getElementById("altoCanal").textContent=
-        altoCanal;
+    document.getElementById("anchoCanal").innerHTML=anchoCanal.toFixed(2)+" mm";
 
-    document.getElementById("desarrollo").innerHTML=
-        desarrollo.toFixed(2)+
-        "<br><br><b>Marcas:</b><br>"+
-        calcularMarcas(
-            medidaFinal,
-            divisiones,
-            profundidad,
-            bordes,
-            espesor
-        );
+    document.getElementById("altoCanal").innerHTML=altoCanal.toFixed(2)+" mm";
+
+    document.getElementById("desarrollo").innerHTML=desarrollo.toFixed(2)+" mm";
 
 }
 
-//------------------------------
-// MARCAS
-//------------------------------
+window.onload=function(){
 
-function calcularMarcas(
-    medidaFinal,
-    divisiones,
-    profundidad,
-    bordes,
-    espesor
-){
+    limpiar90();
 
-    const ancho=Math.floor(medidaFinal/divisiones);
-
-    let posicion=bordes-espesor;
-
-    let texto=posicion.toFixed(2)+" mm";
-
-    for(let i=1;i<=divisiones;i++){
-
-        posicion+=ancho-(espesor*2);
-
-        texto+="<br>"+posicion.toFixed(2)+" mm";
-
-        if(i<divisiones){
-
-            posicion+=profundidad-(espesor*2);
-
-            texto+="<br>"+posicion.toFixed(2)+" mm";
-
-        }
-
-    }
-
-    return texto;
+    document.getElementById("divisiones").addEventListener("input",validarCanales);
 
 }

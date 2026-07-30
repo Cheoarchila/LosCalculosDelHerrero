@@ -148,7 +148,67 @@ button:hover{
     padding:10px 20px;
 
 }
+.fila{
 
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin:12px 0;
+
+}
+
+.fila label{
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+.fila input{
+
+    width:110px;
+
+    padding:8px;
+
+    text-align:center;
+
+    font-size:18px;
+
+}
+
+.resultado{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin:18px 0;
+
+    font-size:20px;
+
+}
+
+.resultado strong{
+
+    font-size:32px;
+
+    color:#1565c0;
+
+}
+
+.volver{
+
+    display:block;
+
+    margin:8px auto 20px auto;
+
+}
 hr{
 
     margin:25px 0;

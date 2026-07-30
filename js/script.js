@@ -151,3 +151,22 @@ window.onload=function(){
     document.getElementById("divisiones").addEventListener("input",validarCanales);
 
 }
+document.addEventListener("DOMContentLoaded", function () {
+
+    const controles = [
+        "medidaFinal",
+        "divisiones",
+        "profundidad",
+        "bordes",
+        "espesor"
+    ];
+
+    controles.forEach(function(id){
+
+        document.getElementById(id).addEventListener("input", calcular90);
+
+    });
+
+    calcular90();
+
+});

@@ -92,51 +92,58 @@ function validarCanales(){
 
 function calcular90(){
 
-    let medida=parseFloat(document.getElementById("medidaFinal").value);
-
-    let canales=parseInt(document.getElementById("divisiones").value);
-
-    let profundidad=parseFloat(document.getElementById("profundidad").value);
-
-    let bordes=parseFloat(document.getElementById("bordes").value);
-
-    let espesor=parseFloat(document.getElementById("espesor").value);
+    let medida = parseFloat(document.getElementById("medidaFinal").value);
+    let canales = parseInt(document.getElementById("divisiones").value);
+    let profundidad = parseFloat(document.getElementById("profundidad").value);
+    let bordes = parseFloat(document.getElementById("bordes").value);
+    let espesor = parseFloat(document.getElementById("espesor").value);
 
     if(
-
         isNaN(medida) ||
         isNaN(canales) ||
-        isNaN(profundidad) ||
         isNaN(bordes) ||
         isNaN(espesor)
-
     ){
-
-        alert("Complete todos los datos.");
         return;
-
     }
 
-    let anchoCanal=medida/canales;
+    if(canales < 1){
+        canales = 1;
+    }
 
-    let altoCanal=profundidad;
+    if(canales == 1){
+        profundidad = 0;
+        document.getElementById("profundidad").value = 0;
+        document.getElementById("profundidad").disabled = true;
+    }else{
+        document.getElementById("profundidad").disabled = false;
 
-    let desarrollo=
+        if(isNaN(profundidad)){
+            profundidad = 0;
+        }
+    }
 
-    ((bordes*2)+
-    medida+
-    ((canales-1)*profundidad))
-    -
-    (canales*4*espesor);
+    let anchoCanal = medida / canales;
 
-    document.getElementById("anchoCanal").innerHTML=anchoCanal.toFixed(2)+" mm";
+    let altoCanal = profundidad;
 
-    document.getElementById("altoCanal").innerHTML=altoCanal.toFixed(2)+" mm";
+    let desarrollo =
+        ((bordes * 2) +
+        medida +
+        ((canales - 1) * profundidad))
+        -
+        (canales * 4 * espesor);
 
-    document.getElementById("desarrollo").innerHTML=desarrollo.toFixed(2)+" mm";
+    document.getElementById("anchoCanal").innerHTML =
+        Math.round(anchoCanal);
+
+    document.getElementById("altoCanal").innerHTML =
+        Math.round(altoCanal);
+
+    document.getElementById("desarrollo").innerHTML =
+        Math.round(desarrollo);
 
 }
-
 window.onload=function(){
 
     limpiar90();

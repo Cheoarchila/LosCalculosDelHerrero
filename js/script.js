@@ -95,3 +95,67 @@ function calcular90(){
     document.getElementById("desarrollo").innerHTML=Math.round(desarrollo);
 
     document.getElementById("anchoCanal").innerHTML=Math.round(anchoCanal);
+
+    //-----------------------------------------
+    // MARCAS DE DOBLADO
+    //-----------------------------------------
+
+    let horizontal = anchoCanal - (espesor * 2);
+
+    let vertical = profundidad - (espesor * 2);
+
+    let marca = bordes - espesor;
+
+    let html = "<div>"+Math.round(marca)+"</div>";
+
+    for(let i=1;i<=canales;i++){
+
+        marca += horizontal;
+
+        html += "<div>"+Math.round(marca)+"</div>";
+
+        if(i<canales){
+
+            marca += vertical;
+
+            html += "<div>"+Math.round(marca)+"</div>";
+
+        }
+
+    }
+
+    marca += bordes - espesor;
+
+    html += "<div>"+Math.round(marca)+"</div>";
+
+    document.getElementById("marcas").innerHTML = html;
+
+}
+
+//-----------------------------------------
+// EVENTOS
+//-----------------------------------------
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    const controles=[
+
+        "medidaFinal",
+        "divisiones",
+        "profundidad",
+        "bordes",
+        "espesor"
+
+    ];
+
+    controles.forEach(function(id){
+
+        document.getElementById(id).addEventListener("input",calcular90);
+
+    });
+
+    calcular90();
+
+});
+
+

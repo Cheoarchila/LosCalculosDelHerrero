@@ -98,12 +98,7 @@ function calcular90(){
     let bordes = parseFloat(document.getElementById("bordes").value);
     let espesor = parseFloat(document.getElementById("espesor").value);
 
-    if(
-        isNaN(medida) ||
-        isNaN(canales) ||
-        isNaN(bordes) ||
-        isNaN(espesor)
-    ){
+    if(isNaN(medida) || isNaN(canales) || isNaN(bordes) || isNaN(espesor)){
         return;
     }
 
@@ -128,11 +123,11 @@ function calcular90(){
     let altoCanal = profundidad;
 
     let desarrollo =
-        ((bordes * 2) +
+        ((bordes*2) +
         medida +
-        ((canales - 1) * profundidad))
+        ((canales-1)*profundidad))
         -
-        (canales * 4 * espesor);
+        (canales*4*espesor);
 
     document.getElementById("anchoCanal").innerHTML =
         Math.round(anchoCanal);
@@ -143,27 +138,31 @@ function calcular90(){
     document.getElementById("desarrollo").innerHTML =
         Math.round(desarrollo);
 
+    //----------------------------------------
+    // MARCAS DE DOBLADO
+    //----------------------------------------
+
     let html = "";
 
     let marca = bordes - espesor;
 
-    html += "<div>" + Math.round(marca) + "</div>";
+    html += "<div>"+Math.round(marca)+"</div>";
 
-    let horizontal = anchoCanal - (espesor * 2);
+    let horizontal = anchoCanal - (espesor*2);
 
-    let vertical = profundidad - (espesor * 2);
+    let vertical = profundidad - (espesor*2);
 
     for(let i=1;i<=canales;i++){
 
         marca += horizontal;
 
-        html += "<div>" + Math.round(marca) + "</div>";
+        html += "<div>"+Math.round(marca)+"</div>";
 
         if(i<canales){
 
             marca += vertical;
 
-            html += "<div>" + Math.round(marca) + "</div>";
+            html += "<div>"+Math.round(marca)+"</div>";
 
         }
 
@@ -171,10 +170,10 @@ function calcular90(){
 
     marca += bordes - espesor;
 
-    html += "<div>" + Math.round(marca) + "</div>";
+    html += "<div>"+Math.round(marca)+"</div>";
 
     document.getElementById("marcas").innerHTML = html;
-    
+
 }
 window.onload=function(){
 

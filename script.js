@@ -49,17 +49,15 @@ function volverAcanalado(){
 
 function limpiar90(){
 
-    document.getElementById("medidaFinal").value=1000;
-    document.getElementById("divisiones").value=3;
-    document.getElementById("profundidad").value=15;
-    document.getElementById("bordes").value=20;
-    document.getElementById("espesor").value=1;
-
-    document.getElementById("anchoCanal").innerHTML="-";
-    document.getElementById("altoCanal").innerHTML="-";
-    document.getElementById("desarrollo").innerHTML="-";
+    document.getElementById("medidaFinal").value = 1000;
+    document.getElementById("divisiones").value = 3;
+    document.getElementById("profundidad").value = 15;
+    document.getElementById("bordes").value = 20;
+    document.getElementById("espesor").value = 1;
 
     validarCanales();
+
+    calcular90();
 
 }
 

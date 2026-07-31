@@ -143,6 +143,38 @@ function calcular90(){
     document.getElementById("desarrollo").innerHTML =
         Math.round(desarrollo);
 
+    let html = "";
+
+    let marca = bordes - espesor;
+
+    html += "<div>" + Math.round(marca) + "</div>";
+
+    let horizontal = anchoCanal - (espesor * 2);
+
+    let vertical = profundidad - (espesor * 2);
+
+    for(let i=1;i<=canales;i++){
+
+        marca += horizontal;
+
+        html += "<div>" + Math.round(marca) + "</div>";
+
+        if(i<canales){
+
+            marca += vertical;
+
+            html += "<div>" + Math.round(marca) + "</div>";
+
+        }
+
+    }
+
+    marca += bordes - espesor;
+
+    html += "<div>" + Math.round(marca) + "</div>";
+
+    document.getElementById("marcas").innerHTML = html;
+    
 }
 window.onload=function(){
 

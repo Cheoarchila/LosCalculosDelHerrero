@@ -52,13 +52,14 @@ function volverAcanalado(){
 
 function calcular90(){
 
+    let anchoPlancha = parseFloat(document.getElementById("anchoPlancha").value);
     let medida = parseFloat(document.getElementById("medidaFinal").value);
     let canales = parseInt(document.getElementById("divisiones").value);
     let profundidad = parseFloat(document.getElementById("profundidad").value);
     let bordes = parseFloat(document.getElementById("bordes").value);
     let espesor = parseFloat(document.getElementById("espesor").value);
 
-    if(isNaN(medida) || isNaN(canales) || isNaN(bordes) || isNaN(espesor)){
+    if isNaN(anchoPlancha) || (isNaN(medida) || isNaN(canales) || isNaN(bordes) || isNaN(espesor)){
         return;
     }
 
@@ -123,6 +124,34 @@ function calcular90(){
 
     html += "<div>"+Math.round(marca)+"</div>";
 
+//-----------------------------------------
+// BUSCAR PUNTO DE CORTE
+//-----------------------------------------
+
+let puntoCorte = -1;
+let marcaCorte = 0;
+
+let elementos = html.match(/>([0-9]+)</g);
+
+if(elementos){
+
+    for(let i=0;i<elementos.length;i++){
+
+        let valor=parseInt(elementos[i].replace(">","").replace("<",""));
+
+        if((i+1)%2!=0 && valor<=anchoPlancha){
+
+            puntoCorte=i+1;
+            marcaCorte=valor;
+
+        }
+
+    }
+
+}
+
+console.log("Punto de corte:",puntoCorte,"Marca:",marcaCorte);
+    
     document.getElementById("marcas").innerHTML = html;
 
 }

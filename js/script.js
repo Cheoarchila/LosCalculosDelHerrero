@@ -52,7 +52,7 @@ function volverAcanalado(){
 
 function calcular90(){
 
-    let anchoPlancha = parseFloat(document.getElementById("anchoPlancha").value);
+let anchoPlancha = 1200;
     let medida = parseFloat(document.getElementById("medidaFinal").value);
     let canales = parseInt(document.getElementById("divisiones").value);
     let profundidad = parseFloat(document.getElementById("profundidad").value);

@@ -66,22 +66,17 @@ function calcular90(){
         canales = 1;
     }
 
-    if(canales == 1){
+  if(canales == 1){
 
-        profundidad = 0;
+    profundidad = 0;
 
-        document.getElementById("profundidad").value = 0;
-        document.getElementById("profundidad").disabled = true;
+}else{
 
-    }else{
-
-        document.getElementById("profundidad").disabled = false;
-
-        if(isNaN(profundidad)){
-            profundidad = 0;
-        }
-
+    if(isNaN(profundidad)){
+        profundidad = 15;
     }
+
+}
 
     let anchoCanal = medida / canales;
 

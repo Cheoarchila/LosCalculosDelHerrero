@@ -158,19 +158,28 @@ document.getElementById("divisiones").addEventListener("change",function(){
 
     let canales=parseInt(this.value);
 
+    let fila=document.getElementById("filaProfundidad");
+    let mensaje=document.getElementById("mensajeProfundidad");
+    let profundidad=document.getElementById("profundidad");
+
     if(canales==1){
 
-        document.getElementById("profundidad").value=0;
-        document.getElementById("profundidad").disabled=true;
+        fila.style.display="none";
+        mensaje.style.display="flex";
+        profundidad.disabled=true;
 
     }else{
 
-        document.getElementById("profundidad").disabled=false;
+        fila.style.display="flex";
+        mensaje.style.display="none";
+        profundidad.disabled=false;
+        profundidad.focus();
 
     }
 
-});
+    calcular90();
 
+});
 calcular90();
 
 });

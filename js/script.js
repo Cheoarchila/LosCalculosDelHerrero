@@ -150,11 +150,28 @@ document.addEventListener("DOMContentLoaded",function(){
 
     controles.forEach(function(id){
 
-        document.getElementById(id).addEventListener("input",calcular90);
+    document.getElementById(id).addEventListener("change",calcular90);
 
-    });
+});
 
-    calcular90();
+document.getElementById("divisiones").addEventListener("change",function(){
+
+    let canales=parseInt(this.value);
+
+    if(canales==1){
+
+        document.getElementById("profundidad").value=0;
+        document.getElementById("profundidad").disabled=true;
+
+    }else{
+
+        document.getElementById("profundidad").disabled=false;
+
+    }
+
+});
+
+calcular90();
 
 });
 

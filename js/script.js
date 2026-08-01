@@ -47,12 +47,35 @@ function volverAcanalado(){
 }
 
 //-----------------------------------------
+// ANCHO DE PLANCHA
+//-----------------------------------------
+
+function editarPlancha(){
+
+    let campo=document.getElementById("anchoPlancha");
+
+    if(campo.readOnly){
+
+        campo.readOnly=false;
+        campo.focus();
+        campo.select();
+
+    }else{
+
+        campo.readOnly=true;
+        calcular90();
+
+    }
+
+}
+
+//-----------------------------------------
 // CALCULAR
 //-----------------------------------------
 
 function calcular90(){
 
-let anchoPlancha = 1200;
+let anchoPlancha=parseFloat(document.getElementById("anchoPlancha").value);
     let medida = parseFloat(document.getElementById("medidaFinal").value);
     let canales = parseInt(document.getElementById("divisiones").value);
     let profundidad = parseFloat(document.getElementById("profundidad").value);

@@ -59,8 +59,15 @@ function calcular90(){
     let bordes = parseFloat(document.getElementById("bordes").value);
     let espesor = parseFloat(document.getElementById("espesor").value);
 
-    if isNaN(anchoPlancha) || (isNaN(medida) || isNaN(canales) || isNaN(bordes) || isNaN(espesor)){
-        return;
+    if(
+    isNaN(anchoPlancha) ||
+    isNaN(medida) ||
+    isNaN(canales) ||
+    isNaN(bordes) ||
+    isNaN(espesor)
+){
+    return;
+}
     }
 
     if(canales < 1){

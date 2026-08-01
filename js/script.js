@@ -139,49 +139,49 @@ function calcular90(){
 document.addEventListener("DOMContentLoaded",function(){
 
     const controles=[
-
         "medidaFinal",
         "divisiones",
         "profundidad",
         "bordes",
         "espesor"
-
     ];
 
     controles.forEach(function(id){
+        document.getElementById(id).addEventListener("change",calcular90);
+    });
 
-    document.getElementById(id).addEventListener("change",calcular90);
+    function actualizarProfundidad(){
 
-});
+        let canales=parseInt(document.getElementById("divisiones").value);
 
-document.getElementById("divisiones").addEventListener("change",function(){
+        let fila=document.getElementById("filaProfundidad");
+        let mensaje=document.getElementById("mensajeProfundidad");
+        let profundidad=document.getElementById("profundidad");
 
-    let canales=parseInt(this.value);
+        if(canales==1){
 
-    let fila=document.getElementById("filaProfundidad");
-    let mensaje=document.getElementById("mensajeProfundidad");
-    let profundidad=document.getElementById("profundidad");
+            fila.style.display="none";
+            mensaje.style.display="flex";
+            profundidad.disabled=true;
 
-    if(canales==1){
+        }else{
 
-        fila.style.display="none";
-        mensaje.style.display="flex";
-        profundidad.disabled=true;
+            fila.style.display="flex";
+            mensaje.style.display="none";
+            profundidad.disabled=false;
 
-    }else{
-
-        fila.style.display="flex";
-        mensaje.style.display="none";
-        profundidad.disabled=false;
-        profundidad.focus();
+        }
 
     }
 
+    document.getElementById("divisiones").addEventListener("change",function(){
+
+        actualizarProfundidad();
+        calcular90();
+
+    });
+
+    actualizarProfundidad();
     calcular90();
 
 });
-calcular90();
-
-});
-
-

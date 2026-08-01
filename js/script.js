@@ -67,7 +67,6 @@ function calcular90(){
     isNaN(espesor)
 ){
     return;
-}
     }
 
     if(canales < 1){

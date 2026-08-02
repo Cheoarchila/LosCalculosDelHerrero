@@ -193,6 +193,44 @@ function mostrarResultados(desarrollo,anchoCanal){
     document.getElementById("anchoCanal").innerHTML=Math.round(anchoCanal);
 
 }
+
+//-----------------------------------------
+// GENERAR MARCAS
+//-----------------------------------------
+
+function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlancha){
+
+    let horizontal=anchoCanal-(espesor*2);
+    let vertical=profundidad-(espesor*2);
+
+    let marca=bordes-espesor;
+
+    let html="<div>"+Math.round(marca)+"</div>";
+
+    for(let i=1;i<=canales;i++){
+
+        marca+=horizontal;
+
+        html+="<div>"+Math.round(marca)+"</div>";
+
+        if(i<canales){
+
+            marca+=vertical;
+
+            html+="<div>"+Math.round(marca)+"</div>";
+
+        }
+
+    }
+
+    marca+=bordes-espesor;
+
+    html+="<div>"+Math.round(marca)+"</div>";
+
+    document.getElementById("marcas").innerHTML=html;
+
+}
+
 //-----------------------------------------
 // EVENTOS
 //-----------------------------------------

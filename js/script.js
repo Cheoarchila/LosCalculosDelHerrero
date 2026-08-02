@@ -186,6 +186,15 @@ console.log("Punto de corte:",puntoCorte,"Marca:",marcaCorte);
 }
 
 //-----------------------------------------
+// MOSTRAR RESULTADOS
+//-----------------------------------------
+
+function mostrarResultados(desarrollo,anchoCanal){
+
+   mostrarResultados(desarrollo,anchoCanal);
+}
+
+//-----------------------------------------
 // EVENTOS
 //-----------------------------------------
 

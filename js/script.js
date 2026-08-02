@@ -117,10 +117,7 @@ let anchoPlancha=parseFloat(document.getElementById("anchoPlancha").value);
     -
     (canales*4*espesor);
 
-    document.getElementById("desarrollo").innerHTML=Math.round(desarrollo);
-
-    document.getElementById("anchoCanal").innerHTML=Math.round(anchoCanal);
-
+    mostrarResultados(desarrollo,anchoCanal);
     //-----------------------------------------
     // MARCAS DE DOBLADO
     //-----------------------------------------
@@ -191,9 +188,11 @@ console.log("Punto de corte:",puntoCorte,"Marca:",marcaCorte);
 
 function mostrarResultados(desarrollo,anchoCanal){
 
-   mostrarResultados(desarrollo,anchoCanal);
-}
+    document.getElementById("desarrollo").innerHTML=Math.round(desarrollo);
 
+    document.getElementById("anchoCanal").innerHTML=Math.round(anchoCanal);
+
+}
 //-----------------------------------------
 // EVENTOS
 //-----------------------------------------

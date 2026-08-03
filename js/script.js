@@ -220,14 +220,36 @@ let corte=-1;
         texto+=" <strong style='color:red;'>CORTE</strong>";
     }
 
-        if(i==corte+1){
+      if(i==corte+1){
+
+    let plancha2=construirPlancha(
+        marcas[i].numero,
+        horizontal,
+        vertical,
+        espesor
+    );
 
     html+=`
     <br>
-    <h4 style="color:blue;margin:8px 0;">
-    PLANCHA 2
-    </h4>
+    <h3>PLANCHA 2</h3>
     `;
+
+    for(let j=0;j<plancha2.length;j++){
+
+        html+=`
+<div>
+
+<span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
+${plancha2[j].numero}-)
+</span>
+
+<span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
+${plancha2[j].valor}
+</span>
+
+</div>`;
+
+    }
 
 }
    

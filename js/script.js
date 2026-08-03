@@ -311,6 +311,27 @@ ${texto}
 }
 
 //-----------------------------------------
+// CONSTRUIR PLANCHA
+//-----------------------------------------
+
+function construirPlancha(numeroInicial,horizontal,vertical,espesor){
+
+    let plancha=[];
+
+    let numero=numeroInicial;
+
+    let marca=vertical+espesor;
+
+    plancha.push({
+        numero:numero,
+        valor:Math.round(marca)
+    });
+
+    return plancha;
+
+}
+
+//-----------------------------------------
 // EVENTOS
 //-----------------------------------------
 

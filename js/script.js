@@ -199,8 +199,43 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
 
     let html="";
 
+let corte=-1;
+            
     for(let i=0;i<marcas.length;i++){
 
+    if(
+        marcas[i].tipo=="profundidad" &&
+        marcas[i].valor<=anchoPlancha
+    ){
+        corte=i;
+    }
+
+}
+
+    for(let i=0;i<marcas.length;i++){
+
+    let texto=marcas[i].valor;
+
+    if(i==corte){
+        texto+=" <strong style='color:red;'>CORTE</strong>";
+    }
+
+    html+=`
+<div>
+
+<span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
+${marcas[i].numero}-)
+</span>
+
+<span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
+${texto}
+</span>
+
+</div>`;
+
+}    
+
+    
        html+=`
 <div style="display:flex;font-family:Consolas,monospace;">
 

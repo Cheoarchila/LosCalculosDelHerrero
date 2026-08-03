@@ -151,34 +151,63 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
     let horizontal=anchoCanal-(espesor*2);
     let vertical=profundidad-(espesor*2);
 
+    let marcas=[];
+
+    let numero=1;
     let marca=bordes-espesor;
 
-    let html="<div>"+Math.round(marca)+"</div>";
+    marcas.push({
+        numero:numero,
+        valor:Math.round(marca),
+        tipo:"borde"
+    });
 
     for(let i=1;i<=canales;i++){
 
+        numero++;
         marca+=horizontal;
 
-        html+="<div>"+Math.round(marca)+"</div>";
+        marcas.push({
+            numero:numero,
+            valor:Math.round(marca),
+            tipo:"horizontal"
+        });
 
         if(i<canales){
 
+            numero++;
             marca+=vertical;
 
-            html+="<div>"+Math.round(marca)+"</div>";
+            marcas.push({
+                numero:numero,
+                valor:Math.round(marca),
+                tipo:"profundidad"
+            });
 
         }
 
     }
 
+    numero++;
     marca+=bordes-espesor;
 
-    html+="<div>"+Math.round(marca)+"</div>";
+    marcas.push({
+        numero:numero,
+        valor:Math.round(marca),
+        tipo:"bordeFinal"
+    });
+
+    let html="";
+
+    for(let i=0;i<marcas.length;i++){
+
+        html+="<div>"+marcas[i].numero+".- "+marcas[i].valor+"</div>";
+
+    }
 
     document.getElementById("marcas").innerHTML=html;
 
 }
-
 //-----------------------------------------
 // EVENTOS
 //-----------------------------------------

@@ -212,7 +212,7 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
         ${marcas[i].valor}
     </span>
 
-</div>
+</div>`;
     }
 
     document.getElementById("marcas").innerHTML=html;

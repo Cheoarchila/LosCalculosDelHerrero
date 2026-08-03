@@ -247,8 +247,7 @@ ${texto}
 }    
 
 
-    document.getElementById("marcas").innerHTML=html;
-
+   mostrarPlanchas(marcas,corte);
 }
 
 //-----------------------------------------

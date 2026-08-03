@@ -250,6 +250,51 @@ ${texto}
     document.getElementById("marcas").innerHTML=html;
 
 }
+
+//-----------------------------------------
+// MOSTRAR PLANCHAS
+//-----------------------------------------
+
+function mostrarPlanchas(marcas,corte){
+
+    let html="";
+
+    for(let i=0;i<marcas.length;i++){
+
+        let texto=marcas[i].valor;
+
+        if(i==corte){
+            texto+=" <strong style='color:red;'>◄ CORTE</strong>";
+        }
+
+        if(i==corte+1){
+
+            html+=`
+            <br>
+            <h3>PLANCHA 2</h3>
+            `;
+
+        }
+
+        html+=`
+<div>
+
+<span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
+${marcas[i].numero}-)
+</span>
+
+<span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
+${texto}
+</span>
+
+</div>`;
+
+    }
+
+    document.getElementById("marcas").innerHTML=html;
+
+}
+
 //-----------------------------------------
 // EVENTOS
 //-----------------------------------------

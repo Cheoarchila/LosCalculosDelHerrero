@@ -204,12 +204,13 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
        html+=`
 <div style="display:flex;">
     <span style="display:inline-block;width:45px;">
-        ${marcas[i].numero}-)
-    </span>
-    <span>
-        ${marcas[i].valor}
-    </span>
-</div>`;
+    ${marcas[i].numero}-)
+</span>
+
+<span style="display:inline-block;width:60px;text-align:right;font-family:Consolas,monospace;">
+    ${marcas[i].valor}
+</span>
+    </div>`;
 
     }
 

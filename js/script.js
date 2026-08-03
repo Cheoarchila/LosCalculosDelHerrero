@@ -220,7 +220,18 @@ let corte=-1;
         texto+=" <strong style='color:red;'>CORTE</strong>";
     }
 
+        if(i==corte+1){
+
     html+=`
+    <br>
+    <h4 style="color:blue;margin:8px 0;">
+    PLANCHA 2
+    </h4>
+    `;
+
+}
+   
+        html+=`
 <div>
 
 <span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">

@@ -258,13 +258,29 @@ function mostrarPlanchas(marcas,corte){
 
     let html="";
 
+    let inicioPlancha2=0;
+
     for(let i=0;i<marcas.length;i++){
 
-        let texto=marcas[i].valor;
+        let texto;
+
+if(i<=corte){
+
+    texto=marcas[i].valor;
+
+}else{
+
+    texto=marcas[i].valor-inicioPlancha2;
+
+}
 
         if(i==corte){
-            texto+=" <strong style='color:red;'>◄ CORTE</strong>";
-        }
+
+    texto+=" <strong style='color:red;'>◄ CORTE</strong>";
+
+    inicioPlancha2=marcas[i].valor;
+
+}
 
         if(i==corte+1){
 

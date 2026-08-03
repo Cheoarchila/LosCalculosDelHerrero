@@ -201,7 +201,15 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
 
     for(let i=0;i<marcas.length;i++){
 
-        html+="<div>"+marcas[i].numero+".- "+marcas[i].valor+"</div>";
+       html+=`
+<div style="display:flex;">
+    <span style="display:inline-block;width:45px;">
+        ${marcas[i].numero}-)
+    </span>
+    <span>
+        ${marcas[i].valor}
+    </span>
+</div>`;
 
     }
 

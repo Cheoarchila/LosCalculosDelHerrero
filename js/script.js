@@ -247,15 +247,27 @@ ${texto}
 }    
 
 
-   mostrarPlanchas(marcas,corte);
+   mostrarPlanchas(
+    marcas,
+    corte,
+    horizontal,
+    vertical,
+    espesor
+);
+
 }
 
 //-----------------------------------------
 // MOSTRAR PLANCHAS
 //-----------------------------------------
 
-function mostrarPlanchas(marcas,corte){
-
+function mostrarPlanchas(
+    marcas,
+    corte,
+    horizontal,
+    vertical,
+    espesor
+){
     let html="";
 
     let inicioPlancha2=0;
@@ -284,12 +296,19 @@ if(i<=corte){
 
         if(i==corte+1){
 
-            html+=`
-            <br>
-            <h3>PLANCHA 2</h3>
-            `;
+    let plancha2=construirPlancha(
+        marcas[i].numero,
+        horizontal,
+        vertical,
+        espesor
+    );
 
-        }
+    html+=`
+    <br>
+    <h3>PLANCHA 2</h3>
+    `;
+
+}
 
         html+=`
 <div>

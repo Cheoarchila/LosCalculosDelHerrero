@@ -202,16 +202,17 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
     for(let i=0;i<marcas.length;i++){
 
        html+=`
-<div style="display:flex;">
-    <span style="display:inline-block;width:45px;">
-    ${marcas[i].numero}-)
-</span>
+<div style="display:flex;font-family:Consolas,monospace;">
 
-<span style="display:inline-block;width:60px;text-align:right;font-family:Consolas,monospace;">
-    ${marcas[i].valor}
-</span>
-    </div>`;
+    <span style="width:50px;text-align:right;">
+        ${marcas[i].numero}-)
+    </span>
 
+    <span style="width:70px;text-align:right;">
+        ${marcas[i].valor}
+    </span>
+
+</div>
     }
 
     document.getElementById("marcas").innerHTML=html;

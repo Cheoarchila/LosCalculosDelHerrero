@@ -235,20 +235,6 @@ ${texto}
 
 }    
 
-    
-       html+=`
-<div style="display:flex;font-family:Consolas,monospace;">
-
-    <span style="width:50px;text-align:right;">
-        ${marcas[i].numero}-)
-    </span>
-
-    <span style="width:70px;text-align:right;">
-        ${marcas[i].valor}
-    </span>
-
-</div>`;
-    }
 
     document.getElementById("marcas").innerHTML=html;
 

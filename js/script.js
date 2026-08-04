@@ -354,6 +354,10 @@ ${texto}
 // GENERAR PLANCHAS
 //-----------------------------------------
 
+//-----------------------------------------
+// AQUI COMIENZA LA FUNCION generarPlanchas()
+//-----------------------------------------
+
 function generarPlanchas(
     marcas,
     corte,
@@ -365,7 +369,19 @@ function generarPlanchas(
 
     let html="";
 
+    html+="<h3>PLANCHA 1</h3>";
+
     for(let i=0;i<marcas.length;i++){
+
+        if(i==corte+1){
+
+            html+=`
+<br>
+<hr>
+<h3>PLANCHA 2</h3>
+`;
+
+        }
 
         html+=`
 <div>
@@ -386,6 +402,10 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
     document.getElementById("marcas").innerHTML=html;
 
 }
+
+//-----------------------------------------
+// AQUI TERMINA LA FUNCION generarPlanchas()
+//-----------------------------------------
 //-----------------------------------------
 // CONSTRUIR PLANCHA
 //-----------------------------------------

@@ -440,6 +440,7 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 //-----------------------------------------
 // AQUI TERMINA LA FUNCION generarPlanchas()
 //-----------------------------------------
+
 //-----------------------------------------
 // AQUI COMIENZA LA FUNCION generarPlancha2()
 //-----------------------------------------
@@ -447,6 +448,7 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 function generarPlancha2(
     horizontal,
     vertical,
+    bordes,
     espesor,
     cantidadMarcas
 ){
@@ -457,23 +459,17 @@ function generarPlancha2(
 
     datos.push(medida);
 
-    let horizontalSiguiente=true;
-
     while(datos.length<cantidadMarcas){
 
-        if(horizontalSiguiente){
-
-            medida+=horizontal;
-
-        }else{
-
-            medida+=vertical;
-
-        }
-
+        medida+=horizontal;
         datos.push(medida);
 
-        horizontalSiguiente=!horizontalSiguiente;
+        if(datos.length>=cantidadMarcas){
+            break;
+        }
+
+        medida+=vertical;
+        datos.push(medida);
 
     }
 
@@ -484,6 +480,7 @@ function generarPlancha2(
 //-----------------------------------------
 // AQUI TERMINA LA FUNCION generarPlancha2()
 //-----------------------------------------
+
 //-----------------------------------------
 // CONSTRUIR PLANCHA
 //-----------------------------------------

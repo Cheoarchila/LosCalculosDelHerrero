@@ -369,6 +369,15 @@ function generarPlanchas(
 
     let html="";
 
+    let prueba=generarPlancha2(
+    horizontal,
+    vertical,
+    espesor,
+    10
+);
+
+console.log(prueba);
+
     let numeroPlancha2=1;
     let inicioPlancha2=0;
 
@@ -430,6 +439,50 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 
 //-----------------------------------------
 // AQUI TERMINA LA FUNCION generarPlanchas()
+//-----------------------------------------
+//-----------------------------------------
+// AQUI COMIENZA LA FUNCION generarPlancha2()
+//-----------------------------------------
+
+function generarPlancha2(
+    horizontal,
+    vertical,
+    espesor,
+    cantidadMarcas
+){
+
+    let datos=[];
+
+    let medida=vertical+espesor;
+
+    datos.push(medida);
+
+    let horizontalSiguiente=true;
+
+    while(datos.length<cantidadMarcas){
+
+        if(horizontalSiguiente){
+
+            medida+=horizontal;
+
+        }else{
+
+            medida+=vertical;
+
+        }
+
+        datos.push(medida);
+
+        horizontalSiguiente=!horizontalSiguiente;
+
+    }
+
+    return datos;
+
+}
+
+//-----------------------------------------
+// AQUI TERMINA LA FUNCION generarPlancha2()
 //-----------------------------------------
 //-----------------------------------------
 // CONSTRUIR PLANCHA

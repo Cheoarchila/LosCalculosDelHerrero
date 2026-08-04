@@ -269,14 +269,14 @@ ${texto}
 }    
 
 
-   mostrarPlanchas(
+  generarPlanchas(
     marcas,
     corte,
     horizontal,
     vertical,
+    bordes,
     espesor
 );
-
 }
 
 //-----------------------------------------
@@ -350,7 +350,23 @@ ${texto}
     document.getElementById("marcas").innerHTML=html;
 
 }
+//-----------------------------------------
+// GENERAR PLANCHAS
+//-----------------------------------------
 
+function generarPlanchas(
+    marcas,
+    corte,
+    horizontal,
+    vertical,
+    bordes,
+    espesor
+){
+
+    document.getElementById("marcas").innerHTML=
+    "Generador de Planchas funcionando";
+
+}
 //-----------------------------------------
 // CONSTRUIR PLANCHA
 //-----------------------------------------

@@ -369,6 +369,8 @@ function generarPlanchas(
 
     let html="";
 
+    let numeroPlancha2=1;
+
     html+="<h3>PLANCHA 1</h3>";
 
     for(let i=0;i<marcas.length;i++){
@@ -383,11 +385,23 @@ function generarPlanchas(
 
         }
 
+        let numero;
+
+        if(i<=corte){
+
+            numero=marcas[i].numero;
+
+        }else{
+
+            numero=numeroPlancha2++;
+
+        }
+
         html+=`
 <div>
 
 <span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
-${marcas[i].numero}-)
+${numero}-)
 </span>
 
 <span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">

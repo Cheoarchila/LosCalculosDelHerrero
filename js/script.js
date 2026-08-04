@@ -370,6 +370,7 @@ function generarPlanchas(
     let html="";
 
     let numeroPlancha2=1;
+    let inicioPlancha2=0;
 
     html+="<h3>PLANCHA 1</h3>";
 
@@ -385,15 +386,26 @@ function generarPlanchas(
 
         }
 
-        let numero;
+let numero;
+let medida;
 
-        if(i<=corte){
+if(i<=corte){
 
-            numero=marcas[i].numero;
+    numero=marcas[i].numero;
+    medida=marcas[i].valor;
 
-        }else{
+}else{
 
-            numero=numeroPlancha2++;
+    if(numeroPlancha2==1){
+
+        inicioPlancha2=marcas[i-1].valor;
+
+    }
+
+    numero=numeroPlancha2++;
+    medida=marcas[i].valor-inicioPlancha2;
+
+}
 
         }
 
@@ -405,7 +417,7 @@ ${numero}-)
 </span>
 
 <span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
-${marcas[i].valor}
+${medida}
 ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 </span>
 

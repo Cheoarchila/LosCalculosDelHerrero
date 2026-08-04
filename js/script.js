@@ -365,12 +365,22 @@ function generarPlanchas(
 
     let html="";
 
-    html+="Cantidad de marcas: "+marcas.length+"<br>";
-    html+="Punto de corte: "+corte+"<br>";
-    html+="Horizontal: "+horizontal+"<br>";
-    html+="Vertical: "+vertical+"<br>";
-    html+="Borde: "+bordes+"<br>";
-    html+="Espesor: "+espesor+"<br>";
+    for(let i=0;i<marcas.length;i++){
+
+        html+=`
+<div>
+
+<span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
+${marcas[i].numero}-)
+</span>
+
+<span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
+${marcas[i].valor}
+</span>
+
+</div>`;
+
+    }
 
     document.getElementById("marcas").innerHTML=html;
 

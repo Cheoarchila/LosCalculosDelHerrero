@@ -363,8 +363,16 @@ function generarPlanchas(
     espesor
 ){
 
-    document.getElementById("marcas").innerHTML=
-    "Generador de Planchas funcionando";
+    let html="";
+
+    html+="Cantidad de marcas: "+marcas.length+"<br>";
+    html+="Punto de corte: "+corte+"<br>";
+    html+="Horizontal: "+horizontal+"<br>";
+    html+="Vertical: "+vertical+"<br>";
+    html+="Borde: "+bordes+"<br>";
+    html+="Espesor: "+espesor+"<br>";
+
+    document.getElementById("marcas").innerHTML=html;
 
 }
 //-----------------------------------------

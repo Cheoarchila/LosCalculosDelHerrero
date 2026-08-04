@@ -442,10 +442,11 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 //-----------------------------------------
 
 //-----------------------------------------
-// AQUI COMIENZA LA FUNCION generarPlancha2()
+// AQUI COMIENZA LA FUNCION construirPlancha()
 //-----------------------------------------
 
-function generarPlancha2(
+function construirPlancha(
+
     horizontal,
     vertical,
     bordes,

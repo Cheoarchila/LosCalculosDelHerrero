@@ -398,7 +398,7 @@ if(i<=corte){
 
     if(numeroPlancha2==1){
 
-        inicioPlancha2=marcas[i-1].valor;
+       inicioPlancha2=marcas[i].valor-(vertical+espesor);
 
     }
 

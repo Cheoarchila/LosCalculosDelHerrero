@@ -407,7 +407,6 @@ if(i<=corte){
 
 }
 
-        }
 
         html+=`
 <div>

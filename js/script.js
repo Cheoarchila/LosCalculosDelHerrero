@@ -376,6 +376,7 @@ ${marcas[i].numero}-)
 
 <span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
 ${marcas[i].valor}
+${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 </span>
 
 </div>`;

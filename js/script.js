@@ -239,41 +239,46 @@ function generarPlanchas(
 ){
 
     let html="";
-    let numeroPlancha2=1;
-    let inicioPlancha2=0;
 
-    html+="<h3>PLANCHA 1</h3>";
+    let numeroPlancha=1;
+ let numeroMarca=1;
+let inicioPlancha=0;
+
+    html+=`<h3>PLANCHA ${numeroPlancha}</h3>`;
 
     for(let i=0;i<marcas.length;i++){
 
-        if(i==corte+1){
+       if(corte!=-1 && i==corte+1){
 
-            html+=`
+    numeroPlancha++;
+
+    numeroMarca=1;
+
+    html+=`
 <br>
 <hr>
-<h3>PLANCHA 2</h3>
+<h3>PLANCHA ${numeroPlancha}</h3>
 `;
 
-        }
+}
 
 let numero;
 let medida;
 
-if(i<=corte){
-
+if(i<=corte || corte==-1){
     numero=marcas[i].numero;
     medida=marcas[i].valor;
 
 }else{
 
-    if(numeroPlancha2==1){
+   if(numeroMarca==1){
 
-       inicioPlancha2=marcas[i].valor-(vertical+espesor);
+    inicioPlancha=marcas[i].valor-(vertical+espesor);
 
-    }
+}
 
-    numero=numeroPlancha2++;
-    medida=marcas[i].valor-inicioPlancha2;
+numero=numeroMarca++;
+medida=marcas[i].valor-inicioPlancha;
 
 }
 

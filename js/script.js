@@ -374,6 +374,7 @@ function generarPlanchas(
 ){
 
     let html="";
+    html+="<h2>PRUEBA</h2>";
 
     let prueba=generarPlancha2(
     horizontal,

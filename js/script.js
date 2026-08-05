@@ -203,9 +203,7 @@ console.log(
         tipo:"bordeFinal"
     });
 
-    let html="";
-
-let corte=-1;
+   let corte=-1;
             
     for(let i=0;i<marcas.length;i++){
 
@@ -218,63 +216,6 @@ let corte=-1;
 
 }
 
-    for(let i=0;i<marcas.length;i++){
-
-    let texto=marcas[i].valor;
-
-    if(i==corte){
-        texto+=" <strong style='color:red;'>CORTE</strong>";
-    }
-
-      if(i==corte+1){
-
-    let plancha2=construirPlancha(
-        marcas[i].numero,
-        horizontal,
-        vertical,
-        espesor
-    );
-
-    html+=`
-    <br>
-    <h3>PLANCHA 2</h3>
-    `;
-
-    for(let j=0;j<plancha2.length;j++){
-
-        html+=`
-<div>
-
-<span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
-${plancha2[j].numero}-)
-</span>
-
-<span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
-${plancha2[j].valor}
-</span>
-
-</div>`;
-
-    }
-
-}
-   
-        html+=`
-<div>
-
-<span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
-${marcas[i].numero}-)
-</span>
-
-<span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
-${texto}
-</span>
-
-</div>`;
-
-}    
-
-
   generarPlanchas(
     marcas,
     corte,
@@ -286,76 +227,6 @@ ${texto}
 }
 
 //-----------------------------------------
-// MOSTRAR PLANCHAS
-//-----------------------------------------
-
-function mostrarPlanchas(
-    marcas,
-    corte,
-    horizontal,
-    vertical,
-    espesor
-){
-    let html="";
-
-    let inicioPlancha2=0;
-
-    for(let i=0;i<marcas.length;i++){
-
-        let texto;
-
-if(i<=corte){
-
-    texto=marcas[i].valor;
-
-}else{
-
-    texto=marcas[i].valor-inicioPlancha2;
-
-}
-
-        if(i==corte){
-
-    texto+=" <strong style='color:red;'>◄ CORTE</strong>";
-
-    inicioPlancha2=marcas[i].valor;
-
-}
-
-        if(i==corte+1){
-
-    let plancha2=construirPlancha(
-        marcas[i].numero,
-        horizontal,
-        vertical,
-        espesor
-    );
-
-    html+=`
-    <br>
-    <h3>PLANCHA 2</h3>
-    `;
-
-}
-
-        html+=`
-<div>
-
-<span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
-${marcas[i].numero}-)
-</span>
-
-<span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
-${texto}
-</span>
-
-</div>`;
-
-    }
-
-    document.getElementById("marcas").innerHTML=html;
-
-}
 //-----------------------------------------
 // GENERAR PLANCHAS
 //-----------------------------------------
@@ -437,58 +308,6 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 // AQUI TERMINA LA FUNCION generarPlanchas()
 //-----------------------------------------
 
-//-----------------------------------------
-// AQUI COMIENZA LA FUNCION construirPlancha()
-//-----------------------------------------
-
-function construirPlancha(
-
-    horizontal,
-    vertical,
-    bordes,
-    espesor,
-    cantidadMarcas
-){
-
-    let datos=[];
-
-let medida;
-
-// Primera plancha
-if(cantidadMarcas==0){
-
-    medida=bordes-espesor;
-
-}else{
-
-    // Todas las demás planchas
-    medida=vertical+espesor;
-
-}
-
-datos.push(medida);
-
-    while(datos.length<cantidadMarcas){
-
-        medida+=horizontal;
-        datos.push(medida);
-
-        if(datos.length>=cantidadMarcas){
-            break;
-        }
-
-        medida+=vertical;
-        datos.push(medida);
-
-    }
-
-    return datos;
-
-}
-
-//-----------------------------------------
-// AQUI TERMINA LA FUNCION generarPlancha2()
-//-----------------------------------------
 
 //-----------------------------------------
 // CONSTRUIR PLANCHA

@@ -456,9 +456,21 @@ function construirPlancha(
 
     let datos=[];
 
-    let medida=vertical+espesor;
+let medida;
 
-    datos.push(medida);
+// Primera plancha
+if(cantidadMarcas==0){
+
+    medida=bordes-espesor;
+
+}else{
+
+    // Todas las demás planchas
+    medida=vertical+espesor;
+
+}
+
+datos.push(medida);
 
     while(datos.length<cantidadMarcas){
 

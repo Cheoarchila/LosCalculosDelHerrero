@@ -197,16 +197,21 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
         tipo:"bordeFinal"
     });
 
-   let corte=-1;
+   let cortes=[];
+let corte=-1;
             
     for(let i=0;i<marcas.length;i++){
 
     if(
-        marcas[i].tipo=="profundidad" &&
-        marcas[i].valor<=anchoPlancha
-    ){
-        corte=i;
-    }
+    marcas[i].tipo=="profundidad" &&
+    marcas[i].valor<=anchoPlancha
+){
+    corte=i;
+}
+
+if(corte!=-1){
+    cortes.push(corte);
+}
 
 }
 
@@ -271,9 +276,12 @@ if(i<=corte || corte==-1){
 
 }else{
 
-   if(numeroMarca==1){
+  if(numeroMarca==1){
 
-    inicioPlancha=marcas[i].valor-(vertical+espesor);
+    // El origen de cada nueva plancha será
+    // la primera profundidad (empalme)
+
+    inicioPlancha = marcas[i].valor - (vertical + espesor);
 
 }
 

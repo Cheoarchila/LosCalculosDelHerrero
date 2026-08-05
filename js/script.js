@@ -184,6 +184,12 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
                 tipo:"profundidad"
             });
 
+console.log(
+    "Profundidad",
+    numero,
+    Math.round(marca)
+);
+            
         }
 
     }

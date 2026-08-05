@@ -183,12 +183,6 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
                 valor:Math.round(marca),
                 tipo:"profundidad"
             });
-
-console.log(
-    "Profundidad",
-    numero,
-    Math.round(marca)
-);
             
         }
 
@@ -307,28 +301,6 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 //-----------------------------------------
 // AQUI TERMINA LA FUNCION generarPlanchas()
 //-----------------------------------------
-
-
-//-----------------------------------------
-// CONSTRUIR PLANCHA
-//-----------------------------------------
-
-function construirPlancha(numeroInicial,horizontal,vertical,espesor){
-
-    let plancha=[];
-
-    let numero=numeroInicial;
-
-    let marca=vertical+espesor;
-
-    plancha.push({
-        numero:numero,
-        valor:Math.round(marca)
-    });
-
-    return plancha;
-
-}
 
 //-----------------------------------------
 // EVENTOS

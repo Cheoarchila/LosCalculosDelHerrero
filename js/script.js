@@ -374,17 +374,6 @@ function generarPlanchas(
 ){
 
     let html="";
-    html+="<h2>PRUEBA</h2>";
-
-    let prueba=generarPlancha2(
-    horizontal,
-    vertical,
-    espesor,
-    10
-);
-
-console.log(prueba);
-
     let numeroPlancha2=1;
     let inicioPlancha2=0;
 

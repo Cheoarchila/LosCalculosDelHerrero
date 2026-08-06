@@ -235,7 +235,8 @@ function generarPlanchas(
     horizontal,
     vertical,
     bordes,
-    espesor
+    espesor,
+    desarrollo
 ){
 
     let html="";
@@ -309,7 +310,44 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 //-----------------------------------------
 // AQUI TERMINA LA FUNCION generarPlanchas()
 //-----------------------------------------
+//-----------------------------------------
+// GENERAR UNA PLANCHA
+//-----------------------------------------
 
+function generarUnaPlancha(
+    horizontal,
+    vertical,
+    bordes,
+    espesor,
+    esPrimera,
+    esUltima
+){
+
+    let plancha=[];
+
+    let numero=1;
+    let marca=0;
+
+    // INICIO
+
+    if(esPrimera){
+
+        marca=bordes-espesor;
+
+    }else{
+
+        marca=vertical+espesor;
+
+    }
+
+    plancha.push({
+        numero:numero++,
+        valor:Math.round(marca)
+    });
+
+    return plancha;
+
+}
 //-----------------------------------------
 // EVENTOS
 //-----------------------------------------

@@ -263,29 +263,8 @@ let inicioPlancha=0;
 
 }
 
-let numero;
-let medida;
-
-if(i<=corte || corte==-1){
-    numero=marcas[i].numero;
-    medida=marcas[i].valor;
-
-}else{
-
-if(numeroMarca==1){
-
-    // Tomamos como referencia el último doblez
-    // de la plancha anterior.
-
-    inicioPlancha = marcas[i-1].valor - espesor;
-
-}
-
-numero=numeroMarca++;
-medida=marcas[i].valor-inicioPlancha;
-
-}
-
+let numero=marcas[i].numero;
+let medida=marcas[i].valor;
 
         html+=`
 <div>

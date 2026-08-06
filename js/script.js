@@ -209,9 +209,7 @@ let corte=-1;
     corte=i;
 }
 
-if(corte!=-1){
-    cortes.push(corte);
-}
+let corte=-1;
 
 }
 
@@ -276,12 +274,12 @@ if(i<=corte || corte==-1){
 
 }else{
 
-  if(numeroMarca==1){
+if(numeroMarca==1){
 
-    // El origen de cada nueva plancha será
-    // la primera profundidad (empalme)
+    // Tomamos como referencia el último doblez
+    // de la plancha anterior.
 
-    inicioPlancha = marcas[i].valor - (vertical + espesor);
+    inicioPlancha = marcas[i-1].valor - espesor;
 
 }
 

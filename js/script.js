@@ -249,20 +249,12 @@ let inicioPlancha=0;
 
     for(let i=0;i<marcas.length;i++){
 
-       if(corte!=-1 && i==corte+1){
+if(i==corte+1){
 
-    numeroPlancha++;
-
-    numeroMarca=1;
-
-    html+=`
-<br>
-<hr>
-<h3>PLANCHA ${numeroPlancha}</h3>
-`;
+    break;
 
 }
-
+        
 let numero=marcas[i].numero;
 let medida=marcas[i].valor;
 

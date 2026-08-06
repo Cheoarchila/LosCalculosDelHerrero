@@ -197,8 +197,7 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
         tipo:"bordeFinal"
     });
 
-   let cortes=[];
-let corte=-1;
+  let corte=-1;
             
     for(let i=0;i<marcas.length;i++){
 
@@ -208,8 +207,6 @@ let corte=-1;
 ){
     corte=i;
 }
-
-let corte=-1;
 
 }
 

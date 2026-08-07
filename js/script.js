@@ -284,39 +284,13 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 //-----------------------------------------
 // GENERAR UNA PLANCHA
 //-----------------------------------------
+function calcularUnaPlancha(){
 
-function generarUnaPlancha(
-    horizontal,
-    vertical,
-    bordes,
-    espesor,
-    esPrimera,
-    esUltima
-){
-
-    let plancha=[];
-
-    let numero=1;
-    let marca=0;
-
-    // INICIO
-
-    if(esPrimera){
-
-        marca=bordes-espesor;
-
-    }else{
-
-        marca=vertical+espesor;
-
-    }
-
-    plancha.push({
-        numero:numero++,
-        valor:Math.round(marca)
-    });
-
-    return plancha;
+    return{
+        marcas:[],
+        corte:0,
+        consumido:0
+    };
 
 }
 //-----------------------------------------

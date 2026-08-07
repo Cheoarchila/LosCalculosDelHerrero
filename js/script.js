@@ -247,7 +247,7 @@ let prueba = calcularUnaPlancha(
     true
 );
 
-alert(prueba.marcas[0]);
+alert(prueba.marcas.join(" - "));
     let numeroPlancha=1;
  let numeroMarca=1;
 let inicioPlancha=0;
@@ -314,10 +314,18 @@ function calcularUnaPlancha(
 
     plancha.push(marca);
 
+    // Primer horizontal
+
+    marca+=horizontal;
+
+    plancha.push(marca);
+
     return{
+
         marcas:plancha,
         corte:marca,
         consumido:marca
+
     };
 
 }

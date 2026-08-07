@@ -244,7 +244,8 @@ let prueba = calcularUnaPlancha(
     horizontal,
     vertical,
     bordes,
-    true
+    true,
+    1200
 );
 
 alert(prueba.marcas.join(" - "));
@@ -295,25 +296,22 @@ function calcularUnaPlancha(
     horizontal,
     vertical,
     borde,
-    esPrimera
+    esPrimera,
+    anchoPlancha
 ){
 
     let plancha=[];
-
     let marca;
 
     if(esPrimera){
-
         marca=borde-1;
-
     }else{
-
         marca=vertical+1;
-
     }
 
     plancha.push(marca);
 
+    let corte=-1;
     let usarHorizontal=true;
 
     while(true){
@@ -322,28 +320,38 @@ function calcularUnaPlancha(
 
             marca+=horizontal;
 
+            // Si el horizontal ya no cabe,
+            // terminamos la plancha.
+            if(marca>anchoPlancha){
+                break;
+            }
+
+            plancha.push(marca);
+
         }else{
 
             marca+=vertical;
 
-        }
+            // Si el vertical ya no cabe,
+            // no lo guardamos.
+            if(marca>anchoPlancha){
+                break;
+            }
 
-        plancha.push(marca);
+            plancha.push(marca);
+
+            // Este es el último vertical
+            // que cabe en la plancha.
+            corte=plancha.length-1;
+        }
 
         usarHorizontal=!usarHorizontal;
-
-        if(plancha.length>=5){
-            break;
-        }
-
     }
 
     return{
-
         marcas:plancha,
-        corte:marca,
+        corte:corte,
         consumido:marca
-
     };
 
 }

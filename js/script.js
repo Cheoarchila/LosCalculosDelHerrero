@@ -312,25 +312,39 @@ function calcularUnaPlancha(
 
     }
 
-  plancha.push(marca);
+    plancha.push(marca);
 
-// Primer horizontal
+    let usarHorizontal=true;
 
-marca += horizontal;
-plancha.push(marca);
+    while(true){
 
-// Primera profundidad
+        if(usarHorizontal){
 
-marca += vertical;
-plancha.push(marca);
+            marca+=horizontal;
 
-return{
+        }else{
 
-    marcas:plancha,
-    corte:marca,
-    consumido:marca
+            marca+=vertical;
 
-};
+        }
+
+        plancha.push(marca);
+
+        usarHorizontal=!usarHorizontal;
+
+        if(plancha.length>=5){
+            break;
+        }
+
+    }
+
+    return{
+
+        marcas:plancha,
+        corte:marca,
+        consumido:marca
+
+    };
 
 }
 //-----------------------------------------

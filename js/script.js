@@ -240,7 +240,12 @@ function generarPlanchas(
 ){
 
     let html="";
-let prueba = calcularUnaPlancha();
+let prueba = calcularUnaPlancha(
+    horizontal,
+    vertical,
+    bordes,
+    true
+);
 
 alert(prueba.marcas[0]);
     let numeroPlancha=1;
@@ -286,16 +291,33 @@ ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
 //-----------------------------------------
 // GENERAR UNA PLANCHA
 //-----------------------------------------
-function calcularUnaPlancha(){
+function calcularUnaPlancha(
+    horizontal,
+    vertical,
+    borde,
+    esPrimera
+){
 
     let plancha=[];
 
-    plancha.push(19);
+    let marca;
+
+    if(esPrimera){
+
+        marca=borde-1;
+
+    }else{
+
+        marca=vertical+1;
+
+    }
+
+    plancha.push(marca);
 
     return{
         marcas:plancha,
-        corte:19,
-        consumido:19
+        corte:marca,
+        consumido:marca
     };
 
 }

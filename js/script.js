@@ -242,7 +242,7 @@ function generarPlanchas(
     let html="";
 let prueba = calcularUnaPlancha();
 
-console.log(prueba);
+alert("Estoy entrando a generarPlanchas");
     let numeroPlancha=1;
  let numeroMarca=1;
 let inicioPlancha=0;

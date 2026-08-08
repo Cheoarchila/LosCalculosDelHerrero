@@ -119,15 +119,15 @@ let anchoPlancha=parseFloat(document.getElementById("anchoPlancha").value);
 
     mostrarResultados(desarrollo,anchoCanal);
 
-    generarMarcas(
-    anchoCanal,
-    profundidad,
+   generarPlanchas(
+    marcas,
+    corte,
+    horizontal,
+    vertical,
     bordes,
     espesor,
-    canales,
     anchoPlancha
 );
-
 }
 
 //-----------------------------------------
@@ -236,16 +236,24 @@ function generarPlanchas(
     vertical,
     bordes,
     espesor,
-    desarrollo
+    anchoPlancha
 ){
 
     let html="";
+
+alert(
+    "horizontal = " + horizontal +
+    "\nvertical = " + vertical +
+    "\nbordes = " + bordes +
+    "\nanchoPlancha = " + anchoPlancha
+);
+    
 let prueba = calcularUnaPlancha(
     horizontal,
     vertical,
     bordes,
     true,
-    1200
+  anchoPlancha
 );
 
 alert(prueba.marcas.join(" - "));

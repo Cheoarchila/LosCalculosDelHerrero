@@ -240,7 +240,6 @@ function generarMarcas(
 
 }
 
-
 //-----------------------------------------
 // GENERAR PLANCHAS
 //-----------------------------------------
@@ -257,8 +256,6 @@ function generarPlanchas(
 
     let html = "";
 
-    // PRUEBA DE LA PRIMERA PLANCHA
-
     let prueba = calcularUnaPlancha(
         horizontal,
         vertical,
@@ -268,8 +265,6 @@ function generarPlanchas(
     );
 
     alert(prueba.marcas.join(" - "));
-
-    // MOSTRAR PLANCHA 1
 
     html += `<h3>PLANCHA 1</h3>`;
 
@@ -309,52 +304,8 @@ function generarPlanchas(
     document.getElementById("marcas").innerHTML = html;
 
 }
-function generarPlanchas(
-    marcas,
-    corte,
-    horizontal,
-    vertical,
-    bordes,
-    espesor,
-    anchoPlancha
-){
 
-    let html="";
-
-    let prueba = calcularUnaPlancha(
-        horizontal,
-        vertical,
-        bordes,
-        true,
-        anchoPlancha
-    );
-
-    alert(prueba.marcas.join(" - "));
-
-    html += `<h3>PLANCHA 1</h3>`;
-
-    for(let i=0; i<=corte; i++){
-
-        html += `
-        <div>
-            <span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
-                ${marcas[i].numero}-)
-            </span>
-
-            <span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
-                ${marcas[i].valor}
-                ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
-            </span>
-        </div>
-        `;
-
-    }
-
-    document.getElementById("marcas").innerHTML=html;
-
-}
-    
-}function calcularUnaPlancha(
+function calcularUnaPlancha(
     horizontal,
     vertical,
     borde,

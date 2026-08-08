@@ -211,9 +211,6 @@ function generarMarcas(
 
    let corte = -1;
 
-// Si el desarrollo completo cabe en la plancha,
-// no necesitamos ningún corte intermedio.
-
 let desarrolloFinal = marcas[marcas.length - 1].valor;
 
 if(desarrolloFinal > anchoPlancha){
@@ -273,8 +270,11 @@ function generarPlanchas(
 
     html += `<h3>PLANCHA 1</h3>`;
 
-    for(let i = 0; i <= corte; i++){
-
+   for(
+    let i = 0;
+    i < marcas.length && (corte == -1 || i <= corte);
+    i++
+){
         html += `
         <div>
 

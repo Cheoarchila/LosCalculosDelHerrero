@@ -220,6 +220,51 @@ generarPlanchas(
     anchoPlancha
 );
 
+function generarPlanchas(
+    marcas,
+    corte,
+    horizontal,
+    vertical,
+    bordes,
+    espesor,
+    anchoPlancha
+){
+
+    let html="";
+
+    let prueba = calcularUnaPlancha(
+        horizontal,
+        vertical,
+        bordes,
+        true,
+        anchoPlancha
+    );
+
+    alert(prueba.marcas.join(" - "));
+
+    html += `<h3>PLANCHA 1</h3>`;
+
+    for(let i=0; i<=corte; i++){
+
+        html += `
+        <div>
+            <span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
+                ${marcas[i].numero}-)
+            </span>
+
+            <span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
+                ${marcas[i].valor}
+                ${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
+            </span>
+        </div>
+        `;
+
+    }
+
+    document.getElementById("marcas").innerHTML=html;
+
+}
+    
 }function calcularUnaPlancha(
     horizontal,
     vertical,

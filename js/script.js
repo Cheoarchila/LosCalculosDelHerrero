@@ -146,71 +146,106 @@ function mostrarResultados(desarrollo,anchoCanal){
 // GENERAR MARCAS
 //-----------------------------------------
 
-function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlancha){
+//-----------------------------------------
+// GENERAR MARCAS
+//-----------------------------------------
 
-    let horizontal=anchoCanal-(espesor*2);
-    let vertical=profundidad-(espesor*2);
+function generarMarcas(
+    anchoCanal,
+    profundidad,
+    bordes,
+    espesor,
+    canales,
+    anchoPlancha
+){
 
-    let marcas=[];
+    let horizontal = anchoCanal - (espesor * 2);
+    let vertical = profundidad - (espesor * 2);
 
-    let numero=1;
-    let marca=bordes-espesor;
+    let marcas = [];
 
+    let numero = 1;
+    let marca = bordes - espesor;
+
+    // BORDE INICIAL
     marcas.push({
-        numero:numero,
-        valor:Math.round(marca),
-        tipo:"borde"
+        numero: numero,
+        valor: Math.round(marca),
+        tipo: "borde"
     });
 
-    for(let i=1;i<=canales;i++){
+    // CANALES Y PROFUNDIDADES
+    for(let i = 1; i <= canales; i++){
 
         numero++;
-        marca+=horizontal;
+        marca += horizontal;
 
         marcas.push({
-            numero:numero,
-            valor:Math.round(marca),
-            tipo:"horizontal"
+            numero: numero,
+            valor: Math.round(marca),
+            tipo: "horizontal"
         });
 
-        if(i<canales){
+        if(i < canales){
 
             numero++;
-            marca+=vertical;
+            marca += vertical;
 
             marcas.push({
-                numero:numero,
-                valor:Math.round(marca),
-                tipo:"profundidad"
+                numero: numero,
+                valor: Math.round(marca),
+                tipo: "profundidad"
             });
-            
+
+        }
+    }
+
+    // BORDE FINAL
+    numero++;
+    marca += bordes - espesor;
+
+    marcas.push({
+        numero: numero,
+        valor: Math.round(marca),
+        tipo: "bordeFinal"
+    });
+
+    // BUSCAR EL ÚLTIMO VERTICAL
+    // QUE CABE EN LA PRIMERA PLANCHA
+
+    let corte = -1;
+
+    for(let i = 0; i < marcas.length; i++){
+
+        if(
+            marcas[i].tipo == "profundidad" &&
+            marcas[i].valor <= anchoPlancha
+        ){
+
+            corte = i;
+
         }
 
     }
 
-    numero++;
-    marca+=bordes-espesor;
-
-    marcas.push({
-        numero:numero,
-        valor:Math.round(marca),
-        tipo:"bordeFinal"
-    });
-
-let corte=-1;
-
-for(let i=0;i<marcas.length;i++){
-
-    if(
-        marcas[i].tipo=="profundidad" &&
-        marcas[i].valor<=anchoPlancha
-    ){
-        corte=i;
-    }
+    generarPlanchas(
+        marcas,
+        corte,
+        horizontal,
+        vertical,
+        bordes,
+        espesor,
+        anchoPlancha
+    );
 
 }
 
-generarPlanchas(
+
+//-----------------------------------------
+// GENERAR PLANCHAS
+//-----------------------------------------
+
+function generarPlanchas(
     marcas,
     corte,
     horizontal,
@@ -218,8 +253,62 @@ generarPlanchas(
     bordes,
     espesor,
     anchoPlancha
-);
+){
 
+    let html = "";
+
+    // PRUEBA DE LA PRIMERA PLANCHA
+
+    let prueba = calcularUnaPlancha(
+        horizontal,
+        vertical,
+        bordes,
+        true,
+        anchoPlancha
+    );
+
+    alert(prueba.marcas.join(" - "));
+
+    // MOSTRAR PLANCHA 1
+
+    html += `<h3>PLANCHA 1</h3>`;
+
+    for(let i = 0; i <= corte; i++){
+
+        html += `
+        <div>
+
+            <span style="
+                display:inline-block;
+                width:55px;
+                text-align:right;
+                font-family:Consolas,monospace;
+            ">
+                ${marcas[i].numero}-)
+            </span>
+
+            <span style="
+                display:inline-block;
+                width:65px;
+                text-align:right;
+                font-family:Consolas,monospace;
+            ">
+                ${marcas[i].valor}
+                ${
+                    i == corte
+                    ? " <strong style='color:red;'>◄ CORTE</strong>"
+                    : ""
+                }
+            </span>
+
+        </div>
+        `;
+
+    }
+
+    document.getElementById("marcas").innerHTML = html;
+
+}
 function generarPlanchas(
     marcas,
     corte,

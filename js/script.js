@@ -119,16 +119,7 @@ let anchoPlancha=parseFloat(document.getElementById("anchoPlancha").value);
 
     mostrarResultados(desarrollo,anchoCanal);
 
-   generarPlanchas(
-    marcas,
-    corte,
-    horizontal,
-    vertical,
-    bordes,
-    espesor,
-    anchoPlancha
-);
-}
+  }
 
 //-----------------------------------------
 // MOSTRAR RESULTADOS

@@ -119,6 +119,15 @@ let anchoPlancha=parseFloat(document.getElementById("anchoPlancha").value);
 
     mostrarResultados(desarrollo,anchoCanal);
 
+generarMarcas(
+    anchoCanal,
+    profundidad,
+    bordes,
+    espesor,
+    canales,
+    anchoPlancha
+);
+    
   }
 
 //-----------------------------------------

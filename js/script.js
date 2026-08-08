@@ -197,104 +197,30 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
         tipo:"bordeFinal"
     });
 
-  let corte=-1;
-            
-    for(let i=0;i<marcas.length;i++){
+let corte=-1;
+
+for(let i=0;i<marcas.length;i++){
 
     if(
-    marcas[i].tipo=="profundidad" &&
-    marcas[i].valor<=anchoPlancha
-){
-    corte=i;
-}
-
-}
-
-  function generarPlanchas(
-    marcas,
-    corte,
-    horizontal,
-    vertical,
-    bordes,
-    espesor,
-    anchoPlancha
-){
-
-//-----------------------------------------
-//-----------------------------------------
-// GENERAR PLANCHAS
-//-----------------------------------------
-
-//-----------------------------------------
-// AQUI COMIENZA LA FUNCION generarPlanchas()
-//-----------------------------------------
-
-function generarPlanchas(
-    marcas,
-    corte,
-    horizontal,
-    vertical,
-    bordes,
-    espesor,
-    anchoPlancha
-){
-
-    let html="";
-
-    
-let prueba = calcularUnaPlancha(
-    horizontal,
-    vertical,
-    bordes,
-    true,
-  anchoPlancha
-);
-
-alert(prueba.marcas.join(" - "));
-    let numeroPlancha=1;
- let numeroMarca=1;
-let inicioPlancha=0;
-
-    html+=`<h3>PLANCHA ${numeroPlancha}</h3>`;
-
-    for(let i=0;i<marcas.length;i++){
-
-if(i==corte+1){
-
-    break;
-
-}
-        
-let numero=marcas[i].numero;
-let medida=marcas[i].valor;
-
-        html+=`
-<div>
-
-<span style="display:inline-block;width:55px;text-align:right;font-family:Consolas,monospace;">
-${numero}-)
-</span>
-
-<span style="display:inline-block;width:65px;text-align:right;font-family:Consolas,monospace;">
-${medida}
-${i==corte ? " <strong style='color:red;'>◄ CORTE</strong>" : ""}
-</span>
-
-</div>`;
-
+        marcas[i].tipo=="profundidad" &&
+        marcas[i].valor<=anchoPlancha
+    ){
+        corte=i;
     }
 
-    document.getElementById("marcas").innerHTML=html;
-
 }
 
-//-----------------------------------------
-// AQUI TERMINA LA FUNCION generarPlanchas()
-//-----------------------------------------
-//-----------------------------------------
-// GENERAR UNA PLANCHA
-//-----------------------------------------
-function calcularUnaPlancha(
+generarPlanchas(
+    marcas,
+    corte,
+    horizontal,
+    vertical,
+    bordes,
+    espesor,
+    anchoPlancha
+);
+
+}function calcularUnaPlancha(
     horizontal,
     vertical,
     borde,

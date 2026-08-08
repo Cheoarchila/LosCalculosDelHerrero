@@ -210,15 +210,15 @@ function generarMarcas(anchoCanal,profundidad,bordes,espesor,canales,anchoPlanch
 
 }
 
-  generarPlanchas(
+  function generarPlanchas(
     marcas,
     corte,
     horizontal,
     vertical,
     bordes,
-    espesor
-);
-}
+    espesor,
+    anchoPlancha
+){
 
 //-----------------------------------------
 //-----------------------------------------
@@ -241,12 +241,6 @@ function generarPlanchas(
 
     let html="";
 
-alert(
-    "horizontal = " + horizontal +
-    "\nvertical = " + vertical +
-    "\nbordes = " + bordes +
-    "\nanchoPlancha = " + anchoPlancha
-);
     
 let prueba = calcularUnaPlancha(
     horizontal,

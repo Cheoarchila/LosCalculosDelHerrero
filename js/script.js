@@ -276,34 +276,42 @@ function generarPlanchas(
     i++
 ){
         html += `
-        <div>
+<div style="
+    display:flex;
+    align-items:center;
+    white-space:nowrap;
+    font-family:Consolas,monospace;
+">
 
-            <span style="
-                display:inline-block;
-                width:55px;
-                text-align:right;
-                font-family:Consolas,monospace;
-            ">
-                ${marcas[i].numero}-)
-            </span>
+    <span style="
+        display:inline-block;
+        width:55px;
+        text-align:right;
+    ">
+        ${marcas[i].numero}-)
+    </span>
 
-            <span style="
-                display:inline-block;
-                width:65px;
-                text-align:right;
-                font-family:Consolas,monospace;
-            ">
-               ${marcas[i].valor}
-${
-    i == corte
-    ? " <strong style='color:red;'>◄ CORTE AQUÍ</strong>"
-    : ""
-}
-            </span>
+    <span style="
+        display:inline-block;
+        width:80px;
+        text-align:right;
+        margin-left:8px;
+    ">
+        ${marcas[i].valor}
+    </span>
 
-        </div>
-        `;
+    ${
+        i == corte
+        ? `<span style="
+                margin-left:10px;
+                color:red;
+                font-weight:bold;
+            ">◄ CORTE</span>`
+        : ""
+    }
 
+</div>
+`;
     }
 
     document.getElementById("marcas").innerHTML = html;

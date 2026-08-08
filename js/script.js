@@ -293,12 +293,12 @@ function generarPlanchas(
                 text-align:right;
                 font-family:Consolas,monospace;
             ">
-                ${marcas[i].valor}
-                ${
-                    i == corte
-                    ? " <strong style='color:red;'>◄ CORTE</strong>"
-                    : ""
-                }
+               ${marcas[i].valor}
+${
+    i == corte
+    ? " <strong style='color:red;'>◄ CORTE AQUÍ</strong>"
+    : ""
+}
             </span>
 
         </div>

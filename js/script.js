@@ -125,7 +125,8 @@ generarMarcas(
     bordes,
     espesor,
     canales,
-    anchoPlancha
+    anchoPlancha,
+    desarrollo
 );
     
   }
@@ -147,12 +148,13 @@ function mostrarResultados(desarrollo,anchoCanal){
 //-----------------------------------------
 
 function generarMarcas(
-    anchoCanal,
-    profundidad,
-    bordes,
-    espesor,
-    canales,
-    anchoPlancha
+anchoCanal,
+profundidad,
+bordes,
+espesor,
+canales,
+anchoPlancha,
+desarrollo
 ){
 
     let horizontal = anchoCanal - (espesor * 2);
@@ -209,11 +211,9 @@ function generarMarcas(
     // BUSCAR EL ÚLTIMO VERTICAL
     // QUE CABE EN LA PRIMERA PLANCHA
 
-   let corte = -1;
+  let corte = -1;
 
-let desarrolloFinal = marcas[marcas.length - 1].valor;
-
-if(desarrolloFinal > anchoPlancha){
+if(desarrollo > anchoPlancha){
 
     for(let i = 0; i < marcas.length; i++){
 

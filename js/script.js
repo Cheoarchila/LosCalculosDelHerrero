@@ -146,10 +146,6 @@ function mostrarResultados(desarrollo,anchoCanal){
 // GENERAR MARCAS
 //-----------------------------------------
 
-//-----------------------------------------
-// GENERAR MARCAS
-//-----------------------------------------
-
 function generarMarcas(
     anchoCanal,
     profundidad,
@@ -213,7 +209,14 @@ function generarMarcas(
     // BUSCAR EL ÚLTIMO VERTICAL
     // QUE CABE EN LA PRIMERA PLANCHA
 
-    let corte = -1;
+   let corte = -1;
+
+// Si el desarrollo completo cabe en la plancha,
+// no necesitamos ningún corte intermedio.
+
+let desarrolloFinal = marcas[marcas.length - 1].valor;
+
+if(desarrolloFinal > anchoPlancha){
 
     for(let i = 0; i < marcas.length; i++){
 
@@ -227,6 +230,8 @@ function generarMarcas(
         }
 
     }
+
+}
 
     generarPlanchas(
         marcas,

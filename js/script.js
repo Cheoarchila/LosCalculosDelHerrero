@@ -281,12 +281,84 @@ function generarPlanchas(
 
     html += `<h3>PLANCHA 1</h3>`;
 
-   for(
+for(
     let i = 0;
     i < marcas.length && (corte == -1 || i <= corte);
     i++
 ){
+
+    html += `
+    <div>
+
+        <span style="
+            display:inline-block;
+            width:55px;
+            text-align:right;
+        ">
+            ${marcas[i].numero}-)
+        </span>
+
+        <span style="
+            display:inline-block;
+            width:80px;
+            text-align:right;
+            margin-left:8px;
+        ">
+            ${marcas[i].valor}
+        </span>
+
+        ${
+            i == corte
+            ? `<span style="
+                    margin-left:10px;
+                    color:red;
+                    font-weight:bold;
+                ">◄ CORTE</span>`
+            : ""
+        }
+
+    </div>
+    `;
+}
+
+
+//-----------------------------------------
+// PLANCHA 2 — SOLO PRUEBA
+//-----------------------------------------
+
+if(corte != -1 && corte < marcas.length - 1){
+
+    html += `<h3>PLANCHA 2</h3>`;
+
+    for(let i = corte + 1; i < marcas.length; i++){
+
         html += `
+        <div>
+
+            <span style="
+                display:inline-block;
+                width:55px;
+                text-align:right;
+            ">
+                ${marcas[i].numero}-)
+            </span>
+
+            <span style="
+                display:inline-block;
+                width:80px;
+                text-align:right;
+                margin-left:8px;
+            ">
+                ${marcas[i].valor}
+            </span>
+
+        </div>
+        `;
+    }
+
+}
+
+document.getElementById("marcas").innerHTML = html;
 <div style="
     display:flex;
     align-items:center;

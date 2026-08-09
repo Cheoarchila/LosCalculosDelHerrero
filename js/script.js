@@ -52,23 +52,22 @@ function volverAcanalado(){
 
 function editarPlancha(){
 
-    let campo=document.getElementById("anchoPlancha");
+    let campo = document.getElementById("anchoPlancha");
 
     if(campo.readOnly){
 
-        campo.readOnly=false;
+        campo.readOnly = false;
         campo.focus();
         campo.select();
 
     }else{
 
-        campo.readOnly=true;
+        campo.readOnly = true;
         calcular90();
 
     }
 
 }
-
 //-----------------------------------------
 // CALCULAR
 //-----------------------------------------
@@ -387,13 +386,14 @@ function calcularUnaPlancha(
 
 document.addEventListener("DOMContentLoaded",function(){
 
-    const controles=[
-        "medidaFinal",
-        "divisiones",
-        "profundidad",
-        "bordes",
-        "espesor"
-    ];
+   const controles=[
+    "anchoPlancha",
+    "medidaFinal",
+    "divisiones",
+    "profundidad",
+    "bordes",
+    "espesor"
+];
 
     controles.forEach(function(id){
         document.getElementById(id).addEventListener("change",calcular90);

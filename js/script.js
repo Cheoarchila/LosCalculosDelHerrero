@@ -277,60 +277,15 @@ function generarPlanchas(
         anchoPlancha
     );
 
-    alert(prueba.marcas.join(" - "));
+    // alert(prueba.marcas.join(" - ")); // comentado para evitar pop-ups
 
     html += `<h3>PLANCHA 1</h3>`;
 
-for(
-    let i = 0;
-    i < marcas.length && (corte == -1 || i <= corte);
-    i++
-){
-
-    html += `
-    <div>
-
-        <span style="
-            display:inline-block;
-            width:55px;
-            text-align:right;
-        ">
-            ${marcas[i].numero}-)
-        </span>
-
-        <span style="
-            display:inline-block;
-            width:80px;
-            text-align:right;
-            margin-left:8px;
-        ">
-            ${marcas[i].valor}
-        </span>
-
-        ${
-            i == corte
-            ? `<span style="
-                    margin-left:10px;
-                    color:red;
-                    font-weight:bold;
-                ">◄ CORTE</span>`
-            : ""
-        }
-
-    </div>
-    `;
-}
-
-
-//-----------------------------------------
-// PLANCHA 2 — SOLO PRUEBA
-//-----------------------------------------
-
-if(corte != -1 && corte < marcas.length - 1){
-
-    html += `<h3>PLANCHA 2</h3>`;
-
-    for(let i = corte + 1; i < marcas.length; i++){
+    for(
+        let i = 0;
+        i < marcas.length && (corte == -1 || i <= corte);
+        i++
+    ){
 
         html += `
         <div>
@@ -352,49 +307,51 @@ if(corte != -1 && corte < marcas.length - 1){
                 ${marcas[i].valor}
             </span>
 
+            ${
+                i == corte
+                ? `<span style="
+                        margin-left:10px;
+                        color:red;
+                        font-weight:bold;
+                    ">◄ CORTE</span>`
+                : ""
+            }
+
         </div>
         `;
     }
 
-}
+    // PLANCHA 2 — SOLO PRUEBA
+    if(corte != -1 && corte < marcas.length - 1){
 
-document.getElementById("marcas").innerHTML = html;
-<div style="
-    display:flex;
-    align-items:center;
-    white-space:nowrap;
-    font-family:Consolas,monospace;
-">
+        html += `<h3>PLANCHA 2</h3>`;
 
-    <span style="
-        display:inline-block;
-        width:55px;
-        text-align:right;
-    ">
-        ${marcas[i].numero}-)
-    </span>
+        for(let i = corte + 1; i < marcas.length; i++){
 
-    <span style="
-        display:inline-block;
-        width:80px;
-        text-align:right;
-        margin-left:8px;
-    ">
-        ${marcas[i].valor}
-    </span>
+            html += `
+            <div>
 
-    ${
-        i == corte
-        ? `<span style="
-                margin-left:10px;
-                color:red;
-                font-weight:bold;
-            ">◄ CORTE</span>`
-        : ""
-    }
+                <span style="
+                    display:inline-block;
+                    width:55px;
+                    text-align:right;
+                ">
+                    ${marcas[i].numero}-)
+                </span>
 
-</div>
-`;
+                <span style="
+                    display:inline-block;
+                    width:80px;
+                    text-align:right;
+                    margin-left:8px;
+                ">
+                    ${marcas[i].valor}
+                </span>
+
+            </div>
+            `;
+        }
+
     }
 
     document.getElementById("marcas").innerHTML = html;

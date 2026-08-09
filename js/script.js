@@ -214,6 +214,10 @@ desarrollo
 
 if(desarrollo > anchoPlancha){
 
+    // CORTE INTERMEDIO:
+    // buscamos el último vertical que cabe
+    // en la primera plancha.
+
     for(let i = 0; i < marcas.length; i++){
 
         if(
@@ -226,6 +230,14 @@ if(desarrollo > anchoPlancha){
         }
 
     }
+
+}else{
+
+    // CORTE FINAL:
+    // todo el desarrollo cabe en una sola plancha,
+    // por lo tanto el corte está en la última marca.
+
+    corte = marcas.length - 1;
 
 }
 

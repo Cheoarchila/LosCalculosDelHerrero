@@ -1,3 +1,7 @@
+// js/script.js - corregido
+// Eliminada llave extra que provocaba error de sintaxis
+// Pequeñas mejoras: mostrar unidades en resultados
+
 // =======================================
 // LOS CÁLCULOS DEL HERRERO
 // js/script.js
@@ -136,9 +140,9 @@ generarMarcas(
 
 function mostrarResultados(desarrollo,anchoCanal){
 
-    document.getElementById("desarrollo").innerHTML=Math.round(desarrollo);
+    document.getElementById("desarrollo").innerHTML=Math.round(desarrollo) + " mm";
 
-    document.getElementById("anchoCanal").innerHTML=Math.round(anchoCanal);
+    document.getElementById("anchoCanal").innerHTML=Math.round(anchoCanal) + " mm";
 
 }
 
@@ -147,14 +151,14 @@ function mostrarResultados(desarrollo,anchoCanal){
 //-----------------------------------------
 
 function generarMarcas(
-anchoCanal,
-profundidad,
-bordes,
-espesor,
-canales,
-anchoPlancha,
-desarrollo
-){
+ anchoCanal,
+ profundidad,
+ bordes,
+ espesor,
+ canales,
+ anchoPlancha,
+ desarrollo
+ ){
 
     let horizontal = anchoCanal - (espesor * 2);
     let vertical = profundidad - (espesor * 2);
@@ -251,10 +255,6 @@ if(desarrollo > anchoPlancha){
         anchoPlancha,
         profundidad
     );
-
-}
-
-
 
 }
 

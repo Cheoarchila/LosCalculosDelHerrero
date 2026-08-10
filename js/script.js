@@ -257,7 +257,6 @@ if(desarrollo > anchoPlancha){
 //-----------------------------------------
 // GENERAR PLANCHAS
 //-----------------------------------------
-
 function generarPlanchas(
     marcas,
     corte,
@@ -270,105 +269,117 @@ function generarPlanchas(
 ){
 
     let html = "";
+    let inicio = 0;
+    let numeroPlancha = 1;
 
-    let prueba = calcularUnaPlancha(
-        horizontal,
-        vertical,
-        bordes,
-        true,
-        anchoPlancha
-    );
+    while(inicio < marcas.length){
 
-    // alert(prueba.marcas.join(" - ")); // comentado para evitar pop-ups
+        let esPrimera = numeroPlancha === 1;
 
-    html += `<h3>PLANCHA 1</h3>`;
+        // Punto inicial de esta plancha
+        let posicion = esPrimera
+            ? bordes - 1
+            : profundidad - 1;
 
-    for(
-        let i = 0;
-        i < marcas.length && (corte == -1 || i <= corte);
-        i++
-    ){
+        let indices = [inicio];
 
-        html += `
-        <div>
+        // Vamos colocando las marcas siguientes
+        for(let i = inicio + 1; i < marcas.length; i++){
 
-            <span style="
-                display:inline-block;
-                width:55px;
-                text-align:right;
-            ">
-                ${marcas[i].numero}-)
-            </span>
+            let distancia =
+                marcas[i].valor - marcas[i - 1].valor;
 
-            <span style="
-                display:inline-block;
-                width:80px;
-                text-align:right;
-                margin-left:8px;
-            ">
-                ${marcas[i].valor}
-            </span>
+            let nuevaPosicion = posicion + distancia;
 
-            ${
-                i == corte
-                ? `<span style="
-                        margin-left:10px;
-                        color:red;
-                        font-weight:bold;
-                    ">◄ CORTE</span>`
-                : ""
+            // Última marca de toda la pieza
+            if(i === marcas.length - 1){
+
+                let posicionFinal = bordes - 1;
+
+                if(posicionFinal <= anchoPlancha){
+
+                    posicion = posicionFinal;
+                    indices.push(i);
+                }
+
+                break;
             }
 
-        </div>
-        `;
-    }
+            // Si la siguiente marca cabe, continúa
+            if(nuevaPosicion <= anchoPlancha){
 
-    // PLANCHA 2 — SOLO PRUEBA
-    if(corte != -1 && corte < marcas.length - 1){
+                posicion = nuevaPosicion;
+                indices.push(i);
 
-       html += `<h3>PLANCHA 2</h3>`;
+            }else{
 
-let inicioPlancha2 = profundidad - 1;
+                break;
+            }
+        }
 
-html += `
-<div style="
-    display:flex;
-    align-items:center;
-    white-space:nowrap;
-    font-family:Consolas,monospace;
-">
+        //-----------------------------------------
+        // MOSTRAR PLANCHA
+        //-----------------------------------------
 
-    <span style="
-        display:inline-block;
-        width:55px;
-        text-align:right;
-    ">
-        ${marcas[corte + 1].numero}-)
-    </span>
+        html += `<h3>PLANCHA ${numeroPlancha}</h3>`;
 
-    <span style="
-        display:inline-block;
-        width:80px;
-        text-align:right;
-        margin-left:8px;
-    ">
-        ${inicioPlancha2}
-    </span>
+        let posicionMostrar =
+            esPrimera
+            ? bordes - 1
+            : profundidad - 1;
 
-</div>
-`;
+        for(let j = 0; j < indices.length; j++){
 
-for(let i = corte + 2; i < marcas.length; i++){
+            let indice = indices[j];
+
+            let numero = marcas[indice].numero;
+
+            // Primera marca
+            if(j === 0){
+
+                posicionMostrar =
+                    esPrimera
+                    ? bordes - 1
+                    : profundidad - 1;
+
+            }
+
+            // Última marca de toda la pieza
+            else if(indice === marcas.length - 1){
+
+                posicionMostrar = bordes - 1;
+
+            }
+
+            // Marcas intermedias
+            else{
+
+                let indiceAnterior = indices[j - 1];
+
+                let distancia =
+                    marcas[indice].valor -
+                    marcas[indiceAnterior].valor;
+
+                posicionMostrar += distancia;
+            }
+
+            let esCorte =
+                j === indices.length - 1;
 
             html += `
-            <div>
+            <div style="
+                display:flex;
+                align-items:center;
+                white-space:nowrap;
+                font-family:Consolas,monospace;
+            ">
 
                 <span style="
                     display:inline-block;
                     width:55px;
                     text-align:right;
                 ">
-                    ${marcas[i].numero}-)
+                    ${numero}-)
                 </span>
 
                 <span style="
@@ -377,17 +388,44 @@ for(let i = corte + 2; i < marcas.length; i++){
                     text-align:right;
                     margin-left:8px;
                 ">
-                    ${marcas[i].valor}
+                    ${Math.round(posicionMostrar)}
                 </span>
+
+                ${
+                    esCorte
+                    ? `<span style="
+                            margin-left:10px;
+                            color:red;
+                            font-weight:bold;
+                        ">◄ CORTE</span>`
+                    : ""
+                }
 
             </div>
             `;
         }
 
+        //-----------------------------------------
+        // ¿TERMINÓ LA PIEZA?
+        //-----------------------------------------
+
+        let ultimoIndice =
+            indices[indices.length - 1];
+
+        if(ultimoIndice === marcas.length - 1){
+
+            break;
+        }
+
+        //-----------------------------------------
+        // SIGUIENTE PLANCHA
+        //-----------------------------------------
+
+        inicio = ultimoIndice + 1;
+        numeroPlancha++;
     }
 
     document.getElementById("marcas").innerHTML = html;
-
 }
 
 function calcularUnaPlancha(

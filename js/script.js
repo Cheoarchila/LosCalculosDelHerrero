@@ -353,12 +353,19 @@ function generarPlanchas(
         let indices = [inicio];
         let posiciones = [posicion];
 
-        let ultimoIndice = inicio;
+        let posicion = posicionInicial;
 
-        for(let i = inicio + 1; i < marcas.length; i++){
+let referenciaAnterior =
+    inicio === 0
+    ? marcas[0].valor
+    : marcas[inicio - 1].valor;
 
-            let distancia =
-                marcas[i].valor -
+for(let i = inicio + 1; i < marcas.length; i++){
+
+    let distancia =
+        marcas[i].valor - referenciaAnterior;
+
+    referenciaAnterior = marcas[i].valor;
                 marcas[i - 1].valor;
 
             let nuevaPosicion =

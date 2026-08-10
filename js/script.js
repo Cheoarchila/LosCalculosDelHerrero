@@ -276,39 +276,41 @@ function generarPlanchas(
 
         let esPrimera = numeroPlancha === 1;
 
-        // Punto inicial de esta plancha
-        let posicion = esPrimera
+        let posicionInicial = esPrimera
             ? bordes - 1
             : profundidad - 1;
 
-        let indices = [inicio];
+        let posiciones = [];
+        let indices = [];
 
-        // Vamos colocando las marcas siguientes
+        posiciones.push(posicionInicial);
+        indices.push(inicio);
+
+        let posicion = posicionInicial;
+
         for(let i = inicio + 1; i < marcas.length; i++){
 
             let distancia =
                 marcas[i].valor - marcas[i - 1].valor;
 
-            let nuevaPosicion = posicion + distancia;
-
             // Última marca de toda la pieza
             if(i === marcas.length - 1){
 
-                let posicionFinal = bordes - 1;
-
-                if(posicionFinal <= anchoPlancha){
-
-                    posicion = posicionFinal;
-                    indices.push(i);
-                }
+                // El final de la pieza siempre termina
+                // en Bordes - 1.
+                posiciones.push(bordes - 1);
+                indices.push(i);
 
                 break;
             }
 
-            // Si la siguiente marca cabe, continúa
+            let nuevaPosicion = posicion + distancia;
+
             if(nuevaPosicion <= anchoPlancha){
 
                 posicion = nuevaPosicion;
+
+                posiciones.push(posicion);
                 indices.push(i);
 
             }else{
@@ -323,45 +325,11 @@ function generarPlanchas(
 
         html += `<h3>PLANCHA ${numeroPlancha}</h3>`;
 
-        let posicionMostrar =
-            esPrimera
-            ? bordes - 1
-            : profundidad - 1;
-
         for(let j = 0; j < indices.length; j++){
 
             let indice = indices[j];
-
             let numero = marcas[indice].numero;
-
-            // Primera marca
-            if(j === 0){
-
-                posicionMostrar =
-                    esPrimera
-                    ? bordes - 1
-                    : profundidad - 1;
-
-            }
-
-            // Última marca de toda la pieza
-            else if(indice === marcas.length - 1){
-
-                posicionMostrar = bordes - 1;
-
-            }
-
-            // Marcas intermedias
-            else{
-
-                let indiceAnterior = indices[j - 1];
-
-                let distancia =
-                    marcas[indice].valor -
-                    marcas[indiceAnterior].valor;
-
-                posicionMostrar += distancia;
-            }
+            let valor = posiciones[j];
 
             let esCorte =
                 j === indices.length - 1;
@@ -388,7 +356,7 @@ function generarPlanchas(
                     text-align:right;
                     margin-left:8px;
                 ">
-                    ${Math.round(posicionMostrar)}
+                    ${Math.round(valor)}
                 </span>
 
                 ${
@@ -406,7 +374,7 @@ function generarPlanchas(
         }
 
         //-----------------------------------------
-        // ¿TERMINÓ LA PIEZA?
+        // ¿YA TERMINÓ LA PIEZA?
         //-----------------------------------------
 
         let ultimoIndice =
@@ -418,7 +386,7 @@ function generarPlanchas(
         }
 
         //-----------------------------------------
-        // SIGUIENTE PLANCHA
+        // PREPARAR SIGUIENTE PLANCHA
         //-----------------------------------------
 
         inicio = ultimoIndice + 1;

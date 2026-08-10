@@ -248,7 +248,8 @@ if(desarrollo > anchoPlancha){
         vertical,
         bordes,
         espesor,
-        anchoPlancha
+        anchoPlancha,
+        profundidad
     );
 
 }
@@ -264,7 +265,8 @@ function generarPlanchas(
     vertical,
     bordes,
     espesor,
-    anchoPlancha
+    anchoPlancha,
+    profundidad
 ){
 
     let html = "";

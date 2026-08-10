@@ -321,58 +321,10 @@ function calcularUnaPlancha(
     };
 
 }
+
 //-----------------------------------------
-// EVENTOS
+// GENERAR PLANCHAS
 //-----------------------------------------
-
-document.addEventListener("DOMContentLoaded",function(){
-
-   const controles=[
-    "anchoPlancha",
-    "medidaFinal",
-    "divisiones",
-    "profundidad",
-    "bordes",
-    "espesor"
-];
-
-    controles.forEach(function(id){
-        document.getElementById(id).addEventListener("change",calcular90);
-    });
-
-    function actualizarProfundidad(){
-
-        let canales=parseInt(document.getElementById("divisiones").value);
-
-        let fila=document.getElementById("filaProfundidad");
-        let mensaje=document.getElementById("mensajeProfundidad");
-        let profundidad=document.getElementById("profundidad");
-
-        if(canales==1){
-
-            fila.style.display="none";
-            mensaje.style.display="flex";
-            profundidad.disabled=true;
-
-        }else{
-
-            fila.style.display="flex";
-            mensaje.style.display="none";
-            profundidad.disabled=false;
-
-        }
-
-    }
-
-    document.getElementById("divisiones").addEventListener("change",function(){
-
-        actualizarProfundidad();
-        calcular90();
-
-    });
-
-    actualizarProfundidad();
-    calcular90();
 
 function generarPlanchas(
     marcas,
@@ -500,5 +452,58 @@ function generarPlanchas(
 
     document.getElementById("marcas").innerHTML = html;
 }
-    
+
+//-----------------------------------------
+// EVENTOS
+//-----------------------------------------
+
+document.addEventListener("DOMContentLoaded",function(){
+
+   const controles=[
+    "anchoPlancha",
+    "medidaFinal",
+    "divisiones",
+    "profundidad",
+    "bordes",
+    "espesor"
+];
+
+    controles.forEach(function(id){
+        document.getElementById(id).addEventListener("change",calcular90);
+    });
+
+    function actualizarProfundidad(){
+
+        let canales=parseInt(document.getElementById("divisiones").value);
+
+        let fila=document.getElementById("filaProfundidad");
+        let mensaje=document.getElementById("mensajeProfundidad");
+        let profundidad=document.getElementById("profundidad");
+
+        if(canales==1){
+
+            fila.style.display="none";
+            mensaje.style.display="flex";
+            profundidad.disabled=true;
+
+        }else{
+
+            fila.style.display="flex";
+            mensaje.style.display="none";
+            profundidad.disabled=false;
+
+        }
+
+    }
+
+    document.getElementById("divisiones").addEventListener("change",function(){
+
+        actualizarProfundidad();
+        calcular90();
+
+    });
+
+    actualizarProfundidad();
+    calcular90();
+
 });

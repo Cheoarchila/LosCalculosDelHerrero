@@ -324,9 +324,39 @@ function generarPlanchas(
     // PLANCHA 2 — SOLO PRUEBA
     if(corte != -1 && corte < marcas.length - 1){
 
-        html += `<h3>PLANCHA 2</h3>`;
+       html += `<h3>PLANCHA 2</h3>`;
 
-        for(let i = corte + 1; i < marcas.length; i++){
+let inicioPlancha2 = profundidad - 1;
+
+html += `
+<div style="
+    display:flex;
+    align-items:center;
+    white-space:nowrap;
+    font-family:Consolas,monospace;
+">
+
+    <span style="
+        display:inline-block;
+        width:55px;
+        text-align:right;
+    ">
+        ${marcas[corte + 1].numero}-)
+    </span>
+
+    <span style="
+        display:inline-block;
+        width:80px;
+        text-align:right;
+        margin-left:8px;
+    ">
+        ${inicioPlancha2}
+    </span>
+
+</div>
+`;
+
+for(let i = corte + 2; i < marcas.length; i++){
 
             html += `
             <div>

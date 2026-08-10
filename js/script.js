@@ -258,74 +258,6 @@ if(desarrollo > anchoPlancha){
 
 }
 
-function calcularUnaPlancha(
-    horizontal,
-    vertical,
-    borde,
-    esPrimera,
-    anchoPlancha
-){
-
-    let plancha=[];
-    let marca;
-
-    if(esPrimera){
-        marca=borde-1;
-    }else{
-        marca=vertical+1;
-    }
-
-    plancha.push(marca);
-
-    let corte=-1;
-    let usarHorizontal=true;
-
-    while(true){
-
-        if(usarHorizontal){
-
-            marca+=horizontal;
-
-            // Si el horizontal ya no cabe,
-            // terminamos la plancha.
-            if(marca>anchoPlancha){
-                break;
-            }
-
-            plancha.push(marca);
-
-        }else{
-
-            marca+=vertical;
-
-            // Si el vertical ya no cabe,
-            // no lo guardamos.
-            if(marca>anchoPlancha){
-                break;
-            }
-
-            plancha.push(marca);
-
-            // Este es el último vertical
-            // que cabe en la plancha.
-            corte=plancha.length-1;
-        }
-
-        usarHorizontal=!usarHorizontal;
-    }
-
-    return{
-        marcas:plancha,
-        corte:corte,
-        consumido:marca
-    };
-
-}
-
-//-----------------------------------------
-// GENERAR PLANCHAS
-//-----------------------------------------
-
 function generarPlanchas(
     marcas,
     corte,
@@ -353,20 +285,14 @@ function generarPlanchas(
         let indices = [inicio];
         let posiciones = [posicion];
 
-        let posicion = posicionInicial;
+        let ultimoIndice = inicio;
 
-let referenciaAnterior =
-    inicio === 0
-    ? marcas[0].valor
-    : marcas[inicio - 1].valor;
+        let referenciaAnterior = marcas[inicio].valor;
 
-for(let i = inicio + 1; i < marcas.length; i++){
+        for(let i = inicio + 1; i < marcas.length; i++){
 
-    let distancia =
-        marcas[i].valor - referenciaAnterior;
-
-    referenciaAnterior = marcas[i].valor;
-                marcas[i - 1].valor;
+            let distancia =
+                marcas[i].valor - referenciaAnterior;
 
             let nuevaPosicion =
                 posicion + distancia;
@@ -391,6 +317,8 @@ for(let i = inicio + 1; i < marcas.length; i++){
                 posiciones.push(posicion);
 
                 ultimoIndice = i;
+
+                referenciaAnterior = marcas[i].valor;
 
             }else{
 

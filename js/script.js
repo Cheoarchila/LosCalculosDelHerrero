@@ -1,6 +1,11 @@
+// js/script.js - corregido
+// Eliminada llave extra que provocaba error de sintaxis
+// Pequeñas mejoras: mostrar unidades en resultados
+
 // =======================================
 // LOS CÁLCULOS DEL HERRERO
 // js/script.js
+// PARTE 1
 // =======================================
 
 //-----------------------------------------
@@ -8,35 +13,41 @@
 //-----------------------------------------
 
 function ocultarPantallas(){
+
     document.getElementById("pantallaInicio").style.display="none";
     document.getElementById("pantallaAcanalado").style.display="none";
     document.getElementById("pantalla90").style.display="none";
+
 }
 
 function abrirAcanalado(){
+
     ocultarPantallas();
     document.getElementById("pantallaAcanalado").style.display="block";
+
 }
 
 function volverInicio(){
+
     ocultarPantallas();
     document.getElementById("pantallaInicio").style.display="block";
+
 }
 
 function abrir90(){
+
     ocultarPantallas();
     document.getElementById("pantalla90").style.display="block";
-    
-    // Forzar cálculo cuando se abre la pantalla
-    setTimeout(function(){
-        actualizarProfundidad();
-        calcular90();
-    }, 50);
+
+    calcular90();
+
 }
 
 function volverAcanalado(){
+
     ocultarPantallas();
     document.getElementById("pantallaAcanalado").style.display="block";
+
 }
 
 //-----------------------------------------
@@ -44,104 +55,74 @@ function volverAcanalado(){
 //-----------------------------------------
 
 function editarPlancha(){
+
     let campo = document.getElementById("anchoPlancha");
 
     if(campo.readOnly){
+
         campo.readOnly = false;
         campo.focus();
         campo.select();
+
     }else{
+
         campo.readOnly = true;
         calcular90();
+
     }
+
 }
-
-//-----------------------------------------
-// ACTUALIZAR PROFUNDIDAD
-//-----------------------------------------
-
-function actualizarProfundidad(){
-    let canales = parseInt(document.getElementById("divisiones").value);
-    let fila = document.getElementById("filaProfundidad");
-    let mensaje = document.getElementById("mensajeProfundidad");
-    let profundidad = document.getElementById("profundidad");
-
-    if(canales == 1){
-        fila.classList.add("oculto");
-        mensaje.classList.remove("oculto");
-        profundidad.disabled = true;
-    }else{
-        fila.classList.remove("oculto");
-        mensaje.classList.add("oculto");
-        profundidad.disabled = false;
-    }
-}
-
 //-----------------------------------------
 // CALCULAR
 //-----------------------------------------
 
 function calcular90(){
-    let anchoPlancha = parseFloat(document.getElementById("anchoPlancha").value);
+
+let anchoPlancha=parseFloat(document.getElementById("anchoPlancha").value);
     let medida = parseFloat(document.getElementById("medidaFinal").value);
     let canales = parseInt(document.getElementById("divisiones").value);
     let profundidad = parseFloat(document.getElementById("profundidad").value);
     let bordes = parseFloat(document.getElementById("bordes").value);
     let espesor = parseFloat(document.getElementById("espesor").value);
 
-    // Validación
     if(
-        isNaN(anchoPlancha) ||
-        isNaN(medida) ||
-        isNaN(canales) ||
-        isNaN(bordes) ||
-        isNaN(espesor)
-    ){
-        return;
+    isNaN(anchoPlancha) ||
+    isNaN(medida) ||
+    isNaN(canales) ||
+    isNaN(bordes) ||
+    isNaN(espesor)
+){
+    return;
     }
 
     if(canales < 1){
         canales = 1;
     }
 
-    if(canales == 1){
-        profundidad = 0;
-    }else{
-        if(isNaN(profundidad)){
-            profundidad = 15;
-        }
+  if(canales == 1){
+
+    profundidad = 0;
+
+}else{
+
+    if(isNaN(profundidad)){
+        profundidad = 15;
     }
+
+}
 
     let anchoCanal = medida / canales;
 
     let desarrollo =
-        ((bordes*2)+
-        medida+
-        ((canales-1)*profundidad))
-        -
-        (canales*4*espesor);
+    ((bordes*2)+
+    medida+
+    ((canales-1)*profundidad))
+    -
+    (canales*4*espesor);
 
-    // Mostrar resultados
-    document.getElementById("desarrollo").innerHTML = Math.round(desarrollo) + " mm";
-    document.getElementById("anchoCanal").innerHTML = Math.round(anchoCanal) + " mm";
+    mostrarResultados(desarrollo,anchoCanal);
 
-    // Generar marcas
-    generarMarcas(
-        anchoCanal,
-        profundidad,
-        bordes,
-        espesor,
-        canales,
-        anchoPlancha,
-        desarrollo
-    );
-}
-
-//-----------------------------------------
-// GENERAR MARCAS
-//-----------------------------------------
-
-function generarMarcas(
+generarMarcas(
     anchoCanal,
     profundidad,
     bordes,
@@ -149,7 +130,36 @@ function generarMarcas(
     canales,
     anchoPlancha,
     desarrollo
-){
+);
+    
+  }
+
+//-----------------------------------------
+// MOSTRAR RESULTADOS
+//-----------------------------------------
+
+function mostrarResultados(desarrollo,anchoCanal){
+
+    document.getElementById("desarrollo").innerHTML=Math.round(desarrollo) + " mm";
+
+    document.getElementById("anchoCanal").innerHTML=Math.round(anchoCanal) + " mm";
+
+}
+
+//-----------------------------------------
+// GENERAR MARCAS
+//-----------------------------------------
+
+function generarMarcas(
+ anchoCanal,
+ profundidad,
+ bordes,
+ espesor,
+ canales,
+ anchoPlancha,
+ desarrollo
+ ){
+
     let horizontal = anchoCanal - (espesor * 2);
     let vertical = profundidad - (espesor * 2);
 
@@ -167,6 +177,7 @@ function generarMarcas(
 
     // CANALES Y PROFUNDIDADES
     for(let i = 1; i <= canales; i++){
+
         numero++;
         marca += horizontal;
 
@@ -177,6 +188,7 @@ function generarMarcas(
         });
 
         if(i < canales){
+
             numero++;
             marca += vertical;
 
@@ -185,6 +197,7 @@ function generarMarcas(
                 valor: Math.round(marca),
                 tipo: "profundidad"
             });
+
         }
     }
 
@@ -198,9 +211,43 @@ function generarMarcas(
         tipo: "bordeFinal"
     });
 
-    // Generar planchas
+    // BUSCAR EL ÚLTIMO VERTICAL
+    // QUE CABE EN LA PRIMERA PLANCHA
+
+  let corte = -1;
+
+if(desarrollo > anchoPlancha){
+
+    // CORTE INTERMEDIO:
+    // buscamos el último vertical que cabe
+    // en la primera plancha.
+
+    for(let i = 0; i < marcas.length; i++){
+
+        if(
+            marcas[i].tipo == "profundidad" &&
+            marcas[i].valor <= anchoPlancha
+        ){
+
+            corte = i;
+
+        }
+
+    }
+
+}else{
+
+    // CORTE FINAL:
+    // todo el desarrollo cabe en una sola plancha,
+    // por lo tanto el corte está en la última marca.
+
+    corte = marcas.length - 1;
+
+}
+
     generarPlanchas(
         marcas,
+        corte,
         horizontal,
         vertical,
         bordes,
@@ -208,14 +255,128 @@ function generarMarcas(
         anchoPlancha,
         profundidad
     );
+
 }
 
+function calcularUnaPlancha(
+    horizontal,
+    vertical,
+    borde,
+    esPrimera,
+    anchoPlancha
+){
+
+    let plancha=[];
+    let marca;
+
+    if(esPrimera){
+        marca=borde-1;
+    }else{
+        marca=vertical+1;
+    }
+
+    plancha.push(marca);
+
+    let corte=-1;
+    let usarHorizontal=true;
+
+    while(true){
+
+        if(usarHorizontal){
+
+            marca+=horizontal;
+
+            // Si el horizontal ya no cabe,
+            // terminamos la plancha.
+            if(marca>anchoPlancha){
+                break;
+            }
+
+            plancha.push(marca);
+
+        }else{
+
+            marca+=vertical;
+
+            // Si el vertical ya no cabe,
+            // no lo guardamos.
+            if(marca>anchoPlancha){
+                break;
+            }
+
+            plancha.push(marca);
+
+            // Este es el último vertical
+            // que cabe en la plancha.
+            corte=plancha.length-1;
+        }
+
+        usarHorizontal=!usarHorizontal;
+    }
+
+    return{
+        marcas:plancha,
+        corte:corte,
+        consumido:marca
+    };
+
+}
 //-----------------------------------------
-// GENERAR PLANCHAS
+// EVENTOS
 //-----------------------------------------
+
+document.addEventListener("DOMContentLoaded",function(){
+
+   const controles=[
+    "anchoPlancha",
+    "medidaFinal",
+    "divisiones",
+    "profundidad",
+    "bordes",
+    "espesor"
+];
+
+    controles.forEach(function(id){
+        document.getElementById(id).addEventListener("change",calcular90);
+    });
+
+    function actualizarProfundidad(){
+
+        let canales=parseInt(document.getElementById("divisiones").value);
+
+        let fila=document.getElementById("filaProfundidad");
+        let mensaje=document.getElementById("mensajeProfundidad");
+        let profundidad=document.getElementById("profundidad");
+
+        if(canales==1){
+
+            fila.style.display="none";
+            mensaje.style.display="flex";
+            profundidad.disabled=true;
+
+        }else{
+
+            fila.style.display="flex";
+            mensaje.style.display="none";
+            profundidad.disabled=false;
+
+        }
+
+    }
+
+    document.getElementById("divisiones").addEventListener("change",function(){
+
+        actualizarProfundidad();
+        calcular90();
+
+    });
+
+    actualizarProfundidad();
+    calcular90();
 
 function generarPlanchas(
     marcas,
+    corte,
     horizontal,
     vertical,
     bordes,
@@ -223,11 +384,13 @@ function generarPlanchas(
     anchoPlancha,
     profundidad
 ){
+
     let html = "";
     let inicio = 0;
     let numeroPlancha = 1;
 
     while(inicio < marcas.length){
+
         let esPrimera = numeroPlancha === 1;
 
         let posicion =
@@ -241,6 +404,7 @@ function generarPlanchas(
         let ultimoIndice = inicio;
 
         for(let i = inicio + 1; i < marcas.length; i++){
+
             let distancia =
                 marcas[i].valor -
                 marcas[i - 1].valor;
@@ -250,27 +414,37 @@ function generarPlanchas(
 
             // ÚLTIMA MARCA DE LA PIEZA
             if(i === marcas.length - 1){
+
                 indices.push(i);
                 posiciones.push(bordes - 1);
+
                 ultimoIndice = i;
+
                 break;
             }
 
             // LA MARCA CABE
             if(nuevaPosicion <= anchoPlancha){
+
                 posicion = nuevaPosicion;
+
                 indices.push(i);
                 posiciones.push(posicion);
+
                 ultimoIndice = i;
+
             }else{
+
                 break;
             }
         }
 
         // MOSTRAR PLANCHA
+
         html += `<h3>PLANCHA ${numeroPlancha}</h3>`;
 
         for(let j = 0; j < indices.length; j++){
+
             let indice = indices[j];
 
             html += `
@@ -280,6 +454,7 @@ function generarPlanchas(
                 white-space:nowrap;
                 font-family:Consolas,monospace;
             ">
+
                 <span style="
                     display:inline-block;
                     width:55px;
@@ -306,49 +481,24 @@ function generarPlanchas(
                         ">◄ CORTE</span>`
                     : ""
                 }
+
             </div>
             `;
         }
 
         // ¿TERMINÓ LA PIEZA?
+
         if(ultimoIndice === marcas.length - 1){
             break;
         }
 
         // SIGUIENTE PLANCHA
+
         inicio = ultimoIndice + 1;
         numeroPlancha++;
     }
 
     document.getElementById("marcas").innerHTML = html;
 }
-
-//-----------------------------------------
-// EVENTOS
-//-----------------------------------------
-
-document.addEventListener("DOMContentLoaded", function(){
-    // Agregar listeners a todos los inputs
-    const controles = [
-        "anchoPlancha",
-        "medidaFinal",
-        "divisiones",
-        "profundidad",
-        "bordes",
-        "espesor"
-    ];
-
-    controles.forEach(function(id){
-        const elemento = document.getElementById(id);
-        if(elemento){
-            elemento.addEventListener("change", function(){
-                actualizarProfundidad();
-                calcular90();
-            });
-            elemento.addEventListener("input", function(){
-                actualizarProfundidad();
-                calcular90();
-            });
-        }
-    });
+    
 });

@@ -394,6 +394,16 @@
     const bordes = toFloat(refs.bordes, NaN);
     const espesor = toFloat(refs.espesor, NaN);
 
+    // Validar valores que no pueden ser cero
+if (
+    anchoPlancha <= 0 ||
+    medida <= 0 ||
+    canales <= 0 ||
+    espesor <= 0
+) {
+    return;
+}
+
     // Validación básica (si falta algo esencial, no continuar)
     if ([anchoPlancha, medida, canales, bordes, espesor].some(v => isNaN(v))) {
       // no hacemos nada si valores esenciales faltan

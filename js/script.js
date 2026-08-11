@@ -156,32 +156,30 @@
     let inicio = 0;
     let numeroPlancha = 1;
     let numeroMarca = 1;
-
-    // Índice de la última marca real utilizada
     let indiceAnterior = -1;
+
+    const planchas = [];
+
+    // =========================================
+    // PRIMERO: GENERAR TODAS LAS PLANCHAS
+    // =========================================
 
     while (inicio < marcas.length) {
 
         const esPrimera = numeroPlancha === 1;
-
-        // -----------------------------------------
-        // POSICIÓN INICIAL
-        // -----------------------------------------
 
         const posicionInicial =
             esPrimera
             ? bordes - 1
             : profundidad - 1;
 
-        // -----------------------------------------
-        // DETERMINAR SI EXISTE UN TRAMO QUE CABE
-        // -----------------------------------------
-
         const indiceSiguiente =
             esPrimera
             ? inicio + 1
             : indiceAnterior + 1;
 
+        // Si no existe una siguiente marca,
+        // no podemos generar esta plancha.
         if (indiceSiguiente >= marcas.length) {
             break;
         }
@@ -194,28 +192,16 @@
         const distanciaInicial =
             marcas[indiceSiguiente].valor - referencia;
 
-        // Si ni siquiera el primer tramo cabe,
-        // esta plancha no puede utilizarse.
+        // El primer tramo no cabe.
         if (distanciaInicial > anchoPlancha) {
             break;
         }
 
-        // -----------------------------------------
-        // CREAR PLANCHA
-        // -----------------------------------------
-
-        const piece = document.createElement("div");
-        piece.className = "plancha";
-
-        const h3 = document.createElement("h3");
-        h3.textContent = `PLANCHA ${numeroPlancha}`;
-        piece.appendChild(h3);
-
         let posicion = posicionInicial;
 
-        let indices = [];
-        let posiciones = [];
-        let numeros = [];
+        const indices = [];
+        const posiciones = [];
+        const numeros = [];
 
         // -----------------------------------------
         // PRIMERA PLANCHA
@@ -229,7 +215,6 @@
 
             indiceAnterior = inicio;
             numeroMarca++;
-
         }
 
         // -----------------------------------------
@@ -238,11 +223,8 @@
 
         else {
 
-            // CLON DEL ÚLTIMO PUNTO DE LA PLANCHA
-            // ANTERIOR.
-            //
+            // Clon de la última marca anterior.
             // No consume desarrollo.
-            // Es solamente el empalme.
 
             indices.push(indiceAnterior);
             posiciones.push(posicion);
@@ -274,17 +256,10 @@
             const nuevaPosicion =
                 posicion + distancia;
 
-            // -----------------------------------------
-            // SI NO CABE
-            // -----------------------------------------
-
+            // Si ya no cabe, termina esta plancha.
             if (nuevaPosicion > anchoPlancha) {
                 break;
             }
-
-            // -----------------------------------------
-            // MARCA
-            // -----------------------------------------
 
             indices.push(i);
             posiciones.push(nuevaPosicion);
@@ -297,20 +272,96 @@
 
             numeroMarca++;
 
-            // -----------------------------------------
-            // FINAL DE LA PIEZA
-            // -----------------------------------------
-
             if (i === marcas.length - 1) {
                 break;
             }
         }
 
         // -----------------------------------------
-        // MOSTRAR FILAS
+        // GUARDAR PLANCHA
         // -----------------------------------------
 
-        indices.forEach((indice, j) => {
+        planchas.push({
+            numero: numeroPlancha,
+            indices: indices,
+            posiciones: posiciones,
+            numeros: numeros
+        });
+
+        // -----------------------------------------
+        // ¿TERMINÓ LA PIEZA?
+        // -----------------------------------------
+
+        if (ultimoIndice === marcas.length - 1) {
+            break;
+        }
+
+        // Protección contra bucle infinito.
+        if (ultimoIndice < inicio) {
+            break;
+        }
+
+        inicio = ultimoIndice + 1;
+        numeroPlancha++;
+    }
+
+    // =========================================
+    // COMPARAR Y AGRUPAR PLANCHAS
+    // =========================================
+
+    let i = 0;
+
+    while (i < planchas.length) {
+
+        const planchaActual = planchas[i];
+
+        let ultima = i;
+
+        // Buscar planchas consecutivas idénticas.
+        while (
+            ultima + 1 < planchas.length &&
+            sonPlanchasIguales(
+                planchaActual,
+                planchas[ultima + 1]
+            )
+        ) {
+            ultima++;
+        }
+
+        // =========================================
+        // CREAR BLOQUE DE PLANCHA
+        // =========================================
+
+        const piece = document.createElement("div");
+        piece.className = "plancha";
+
+        let titulo = "";
+
+        if (ultima === i) {
+
+            titulo = `PLANCHA ${planchaActual.numero}`;
+
+        } else {
+
+            const numerosPlancha = [];
+
+            for (let p = i; p <= ultima; p++) {
+                numerosPlancha.push(planchas[p].numero);
+            }
+
+            titulo =
+                `PLANCHA ${numerosPlancha.join(", ")}`;
+        }
+
+        const h3 = document.createElement("h3");
+        h3.textContent = titulo;
+        piece.appendChild(h3);
+
+        // =========================================
+        // MOSTRAR MARCAS
+        // =========================================
+
+        planchaActual.indices.forEach((indice, j) => {
 
             const row = document.createElement("div");
 
@@ -328,7 +379,7 @@
             spanNum.style.textAlign = "right";
 
             spanNum.textContent =
-                `${numeros[j]}-)`;
+                `${planchaActual.numeros[j]}-)`;
 
             const spanPos = document.createElement("span");
 
@@ -337,14 +388,30 @@
             spanPos.style.textAlign = "right";
             spanPos.style.marginLeft = "8px";
 
-            spanPos.textContent =
-                Math.round(posiciones[j]);
+            const posicion =
+                Math.round(planchaActual.posiciones[j]);
+
+            spanPos.textContent = posicion;
 
             row.appendChild(spanNum);
             row.appendChild(spanPos);
 
-            // CORTE SOLO EN LA ÚLTIMA MARCA
-            if (j === indices.length - 1) {
+            // =====================================
+            // CORTE
+            // =====================================
+
+            const esUltimaMarca =
+                j === planchaActual.indices.length - 1;
+
+            const llegaAlFinal =
+                posicion === anchoPlancha;
+
+            // Si llega exactamente al final de la
+            // plancha, NO mostramos CORTE.
+            if (
+                esUltimaMarca &&
+                !llegaAlFinal
+            ) {
 
                 const cut = document.createElement("span");
 
@@ -362,32 +429,35 @@
 
         frag.appendChild(piece);
 
-        // -----------------------------------------
-        // TERMINÓ LA PIEZA
-        // -----------------------------------------
-
-        if (ultimoIndice === marcas.length - 1) {
-            break;
-        }
-
-        // -----------------------------------------
-        // PROTECCIÓN
-        // -----------------------------------------
-
-        if (ultimoIndice < inicio) {
-            break;
-        }
-
-        // -----------------------------------------
-        // SIGUIENTE PLANCHA
-        // -----------------------------------------
-
-        inicio = ultimoIndice + 1;
-        numeroPlancha++;
+        i = ultima + 1;
     }
 
     refs.marcas.innerHTML = "";
     refs.marcas.appendChild(frag);
+}
+
+
+// =========================================
+// COMPARAR DOS PLANCHAS
+// =========================================
+
+function sonPlanchasIguales(a, b) {
+
+    if (a.posiciones.length !== b.posiciones.length) {
+        return false;
+    }
+
+    for (let i = 0; i < a.posiciones.length; i++) {
+
+        if (
+            Math.round(a.posiciones[i]) !==
+            Math.round(b.posiciones[i])
+        ) {
+            return false;
+        }
+    }
+
+    return true;
 }
   // Orquestación: generar marcas y determinar corte
   function generarMarcasUI({ anchoCanal, profundidad, bordes, espesor, canales, anchoPlancha, desarrollo }) {

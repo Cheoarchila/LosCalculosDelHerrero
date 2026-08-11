@@ -401,9 +401,11 @@ if (
     canales <= 0 ||
     espesor <= 0
 ) {
+    refs.desarrollo.textContent = "";
+    refs.anchoCanal.textContent = "";
+    refs.marcas.innerHTML = "";
     return;
 }
-
     // Validación básica (si falta algo esencial, no continuar)
     if ([anchoPlancha, medida, canales, bordes, espesor].some(v => isNaN(v))) {
       // no hacemos nada si valores esenciales faltan

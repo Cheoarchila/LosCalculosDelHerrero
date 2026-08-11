@@ -1,16 +1,9 @@
-// js/script.js - refactorado
-// Mejoras:
-// - Cacheo de elementos DOM
-// - Separación de cálculo y render
-// - Uso de createElement en lugar de innerHTML para la lista de marcas
-// - Debounce en eventos de entrada
-// - Validación y valores por defecto
-// - Comentarios JSDoc y formateo de unidades
+// js/script.js - LÓGICA CORRECTA PARA MÚLTIPLES PLANCHAS
+// La secuencia de marcas se divide en planchas en los últimos verticales que caben
 
 (() => {
   "use strict";
 
-  // Helpers
   const $ = id => document.getElementById(id);
   const fmt = (v, digits = 0) =>
     new Intl.NumberFormat(undefined, { maximumFractionDigits: digits }).format(v) + " mm";
@@ -26,7 +19,6 @@
 
   const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 
-  // Debounce utility
   function debounce(fn, wait = 150) {
     let t;
     return function (...args) {
@@ -35,52 +27,51 @@
     };
   }
 
-  // Cached DOM refs
   const refs = {
     pantallaInicio: $("pantallaInicio"),
     pantallaAcanalado: $("pantallaAcanalado"),
     pantalla90: $("pantalla90"),
-
     anchoPlancha: $("anchoPlancha"),
     medidaFinal: $("medidaFinal"),
     divisiones: $("divisiones"),
     profundidad: $("profundidad"),
     bordes: $("bordes"),
     espesor: $("espesor"),
-
     desarrollo: $("desarrollo"),
     anchoCanal: $("anchoCanal"),
     marcas: $("marcas"),
-
     filaProfundidad: $("filaProfundidad"),
     mensajeProfundidad: $("mensajeProfundidad")
   };
 
-  // NAV
+  // NAVEGACIÓN
   function ocultarPantallas() {
     refs.pantallaInicio && (refs.pantallaInicio.style.display = "none");
     refs.pantallaAcanalado && (refs.pantallaAcanalado.style.display = "none");
     refs.pantalla90 && (refs.pantalla90.style.display = "none");
   }
+  
   function abrirAcanalado() {
     ocultarPantallas();
     refs.pantallaAcanalado.style.display = "block";
   }
+  
   function volverInicio() {
     ocultarPantallas();
     refs.pantallaInicio.style.display = "block";
   }
+  
   function abrir90() {
     ocultarPantallas();
     refs.pantalla90.style.display = "block";
     calcular90();
   }
+  
   function volverAcanalado() {
     ocultarPantallas();
     refs.pantallaAcanalado.style.display = "block";
   }
 
-  // Edit plancha
   function editarPlancha() {
     const campo = refs.anchoPlancha;
     if (campo.readOnly) {
@@ -93,29 +84,27 @@
     }
   }
 
-  // CALCULAR (lógica pura: devuelve desarrollo y anchoCanal)
+  // CALCULAR VALORES PRINCIPALES
   function calcularValores({ anchoPlancha, medida, canales, profundidad, bordes, espesor }) {
-    // Guardar invariantes / saneamientos
     canales = clamp(Math.floor(canales), 1, 9999);
     if (canales <= 1) profundidad = 0;
     if (isNaN(profundidad)) profundidad = canales === 1 ? 0 : 15;
 
     const anchoCanal = medida / canales;
 
-    // fórmula original (manteniendo comportamiento)
+    // Fórmula: ((Bordes*2)+(Medida Interna)+((Canales-1)*Profundidad))-(Canales*4*Espesor)
     const desarrollo =
       (bordes * 2 + medida + (canales - 1) * profundidad) - canales * 4 * espesor;
 
     return { desarrollo, anchoCanal, canales, profundidad };
   }
 
-  // Mostrar resultados en UI
   function mostrarResultados(desarrollo, anchoCanal) {
     refs.desarrollo.textContent = fmt(Math.round(desarrollo));
     refs.anchoCanal.textContent = fmt(Math.round(anchoCanal));
   }
 
-  // Generar marcas (sólo arrays, sin DOM)
+  // GENERAR ARRAY DE MARCAS (secuencia completa)
   function calcularMarcas({ anchoCanal, profundidad, bordes, espesor, canales }) {
     const horizontal = anchoCanal - espesor * 2;
     const vertical = profundidad - espesor * 2;
@@ -124,39 +113,39 @@
     let numero = 1;
     let marca = bordes - espesor;
 
-    // Borde inicial
-    marcas.push({ numero, valor: Math.round(marca), tipo: "borde" });
+    // Marca inicial: Borde - 1
+    marcas.push({ numero, valor: Math.round(marca), tipo: "borde", esVertical: false });
 
-    // Canales y profundidades
+    // Secuencia de canales: horizontal, vertical, horizontal, vertical...
     for (let i = 1; i <= canales; i++) {
+      // Horizontal (ancho del canal)
       numero++;
       marca += horizontal;
-      marcas.push({ numero, valor: Math.round(marca), tipo: "horizontal" });
+      marcas.push({ numero, valor: Math.round(marca), tipo: "horizontal", esVertical: false });
 
+      // Vertical (profundidad) - solo si no es el último canal
       if (i < canales) {
         numero++;
         marca += vertical;
-        marcas.push({ numero, valor: Math.round(marca), tipo: "profundidad" });
+        marcas.push({ numero, valor: Math.round(marca), tipo: "profundidad", esVertical: true });
       }
     }
 
-    // Borde final
+    // Marca final: Borde - 1
     numero++;
     marca += bordes - espesor;
-    marcas.push({ numero, valor: Math.round(marca), tipo: "bordeFinal" });
+    marcas.push({ numero, valor: Math.round(marca), tipo: "bordeFinal", esVertical: false });
 
     return { marcas, horizontal, vertical };
   }
 
-  // Render marcas a DOM (usa DocumentFragment)
-  function renderMarcas({ marcas, corte, anchoPlancha, bordes, profundidad }) {
-    // Construir fragmento
+  // RENDERIZAR MÚLTIPLES PLANCHAS CON LÓGICA CORRECTA
+  function renderMarcas({ marcas, anchoPlancha, bordes, profundidad }) {
     const frag = document.createDocumentFragment();
-
-    let inicio = 0;
     let numeroPlancha = 1;
+    let indiceInicio = 0;
 
-    while (inicio < marcas.length) {
+    while (indiceInicio < marcas.length) {
       const piece = document.createElement("div");
       piece.className = "plancha";
 
@@ -164,71 +153,107 @@
       h3.textContent = `PLANCHA ${numeroPlancha}`;
       piece.appendChild(h3);
 
+      // Posición inicial según el tipo de plancha
       const esPrimera = numeroPlancha === 1;
-      let posicion = esPrimera ? bordes - 1 : profundidad - 1;
+      let posicionActual = esPrimera ? bordes - 1 : profundidad - 1;
 
-      let indices = [inicio];
-      let posiciones = [posicion];
+      const indicesToShow = [];
+      const positionsToShow = [];
 
-      let ultimoIndice = inicio;
-      let referenciaAnterior = marcas[inicio].valor;
+      // Agregar la marca inicial
+      indicesToShow.push(indiceInicio);
+      positionsToShow.push(posicionActual);
 
-      for (let i = inicio + 1; i < marcas.length; i++) {
-        const distancia = marcas[i].valor - referenciaAnterior;
-        const nuevaPosicion = posicion + distancia;
+      let ultimoIndiceVertical = indiceInicio;
+      let referenciaValor = marcas[indiceInicio].valor;
 
-        // Ultima marca de la pieza
-        if (i === marcas.length - 1) {
-          indices.push(i);
-          posiciones.push(bordes - 1);
-          ultimoIndice = i;
-          break;
-        }
+      // Buscar marcas que caben en esta plancha
+      for (let i = indiceInicio + 1; i < marcas.length; i++) {
+        const distancia = marcas[i].valor - referenciaValor;
+        const nuevaPosicion = posicionActual + distancia;
 
+        // Si cabe en la plancha
         if (nuevaPosicion <= anchoPlancha) {
-          posicion = nuevaPosicion;
-          indices.push(i);
-          posiciones.push(posicion);
-          ultimoIndice = i;
-          referenciaAnterior = marcas[i].valor;
+          posicionActual = nuevaPosicion;
+          indicesToShow.push(i);
+          positionsToShow.push(posicionActual);
+
+          // Guardar el índice si es una marca vertical (punto de corte potencial)
+          if (marcas[i].esVertical) {
+            ultimoIndiceVertical = i;
+          }
+
+          referenciaValor = marcas[i].valor;
         } else {
+          // No cabe, terminar aquí
           break;
         }
       }
 
-      // Crear filas para indices
-      indices.forEach((indice, j) => {
+      // Asegurar que la última marca mostrada sea vertical (punto de corte correcto)
+      // A menos que sea la última marca del desarrollo
+      let indiceCorte = ultimoIndiceVertical;
+      
+      // Si la última marca mostrada es la final (bordeFinal), no recortar
+      if (marcas[indicesToShow[indicesToShow.length - 1]].tipo === "bordeFinal") {
+        indiceCorte = indicesToShow.length - 1;
+      }
+
+      // Filtrar para mostrar solo hasta el corte
+      const marcasFinales = indicesToShow.slice(0, indiceCorte + 1);
+      const posicionesFinales = positionsToShow.slice(0, indiceCorte + 1);
+
+      // Renderizar filas
+      marcasFinales.forEach((indice, j) => {
         const row = document.createElement("div");
         row.className = "marca-row";
-        // preferir CSS para estilos en lugar de inline styles
         row.style.display = "flex";
         row.style.alignItems = "center";
         row.style.whiteSpace = "nowrap";
-        row.style.fontFamily = "Consolas,monospace";
+        row.style.fontFamily = "Consolas, monospace";
+        row.style.padding = "6px 0";
 
+        // Número de marca
         const spanNum = document.createElement("span");
         spanNum.style.display = "inline-block";
         spanNum.style.width = "55px";
         spanNum.style.textAlign = "right";
+        spanNum.style.fontWeight = "bold";
         spanNum.textContent = `${marcas[indice].numero}-)`;
 
+        // Posición
         const spanPos = document.createElement("span");
         spanPos.style.display = "inline-block";
         spanPos.style.width = "80px";
         spanPos.style.textAlign = "right";
         spanPos.style.marginLeft = "8px";
-        spanPos.textContent = Math.round(posiciones[j]);
+        spanPos.style.fontWeight = "bold";
+        spanPos.textContent = Math.round(posicionesFinales[j]);
+
+        // Tipo de marca
+        const spanTipo = document.createElement("span");
+        spanTipo.style.marginLeft = "15px";
+        spanTipo.style.fontSize = "12px";
+        spanTipo.style.color = "#666";
+        
+        const tipoMarca = marcas[indice].tipo;
+        if (tipoMarca === "borde") spanTipo.textContent = "[Borde Inicial]";
+        else if (tipoMarca === "bordeFinal") spanTipo.textContent = "[Borde Final]";
+        else if (tipoMarca === "profundidad") spanTipo.textContent = "[Profundidad]";
+        else if (tipoMarca === "horizontal") spanTipo.textContent = "[Canal]";
 
         row.appendChild(spanNum);
         row.appendChild(spanPos);
+        row.appendChild(spanTipo);
 
-        if (j === indices.length - 1) {
-          const cut = document.createElement("span");
-          cut.style.marginLeft = "10px";
-          cut.style.color = "red";
-          cut.style.fontWeight = "bold";
-          cut.textContent = "◄ CORTE";
-          row.appendChild(cut);
+        // Indicar CORTE si es la última marca de esta plancha
+        if (j === marcasFinales.length - 1 && indiceCorte < marcas.length - 1) {
+          const cutLabel = document.createElement("span");
+          cutLabel.style.marginLeft = "10px";
+          cutLabel.style.color = "red";
+          cutLabel.style.fontWeight = "bold";
+          cutLabel.textContent = "◄ CORTE";
+          row.appendChild(cutLabel);
         }
 
         piece.appendChild(row);
@@ -236,37 +261,22 @@
 
       frag.appendChild(piece);
 
-      if (ultimoIndice === marcas.length - 1) break;
+      // Verificar si hemos llegado al final
+      if (marcasFinales[marcasFinales.length - 1] === marcas.length - 1) {
+        // Última plancha, fin
+        break;
+      }
 
-      inicio = ultimoIndice + 1;
+      // La próxima plancha comienza después del último corte
+      indiceInicio = ultimoIndiceVertical + 1;
       numeroPlancha++;
     }
 
-    // Reemplazar contenido actual
     refs.marcas.innerHTML = "";
     refs.marcas.appendChild(frag);
   }
 
-  // Orquestación: generar marcas y determinar corte
-  function generarMarcasUI({ anchoCanal, profundidad, bordes, espesor, canales, anchoPlancha, desarrollo }) {
-    const { marcas, horizontal, vertical } = calcularMarcas({ anchoCanal, profundidad, bordes, espesor, canales });
-
-    let corte = -1;
-    if (desarrollo > anchoPlancha) {
-      // buscar último vertical que cabe
-      for (let i = 0; i < marcas.length; i++) {
-        if (marcas[i].tipo === "profundidad" && marcas[i].valor <= anchoPlancha) {
-          corte = i;
-        }
-      }
-    } else {
-      corte = marcas.length - 1;
-    }
-
-    renderMarcas({ marcas, corte, anchoPlancha, bordes, profundidad });
-  }
-
-  // Función principal que lee inputs, calcula y actualiza UI
+  // FUNCIÓN PRINCIPAL
   function calcular90() {
     const anchoPlancha = toFloat(refs.anchoPlancha, NaN);
     const medida = toFloat(refs.medidaFinal, NaN);
@@ -275,13 +285,10 @@
     const bordes = toFloat(refs.bordes, NaN);
     const espesor = toFloat(refs.espesor, NaN);
 
-    // Validación básica (si falta algo esencial, no continuar)
     if ([anchoPlancha, medida, canales, bordes, espesor].some(v => isNaN(v))) {
-      // no hacemos nada si valores esenciales faltan
       return;
     }
 
-    // Evitar < 1 y valores extremos
     canales = Math.max(1, Math.floor(canales));
 
     const { desarrollo, anchoCanal } = calcularValores({
@@ -295,18 +302,22 @@
 
     mostrarResultados(desarrollo, anchoCanal);
 
-    generarMarcasUI({
+    const { marcas } = calcularMarcas({
       anchoCanal,
       profundidad,
       bordes,
       espesor,
-      canales,
+      canales
+    });
+
+    renderMarcas({
+      marcas,
       anchoPlancha,
-      desarrollo
+      bordes,
+      profundidad
     });
   }
 
-  // UI state for profundidad row
   function actualizarProfundidadUI() {
     const canales = toInt(refs.divisiones, 1);
     if (canales === 1) {
@@ -320,7 +331,7 @@
     }
   }
 
-  // Init
+  // INICIALIZAR
   document.addEventListener("DOMContentLoaded", function () {
     const controles = [
       "anchoPlancha",
@@ -336,7 +347,6 @@
     controles.forEach(id => {
       const el = $(id);
       if (!el) return;
-      // usar input para respuesta inmediata; change también funciona
       el.addEventListener("input", debounced);
       el.addEventListener("change", debounced);
     });
@@ -349,7 +359,7 @@
       });
     }
 
-    // Exponer funciones para botones (si los botones llaman desde HTML inline)
+    // Exponer funciones globales
     window.abrirAcanalado = abrirAcanalado;
     window.volverInicio = volverInicio;
     window.abrir90 = abrir90;

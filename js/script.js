@@ -346,19 +346,29 @@
         // ¿TERMINÓ LA PIEZA?
         // -----------------------------------------
 
-        if (ultimoIndice === marcas.length - 1) {
-            break;
-        }
+        // ¿TERMINÓ LA PIEZA?
 
-        // -----------------------------------------
-        // PREPARAR SIGUIENTE PLANCHA
-        // -----------------------------------------
+if (ultimoIndice === marcas.length - 1) {
+    break;
+}
 
-        indiceAnterior = ultimoIndice;
+// -----------------------------------------
+// PROTECCIÓN CONTRA BUCLE INFINITO
+// -----------------------------------------
 
-        inicio = ultimoIndice + 1;
+if (ultimoIndice < inicio) {
+    break;
+}
 
-        numeroPlancha++;
+// -----------------------------------------
+// PREPARAR SIGUIENTE PLANCHA
+// -----------------------------------------
+
+indiceAnterior = ultimoIndice;
+
+inicio = ultimoIndice + 1;
+
+numeroPlancha++;
     }
 
     refs.marcas.innerHTML = "";
@@ -394,7 +404,21 @@
     const bordes = toFloat(refs.bordes, NaN);
     const espesor = toFloat(refs.espesor, NaN);
 
-    // Validar valores que no pueden ser cero
+// Validar valores vacíos o no numéricos
+if (
+    isNaN(anchoPlancha) ||
+    isNaN(medida) ||
+    isNaN(canales) ||
+    isNaN(bordes) ||
+    isNaN(espesor)
+) {
+    refs.desarrollo.textContent = "";
+    refs.anchoCanal.textContent = "";
+    refs.marcas.innerHTML = "";
+    return;
+}
+
+// Validar valores que NO pueden ser cero
 if (
     anchoPlancha <= 0 ||
     medida <= 0 ||
@@ -406,12 +430,7 @@ if (
     refs.marcas.innerHTML = "";
     return;
 }
-    // Validación básica (si falta algo esencial, no continuar)
-    if ([anchoPlancha, medida, canales, bordes, espesor].some(v => isNaN(v))) {
-      // no hacemos nada si valores esenciales faltan
-      return;
-    }
-
+    
     // Evitar < 1 y valores extremos
     canales = Math.max(1, Math.floor(canales));
 

@@ -92,9 +92,10 @@
 
     const anchoCanal = medida / canales;
 
-    // Fórmula: ((Bordes*2)+(Medida Interna)+((Canales-1)*Profundidad))-(Canales*4*Espesor)
+    // Fórmula: ((Bordes*2)+(Medida Interna)+((Canales-1)*Profundidad))-(2*Espesor)
+    // Se resta solo 2*Espesor porque al doblar, el material crece 1mm a cada lado
     const desarrollo =
-      (bordes * 2 + medida + (canales - 1) * profundidad) - canales * 4 * espesor;
+      (bordes * 2 + medida + (canales - 1) * profundidad) - 2 * espesor;
 
     return { desarrollo, anchoCanal, canales, profundidad };
   }
@@ -106,14 +107,16 @@
 
   // GENERAR ARRAY DE MARCAS (secuencia completa)
   function calcularMarcas({ anchoCanal, profundidad, bordes, espesor, canales }) {
+    // Horizontal: ancho del canal menos espesor×2 (compensación por dobleces)
     const horizontal = anchoCanal - espesor * 2;
+    // Vertical: profundidad menos espesor×2 (compensación por dobleces)
     const vertical = profundidad - espesor * 2;
 
     const marcas = [];
     let numero = 1;
     let marca = bordes - espesor;
 
-    // Marca inicial: Borde - 1
+    // Marca inicial: Borde - Espesor (al doblar medirá "bordes")
     marcas.push({ numero, valor: Math.round(marca), tipo: "borde", esVertical: false });
 
     // Secuencia de canales: horizontal, vertical, horizontal, vertical...
@@ -131,7 +134,7 @@
       }
     }
 
-    // Marca final: Borde - 1
+    // Marca final: Borde - Espesor (al doblar medirá "bordes")
     numero++;
     marca += bordes - espesor;
     marcas.push({ numero, valor: Math.round(marca), tipo: "bordeFinal", esVertical: false });

@@ -244,7 +244,7 @@
 
                 // El final siempre termina
                 // en borde - 1.
-                posiciones.push(bordes - 1);
+               posiciones.push(nuevaPosicion);
 
                 numeros.push(numeroMarca);
 

@@ -234,6 +234,14 @@
             const nuevaPosicion =
                 posicion + distancia;
 
+          // Si el tramo hasta la siguiente marca
+// no cabe en la plancha, esta plancha
+// no puede utilizarse para ese tramo.
+if (distancia > anchoPlancha) {
+    ultimoIndice = inicio - 1;
+    break;
+}
+
             // -----------------------------------------
             // ÚLTIMA MARCA
             // -----------------------------------------

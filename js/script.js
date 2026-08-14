@@ -256,14 +256,14 @@
             const nuevaPosicion =
                 posicion + distancia;
 
-            // Si ya no cabe, termina esta plancha.
-            if (nuevaPosicion > anchoPlancha) {
-                break;
-            }
+           // Si ya no cabe, termina esta plancha.
+if (nuevaPosicion > anchoPlancha) {
+    break;
+}
 
-            indices.push(i);
-            posiciones.push(nuevaPosicion);
-            numeros.push(numeroMarca);
+indices.push(i);
+posiciones.push(nuevaPosicion);
+numeros.push(numeroMarca);
 
             posicion = nuevaPosicion;
 
@@ -277,16 +277,30 @@
             }
         }
 
-        // -----------------------------------------
-        // GUARDAR PLANCHA
-        // -----------------------------------------
+      // -----------------------------------------
+// VALIDAR MÍNIMO 3 SEGMENTOS
+// -----------------------------------------
 
-        planchas.push({
-            numero: numeroPlancha,
-            indices: indices,
-            posiciones: posiciones,
-            numeros: numeros
-        });
+// 3 segmentos necesitan 4 marcas.
+// Si no tenemos 4 marcas, esta plancha
+// no es válida.
+
+const segmentos = indices.length - 1;
+
+if (segmentos < 3) {
+    break;
+}
+
+// -----------------------------------------
+// GUARDAR PLANCHA
+// -----------------------------------------
+
+planchas.push({
+    numero: numeroPlancha,
+    indices: indices,
+    posiciones: posiciones,
+    numeros: numeros
+});
 
         // -----------------------------------------
         // ¿TERMINÓ LA PIEZA?

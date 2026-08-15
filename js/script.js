@@ -233,8 +233,16 @@
             numeroMarca++;
         }
 
-        let ultimoIndice = indiceAnterior;
+       let ultimoIndice = indiceAnterior;
 
+// Último punto donde la plancha tiene una
+// combinación válida:
+//
+// Borde/Profundidad + Canal + Borde/Profundidad
+//
+// Solo consideramos válido un corte después
+// de haber completado al menos un canal.
+let ultimoCorteValido = -1;
         // -----------------------------------------
         // RECORRER MARCAS
         // -----------------------------------------
@@ -265,17 +273,65 @@ indices.push(i);
 posiciones.push(nuevaPosicion);
 numeros.push(numeroMarca);
 
-            posicion = nuevaPosicion;
+posicion = nuevaPosicion;
 
-            ultimoIndice = i;
-            indiceAnterior = i;
+ultimoIndice = i;
+indiceAnterior = i;
 
-            numeroMarca++;
+numeroMarca++;
 
-            if (i === marcas.length - 1) {
-                break;
-            }
+// -----------------------------------------
+// COMPROBAR SI COMPLETAMOS UN CANAL
+// -----------------------------------------
+
+// Un horizontal representa el canal.
+// Cuando después de ese horizontal
+// llegamos a una profundidad o al borde final,
+// tenemos:
+//
+// segmento + CANAL + segmento
+//
+// Por lo tanto este punto puede ser
+// un corte válido.
+
+if (
+    marcas[i].tipo === "profundidad" ||
+    marcas[i].tipo === "bordeFinal"
+) {
+
+    // Verificamos que exista al menos
+    // un horizontal antes de este punto.
+    let hayCanal = false;
+
+    for (
+        let k = indices.length - 2;
+        k >= 0;
+        k--
+    ) {
+
+        if (
+            marcas[indices[k]].tipo === "horizontal"
+        ) {
+            hayCanal = true;
+            break;
         }
+
+        if (
+            marcas[indices[k]].tipo === "borde" ||
+            marcas[indices[k]].tipo === "bordeFinal"
+        ) {
+            break;
+        }
+    }
+
+    if (hayCanal) {
+        ultimoCorteValido = i;
+    }
+}
+
+if (i === marcas.length - 1) {
+    break;
+}        }
 
       // -----------------------------------------
 // VALIDAR MÍNIMO 3 SEGMENTOS
@@ -285,12 +341,42 @@ numeros.push(numeroMarca);
 // Si no tenemos 4 marcas, esta plancha
 // no es válida.
 
-const segmentos = indices.length - 1;
+planchas.push({
+    numero: numeroPlancha,
+    indices: indices,
+    posiciones: posiciones,
+    numeros: numeros
+});
+// -----------------------------------------
+// USAR EL ÚLTIMO CORTE VÁLIDO
+// -----------------------------------------
 
-if (segmentos < 3) {
+if (ultimoCorteValido !== -1) {
+
+    ultimoIndice = ultimoCorteValido;
+
+    // Eliminamos de la representación
+    // cualquier marca que haya quedado
+    // después del último canal completo.
+
+    while (
+        indices.length > 0 &&
+        indices[indices.length - 1] > ultimoIndice
+    ) {
+        indices.pop();
+        posiciones.pop();
+        numeros.pop();
+    }
+
+} else {
+
+    // No existe ninguna combinación válida
+    // Canal + segmento anterior + segmento posterior.
+    //
+    // Por lo tanto esta plancha no puede utilizarse.
+
     break;
 }
-
 // -----------------------------------------
 // GUARDAR PLANCHA
 // -----------------------------------------

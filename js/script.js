@@ -149,7 +149,14 @@
   }
 
   // Render marcas a DOM (usa DocumentFragment)
-  function renderMarcas({ marcas, corte, anchoPlancha, bordes, profundidad }) {
+  function renderMarcas({
+    marcas,
+    corte,
+    anchoPlancha,
+    bordes,
+    profundidad,
+    anchoCanal
+}) {
 
     const frag = document.createDocumentFragment();
 
@@ -568,7 +575,14 @@ function sonPlanchasIguales(a, b) {
       corte = marcas.length - 1;
     }
 
-    renderMarcas({ marcas, corte, anchoPlancha, bordes, profundidad });
+    renderMarcas({
+    marcas,
+    corte,
+    anchoPlancha,
+    bordes,
+    profundidad,
+    anchoCanal
+});
   }
 
   // Función principal que lee inputs, calcula y actualiza UI

@@ -381,13 +381,6 @@ if (ultimoCorteValido !== -1) {
 // GUARDAR PLANCHA
 // -----------------------------------------
 
-planchas.push({
-    numero: numeroPlancha,
-    indices: indices,
-    posiciones: posiciones,
-    numeros: numeros
-});
-
         // -----------------------------------------
         // ¿TERMINÓ LA PIEZA?
         // -----------------------------------------

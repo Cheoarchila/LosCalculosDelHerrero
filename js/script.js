@@ -614,6 +614,7 @@ if (
     medida <= 0 ||
     canales <= 0 ||
     espesor <= 0 ||
+    (canales === 1 && bordes <= 0) ||
     (canales >= 2 && profundidad <= 0)
 ) {
     refs.desarrollo.textContent = "";

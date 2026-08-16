@@ -168,10 +168,10 @@
 
         const esPrimera = numeroPlancha === 1;
 
-        const posicionInicial =
-            esPrimera
-            ? bordes - 1
-            : profundidad - 1;
+       const posicionInicial =
+    esPrimera
+    ? (bordes > 0 ? bordes - 1 : anchoCanal - 1)
+    : profundidad - 1;
 
         const indiceSiguiente =
             esPrimera
@@ -599,7 +599,8 @@ if (
     anchoPlancha <= 0 ||
     medida <= 0 ||
     canales <= 0 ||
-    espesor <= 0
+    espesor <= 0 ||
+    (canales >= 2 && profundidad <= 0)
 ) {
     refs.desarrollo.textContent = "";
     refs.anchoCanal.textContent = "";

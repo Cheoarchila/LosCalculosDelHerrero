@@ -614,7 +614,6 @@ if (
     medida <= 0 ||
     canales <= 0 ||
     espesor <= 0 ||
-    (canales === 1 && bordes <= 0) ||
     (canales >= 2 && profundidad <= 0)
 ) {
     refs.desarrollo.textContent = "";
@@ -635,17 +634,23 @@ if (
       espesor
     });
 
-    mostrarResultados(desarrollo, anchoCanal);
+   mostrarResultados(desarrollo, anchoCanal);
 
-    generarMarcasUI({
-      anchoCanal,
-      profundidad,
-      bordes,
-      espesor,
-      canales,
-      anchoPlancha,
-      desarrollo
-    });
+// Las marcas requieren borde cuando solo hay un canal.
+if (canales === 1 && bordes <= 0) {
+    refs.marcas.innerHTML = "";
+    return;
+}
+
+generarMarcasUI({
+    anchoCanal,
+    profundidad,
+    bordes,
+    espesor,
+    canales,
+    anchoPlancha,
+    desarrollo
+});
   }
 
   // UI state for profundidad row

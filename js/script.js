@@ -103,10 +103,29 @@
     const anchoCanal = medida / canales;
 
     // fórmula original (manteniendo comportamiento)
-    const desarrollo =
-      (bordes * 2 + medida + (canales - 1) * profundidad) - canales * 4 * espesor;
+   let desarrollo;
 
-    return { desarrollo, anchoCanal, canales, profundidad };
+if (canales === 1 && bordes === 0) {
+
+    desarrollo = medida;
+    espesor = 0;
+
+} else {
+
+    desarrollo =
+        (bordes * 2 +
+        medida +
+        (canales - 1) * profundidad) -
+        canales * 4 * espesor;
+}
+
+return {
+    desarrollo,
+    anchoCanal,
+    canales,
+    profundidad,
+    espesor
+};
   }
 
   // Mostrar resultados en UI

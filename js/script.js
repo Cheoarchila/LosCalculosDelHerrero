@@ -621,16 +621,6 @@ if (
     refs.marcas.innerHTML = "";
     return;
 }
-
-// Caso especial: 1 canal y bordes = 0
-if (canales === 1 && bordes === 0) {
-    refs.espesor.value = "No Aplica";       // Espesor = texto
-    refs.desarrollo.textContent = medida;   // Desarrollo = medida interna
-    refs.anchoCanal.textContent = medida;   // Opcional: ancho canal igual a medida
-    refs.marcas.innerHTML = "";             // Limpia marcas
-    return; // Salir para no seguir con el cálculo normal
-}
-
     
     // Evitar < 1 y valores extremos
     canales = Math.max(1, Math.floor(canales));

@@ -713,22 +713,59 @@ generarMarcasUI({
     }
 }
 
-    const divisionesEl = refs.divisiones;
-    if (divisionesEl) {
-    divisionesEl.addEventListener("change", () => {
-        actualizarProfundidadUI();
-        calcular90();
-    });
-}
+    // =========================================
+// EVENTOS E INICIALIZACIÓN
+// =========================================
 
-if (refs.bordes) {
-    refs.bordes.addEventListener("input", () => {
-        actualizarProfundidadUI();
-        calcular90();
-    });
-}
+document.addEventListener("DOMContentLoaded", function () {
 
-    // Exponer funciones para botones (si los botones llaman desde HTML inline)
+    const controles = [
+        "anchoPlancha",
+        "medidaFinal",
+        "divisiones",
+        "profundidad",
+        "bordes",
+        "espesor"
+    ];
+
+    const debounced = debounce(calcular90, 120);
+
+    controles.forEach(id => {
+
+        const el = $(id);
+
+        if (!el) return;
+
+        el.addEventListener("input", debounced);
+        el.addEventListener("change", debounced);
+
+    });
+
+    // Cuando cambian los canales
+    if (refs.divisiones) {
+
+        refs.divisiones.addEventListener("change", () => {
+
+            actualizarProfundidadUI();
+            calcular90();
+
+        });
+
+    }
+
+    // Cuando cambian los bordes
+    if (refs.bordes) {
+
+        refs.bordes.addEventListener("input", () => {
+
+            actualizarProfundidadUI();
+            calcular90();
+
+        });
+
+    }
+
+    // Exponer funciones para los botones del HTML
     window.abrirAcanalado = abrirAcanalado;
     window.volverInicio = volverInicio;
     window.abrir90 = abrir90;
@@ -738,5 +775,6 @@ if (refs.bordes) {
 
     actualizarProfundidadUI();
     calcular90();
-  });
+
+});
 })();

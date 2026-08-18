@@ -659,11 +659,38 @@ if (
    mostrarResultados(desarrollo, anchoCanal);
 
 // Las marcas requieren borde cuando solo hay un canal.
-if (canales === 1 && bordes <= 0) {
-    refs.marcas.innerHTML = "";
+// =========================================
+// CASO ESPECIAL: 1 CANAL CON BORDES
+// =========================================
+if (canales === 1 && bordes > 0) {
+
+    const marca1 = bordes - 1;
+    const marca2 = marca1 + (anchoCanal - 2);
+    const marca3 = marca2 + (bordes - 1);
+
+    refs.marcas.innerHTML = `
+        <div class="plancha">
+            <h3>PLANCHA 1</h3>
+
+            <div class="marca-row">
+                <span>1-)</span>
+                <span>${Math.round(marca1)}</span>
+            </div>
+
+            <div class="marca-row">
+                <span>2-)</span>
+                <span>${Math.round(marca2)}</span>
+            </div>
+
+            <div class="marca-row">
+                <span>3-)</span>
+                <span>${Math.round(marca3)}</span>
+            </div>
+        </div>
+    `;
+
     return;
 }
-
 generarMarcasUI({
     anchoCanal,
     profundidad,

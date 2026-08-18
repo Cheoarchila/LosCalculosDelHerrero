@@ -658,12 +658,24 @@ if (
 
    mostrarResultados(desarrollo, anchoCanal);
 
-// Las marcas requieren borde cuando solo hay un canal.
+// =========================================
+// CASO ESPECIAL: 1 CANAL SIN BORDES
+// =========================================
+// Una sola canal sin bordes representa una
+// plancha plana, por lo que no hay marcas.
+
+if (canales === 1 && bordes === 0) {
+
+    refs.marcas.innerHTML = "";
+
+    return;
+}
+
 // =========================================
 // CASO ESPECIAL: 1 CANAL CON BORDES
 // =========================================
-if (canales === 1 && bordes > 0) {
 
+if (canales === 1 && bordes > 0) {
     const marca1 = bordes - 1;
     const marca2 = marca1 + (anchoCanal - 2);
     const marca3 = marca2 + (bordes - 1);

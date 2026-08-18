@@ -756,14 +756,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // Cuando cambian los bordes
     if (refs.bordes) {
 
-        refs.bordes.addEventListener("input", () => {
+    refs.bordes.addEventListener("input", () => {
+        actualizarProfundidadUI();
+    });
 
-            actualizarProfundidadUI();
-            calcular90();
+    refs.bordes.addEventListener("change", () => {
+        actualizarProfundidadUI();
+        calcular90();
+    });
 
-        });
-
-    }
+}
 
     // Exponer funciones para los botones del HTML
     window.abrirAcanalado = abrirAcanalado;

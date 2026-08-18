@@ -53,7 +53,7 @@
     marcas: $("marcas"),
 
     filaProfundidad: $("filaProfundidad"),
-mensajeProfundidad: $("mensajeProfundidad"),
+    mensajeProfundidad: $("mensajeProfundidad"),
 
 filaEspesor: $("filaEspesor"),
 mensajeEspesor: $("mensajeEspesor")
@@ -677,46 +677,56 @@ generarMarcasUI({
 
   // UI state for profundidad row
   function actualizarProfundidadUI() {
+
     const canales = toInt(refs.divisiones, 1);
+    const bordes = toFloat(refs.bordes, 0);
+
+    // PROFUNDIDAD
     if (canales === 1) {
-      refs.filaProfundidad.style.display = "none";
-      refs.mensajeProfundidad.style.display = "flex";
-      refs.profundidad.disabled = true;
+
+        refs.filaProfundidad.style.display = "none";
+        refs.mensajeProfundidad.style.display = "flex";
+        refs.profundidad.disabled = true;
+
     } else {
-      refs.filaProfundidad.style.display = "flex";
-      refs.mensajeProfundidad.style.display = "none";
-      refs.profundidad.disabled = false;
+
+        refs.filaProfundidad.style.display = "flex";
+        refs.mensajeProfundidad.style.display = "none";
+        refs.profundidad.disabled = false;
     }
-  }
 
-  // Init
-  document.addEventListener("DOMContentLoaded", function () {
-    const controles = [
-      "anchoPlancha",
-      "medidaFinal",
-      "divisiones",
-      "profundidad",
-      "bordes",
-      "espesor"
-    ];
+    // ESPESOR
+    // Solo deja de aplicar cuando:
+    // Canales = 1 y Bordes = 0
 
-    const debounced = debounce(calcular90, 120);
+    if (canales === 1 && bordes === 0) {
 
-    controles.forEach(id => {
-      const el = $(id);
-      if (!el) return;
-      // usar input para respuesta inmediata; change también funciona
-      el.addEventListener("input", debounced);
-      el.addEventListener("change", debounced);
-    });
+        refs.filaEspesor.style.display = "none";
+        refs.mensajeEspesor.style.display = "flex";
+        refs.espesor.disabled = true;
+
+    } else {
+
+        refs.filaEspesor.style.display = "flex";
+        refs.mensajeEspesor.style.display = "none";
+        refs.espesor.disabled = false;
+    }
+}
 
     const divisionesEl = refs.divisiones;
     if (divisionesEl) {
-      divisionesEl.addEventListener("change", () => {
+    divisionesEl.addEventListener("change", () => {
         actualizarProfundidadUI();
         calcular90();
-      });
-    }
+    });
+}
+
+if (refs.bordes) {
+    refs.bordes.addEventListener("input", () => {
+        actualizarProfundidadUI();
+        calcular90();
+    });
+}
 
     // Exponer funciones para botones (si los botones llaman desde HTML inline)
     window.abrirAcanalado = abrirAcanalado;

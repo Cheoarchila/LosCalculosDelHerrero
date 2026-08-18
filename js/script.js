@@ -53,7 +53,10 @@
     marcas: $("marcas"),
 
     filaProfundidad: $("filaProfundidad"),
-    mensajeProfundidad: $("mensajeProfundidad")
+mensajeProfundidad: $("mensajeProfundidad"),
+
+filaEspesor: $("filaEspesor"),
+mensajeEspesor: $("mensajeEspesor")
   };
 
   // NAV

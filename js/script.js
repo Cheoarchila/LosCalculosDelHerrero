@@ -611,7 +611,7 @@ function sonPlanchasIguales(a, b) {
   function calcular90() {
     const anchoPlancha = toFloat(refs.anchoPlancha, NaN);
     const medida = toFloat(refs.medidaFinal, NaN);
-    let canales = toInt(refs.divisiones, 0);
+    let canales = toInt(refs.divisiones, 1);
     let profundidad = toFloat(refs.profundidad, NaN);
     const bordes = toFloat(refs.bordes, 0);
     const espesor = toFloat(refs.espesor, NaN);

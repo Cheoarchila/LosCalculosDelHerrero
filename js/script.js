@@ -659,6 +659,60 @@ if (
    mostrarResultados(desarrollo, anchoCanal);
 
 // =========================================
+// VALIDAR QUE AL MENOS UN CANAL COMPLETO
+// PUEDA CABER EN UNA PLANCHA
+// =========================================
+
+const bordeSegmento = bordes > 0 ? bordes - 1 : null;
+const profundidadSegmento =
+    canales >= 2 ? profundidad - 1 : null;
+
+const canalSegmento = anchoCanal - 2;
+
+let puedeFormarCanal = false;
+
+// Borde + Canal + Borde
+if (
+    bordeSegmento !== null &&
+    bordeSegmento + canalSegmento + bordeSegmento <= anchoPlancha
+) {
+    puedeFormarCanal = true;
+}
+
+// Borde + Canal + Profundidad
+if (
+    bordeSegmento !== null &&
+    profundidadSegmento !== null &&
+    bordeSegmento + canalSegmento + profundidadSegmento <= anchoPlancha
+) {
+    puedeFormarCanal = true;
+}
+
+// Profundidad + Canal + Borde
+if (
+    profundidadSegmento !== null &&
+    bordeSegmento !== null &&
+    profundidadSegmento + canalSegmento + bordeSegmento <= anchoPlancha
+) {
+    puedeFormarCanal = true;
+}
+
+// Profundidad + Canal + Profundidad
+if (
+    profundidadSegmento !== null &&
+    profundidadSegmento + canalSegmento + profundidadSegmento <= anchoPlancha
+) {
+    puedeFormarCanal = true;
+}
+
+// Si no existe ninguna combinación válida,
+// no mostramos marcas.
+if (!puedeFormarCanal) {
+    refs.marcas.innerHTML = "";
+    return;
+}
+    
+// =========================================
 // CASO ESPECIAL: 1 CANAL SIN BORDES
 // =========================================
 // Una sola canal sin bordes representa una

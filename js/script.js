@@ -613,7 +613,7 @@ function sonPlanchasIguales(a, b) {
     const medida = toFloat(refs.medidaFinal, NaN);
     let canales = toInt(refs.divisiones, NaN);
     let profundidad = toFloat(refs.profundidad, NaN);
-    const bordes = toFloat(refs.bordes, NaN);
+    const bordes = toFloat(refs.bordes, 0);
     const espesor = toFloat(refs.espesor, NaN);
 
 // Validar valores vacíos o no numéricos

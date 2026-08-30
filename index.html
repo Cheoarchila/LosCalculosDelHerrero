@@ -62,27 +62,27 @@
 
         <div class="fila">
             <label for="anchoPlancha">Ancho de plancha:</label>
-            <input type="number" id="anchoPlancha" value="1200" step="1">
+            <input type="number" id="anchoPlancha" value="1200" step="1" onkeydown="return event.key !== '.' && event.key !== ','" onblur="verificarMedidaPlancha()">
         </div>
         <div class="fila">
             <label for="medidaFinal">Medida final:</label>
-            <input type="number" id="medidaFinal" value="1000" step="1">
+            <input type="number" id="medidaFinal" value="1000" step="1" onkeydown="return event.key !== '.' && event.key !== ','" onblur="verificarMedidaFinal()">
         </div>
         <div class="fila">
             <label for="canales">Canales:</label>
-            <input type="number" id="canales" value="3" step="1">
+            <input type="number" id="canales" value="3" step="1" onblur="verificarCanales()">
         </div>
         <div class="fila">
             <label for="profundidad">Profundidad:</label>
-            <input type="number" id="profundidad" value="15">
+            <input type="number" id="profundidad" value="15" onblur="verificarProfundidad()">
         </div>
         <div class="fila">
             <label for="bordes">Bordes:</label>
-            <input type="number" id="bordes" value="20">
+            <input type="number" id="bordes" value="20" onblur="verificarBordes()">
         </div>
         <div class="fila">
             <label for="espesor">Espesor:</label>
-            <input type="number" id="espesor" value="1">
+            <input type="number" id="espesor" value="1" onblur="verificarEspesor()">
         </div>
 
         <button type="button" class="btn-calcular" onclick="calcular()">Calcular</button>

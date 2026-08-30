@@ -3,8 +3,16 @@ let ultimaMedidaPlancha = 1200;
 let ultimaMedidaFinal = 1000;
 let ultimaProfundidad = 15;
 let ultimoBorde = 20;
-let ultimoBordePositivo = 20;
 
+// Control de navegación entre pantallas
+function abrirPantalla(idPantalla) {
+    document.querySelectorAll('section').forEach(seccion => {
+        seccion.classList.add('oculto');
+    });
+    document.getElementById(idPantalla).classList.remove('oculto');
+}
+
+// Lógica de cálculo matemático exacta provista por ti
 function calcular() {
     // Obtención de valores numéricos de los inputs
     const anchoPlancha = Number(document.getElementById("anchoPlancha").value);
@@ -13,6 +21,12 @@ function calcular() {
     const profundidad = Number(document.getElementById("profundidad").value);
     const bordes = Number(document.getElementById("bordes").value);
     const espesor = Number(document.getElementById("espesor").value);
+
+    // Validaciones rápidas de seguridad antes de procesar loops
+    if (anchoPlancha <= 0 || canales <= 0) {
+        alert("Por favor introduce valores mayores a 0.");
+        return;
+    }
 
     // Cálculos estructurales
     const anchoCanal = medidaFinal / canales;
@@ -30,11 +44,11 @@ function calcular() {
     let marca = bordes - espesor;
     let contador = 1;
 
-    const altoReducido = profundidad - (2 * espesor); // Mantiene las paredes en 13 mm reales
+    const altoReducido = profundidad - (2 * espesor); // Mantiene las paredes en mm reales
     let marcasArray = [];
     
     // Paso 1: No lleva punto de control (null)
-    marcasArray.push({ num: contador++, valor: Math.round(marca), control: null, texto: "" });
+    marcasArray.push({ num: contador++, valor: Math.round(marca), control: null });
 
     let controlAcumulado = 0;
     
@@ -47,19 +61,19 @@ function calcular() {
         }
         
         // Pasos pares: No llevan control
-        marcasArray.push({ num: contador++, valor: Math.round(marca), control: null, texto: "" });
+        marcasArray.push({ num: contador++, valor: Math.round(marca), control: null });
 
         if (c < canales) {
             marca += altoReducido;
             // Pasos impares: Acumulamos el ancho del canal limpio
             controlAcumulado += anchoCanal;
-            marcasArray.push({ num: contador++, valor: Math.round(marca), control: Math.round(controlAcumulado), texto: "" });
+            marcasArray.push({ num: contador++, valor: Math.round(marca), control: Math.round(controlAcumulado) });
         }
     }
 
     // Cierre del desarrollo: No lleva control
     marca += (bordes - espesor);
-    marcasArray.push({ num: contador, valor: Math.round(marca), control: null, texto: "" });
+    marcasArray.push({ num: contador, valor: Math.round(marca), control: null });
 
     // --- PROCESAMIENTO CÍCLICO DE PLANCHAS ---
     let bloquesPlanchas = [];
@@ -99,9 +113,9 @@ function calcular() {
         if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
-                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " CORTE ➔" : "";
+                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span style='color:#ef4444; font-weight:bold;'>CORTE ➔</span>" : "";
                 
-                // Formateamos Columna Izquierda (Marcas) con su numeración original
+                // Formateamos Columna Izquierda (Marcas) con su numeración original e inline span
                 let textoMarca = marcasArray[k].num + ".-) <span>" + marcasArray[k].valor + "</span>";
                 
                 // Formateamos Columna Derecha (Control) limpia con el número directo
@@ -123,11 +137,10 @@ function calcular() {
             for (let k = i + 1; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
-                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " CORTE ➔" : "";
+                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span style='color:#ef4444; font-weight:bold;'>CORTE ➔</span>" : "";
                 
                 let textoMarca = temporalContador + ".-) <span>" + Math.round(medidaDesdeCero) + "</span>";
                 
-                // Columna Control limpia sin prefijos redundantes
                 let textoControl = "";
                 if (marcasArray[k].control !== null) {
                     textoControl = "<span>" + marcasArray[k].control + "</span>";
@@ -166,112 +179,10 @@ function calcular() {
     }
 
     document.getElementById("listaMarcas").innerHTML = htmlFinal;
-}
 
-// --- Funciones de Verificación y Validación ---
-
-function verificarMedidaPlancha() {
-    const campo = document.getElementById("anchoPlancha");
-    let valor = Number(campo.value);
-
-    if (campo.value === "" || valor < 1) {
-        alert("Debes ingresar una Medida de Plancha válida.");
-        campo.value = ultimaMedidaPlancha;
-        return;
-    }
-    valor = Math.floor(valor);
-    campo.value = valor;
-    ultimaMedidaPlancha = valor;
-}
-
-function verificarMedidaFinal() {
-    const campo = document.getElementById("medidaFinal");
-    let valor = Number(campo.value);
-
-    if (campo.value === "" || valor < 1) {
-        alert("Debes ingresar una Medida final válida.");
-        campo.value = ultimaMedidaFinal;
-        return;
-    }
-
-    valor = Math.floor(valor);
-    campo.value = valor;
-    ultimaMedidaFinal = valor; // Respalda el valor correcto actual
-}
-
-function verificarCanales() {
-    let canales = Number(document.getElementById("canales").value);
-
-    canales = Math.floor(canales);
-    document.getElementById("canales").value = canales;
-
-    if (canales < 1) {
-        document.getElementById("canales").value = 1;
-        canales = 1;
-    }
-
-    if (canales === 1) {
-        document.getElementById("profundidad").value = 0;
-        document.getElementById("profundidad").disabled = true;
-        document.getElementById("bordes").value = ultimoBordePositivo;
-    } else {
-        document.getElementById("profundidad").value = ultimaProfundidad;
-        document.getElementById("profundidad").disabled = false;
-        document.getElementById("bordes").value = ultimoBorde;
-    }
-}
-
-function verificarProfundidad() {
-    const campo = document.getElementById("profundidad");
-    const profundidad = campo.value;
-
-    if (profundidad === "" || Number(profundidad) < 1) {
-        alert("Debes ingresar una profundidad válida.");
-        campo.value = ultimaProfundidad;
-        return;
-    }
-
-    ultimaProfundidad = Number(profundidad);
-}
-
-function verificarBordes() {
-    const campo = document.getElementById("bordes");
-    const valor = campo.value;
-    const canales = Number(document.getElementById("canales").value);
-
-    if (valor === "") {
-        campo.value = 0;
-        if (canales > 1) {
-            ultimoBorde = 0;
-        }
-        return;
-    }
-
-    const numero = Number(valor);
-
-    if (!Number.isInteger(numero) || numero < 0) {
-        alert("Debes ingresar un valor de bordes válido.");
-        campo.value = ultimoBorde;
-        return;
-    }
-
-    ultimoBorde = numero;
-
-    if (numero > 0) {
-        ultimoBordePositivo = numero;
-    }
-
-    if (canales === 1 && numero === 0) {
-        campo.value = ultimoBordePositivo;
-        ultimoBorde = 0;
-    }
-}
-
-function verificarEspesor() {
-    const campo = document.getElementById("espesor");
-    const valor = campo.value;
-
-    if (valor === "" || Number(valor) < 1) {
-        campo.value = 1;
-    }
+    // Guardar estados válidos de respaldo
+    ultimaMedidaPlancha = anchoPlancha;
+    ultimaMedidaFinal = medidaFinal;
+    ultimaProfundidad = profundidad;
+    ultimoBorde = bordes;
 }

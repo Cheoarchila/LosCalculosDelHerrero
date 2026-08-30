@@ -1,176 +1,67 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+/* Tus estilos originales de alineación perfecta */
+#listaMarcas {
+    font-family: monospace; 
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-top: 10px;
+}
+#listaMarcas span {
+    display: inline-block;
+    width: 60px;         
+    text-align: right;   
+    font-weight: bold;
+    color: #1e293b;      
 }
 
-body{
-    background:#eceff1;
-    color:#333;
+/* Estilos de navegación y botones tipo menú */
+.oculto { 
+    display: none !important; 
 }
-
-header{
-    background:#1565c0;
-    color:#fff;
-    text-align:center;
-    padding:20px;
-    box-shadow:0 2px 8px rgba(0,0,0,.2);
+.tarjeta {
+    cursor: pointer;
+    border: 1px solid #cbd5e1;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    font-family: sans-serif;
 }
-
-header h1{
-    font-size:34px;
-    letter-spacing:3px;
+.tarjeta:hover { 
+    background-color: #f1f5f9; 
 }
-
-header p{
-    margin-top:5px;
-    font-size:16px;
+.icono { 
+    font-size: 2rem; 
 }
-
-main{
-    max-width:700px;
-    margin:auto;
-    padding:20px;
+.volver { 
+    cursor: pointer; 
+    margin-bottom: 15px; 
+    padding: 5px 10px; 
+    font-family: sans-serif; 
 }
-
-.oculto{
-    display:none;
+.fila { 
+    margin-bottom: 12px; 
+    font-family: sans-serif; 
 }
-
-.tarjeta{
-
-    display:flex;
-    align-items:center;
-
-    background:#fff;
-
-    border-radius:12px;
-
-    padding:18px;
-
-    margin-bottom:15px;
-
-    cursor:pointer;
-
-    transition:.2s;
-
-    box-shadow:0 3px 10px rgba(0,0,0,.12);
-
+.fila label { 
+    display: block; 
+    font-weight: bold; 
+    margin-bottom: 4px; 
 }
-
-.tarjeta:hover{
-
-    transform:translateY(-2px);
-
+.fila input { 
+    width: 100%; 
+    padding: 6px; 
+    box-sizing: border-box; 
 }
-
-.icono{
-
-    font-size:42px;
-
-    margin-right:18px;
-
+h1, h2, h3 { 
+    font-family: sans-serif; 
 }
-
-.tarjeta h2{
-
-    margin-bottom:5px;
-
-}
-
-label{
-
-    display:block;
-
-    margin-top:18px;
-
-    margin-bottom:6px;
-
-    font-weight:bold;
-
-}
-
-input{
-
-    width:100%;
-
-    padding:12px;
-
-    border:1px solid #c8c8c8;
-
-    border-radius:8px;
-
-    font-size:18px;
-
-    outline:none;
-
-}
-
-input:focus{
-
-    border-color:#1565c0;
-
-}
-
-button{
-
-    width:100%;
-
-    margin-top:20px;
-
-    padding:14px;
-
-    background:#ff7a00;
-
-    color:#fff;
-
-    border:none;
-
-    border-radius:8px;
-
-    font-size:18px;
-
-    cursor:pointer;
-
-}
-
-button:hover{
-
-    background:#e56d00;
-
-}
-
-.volver{
-
-    width:auto;
-
-    padding:10px 20px;
-
-}
-
-hr{
-
-    margin:25px 0;
-
-}
-
-h3{
-
-    margin-bottom:15px;
-
-}
-
-p{
-
-    margin:10px 0;
-
-    font-size:18px;
-
-}
-
-strong{
-
-    color:#1565c0;
-
+.btn-calcular {
+    width: 100%; 
+    padding: 10px; 
+    font-weight: bold; 
+    margin-bottom: 15px;
+    cursor: pointer;
 }

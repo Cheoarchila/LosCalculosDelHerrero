@@ -4,44 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Calculadora del Herrero si funciona</title>
-    <style>
-        /* Tus estilos originales de alineación perfecta */
-        #listaMarcas {
-            font-family: monospace; 
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin-top: 10px;
-        }
-        #listaMarcas span {
-            display: inline-block;
-            width: 60px;         
-            text-align: right;   
-            font-weight: bold;
-            color: #1e293b;      
-        }
-        
-        /* Estilos de navegación y botones tipo menú */
-        .oculto { display: none !important; }
-        .tarjeta {
-            cursor: pointer;
-            border: 1px solid #cbd5e1;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-radius: 8px;
-            background-color: #f8fafc;
-            font-family: sans-serif;
-        }
-        .tarjeta:hover { background-color: #f1f5f9; }
-        .icono { font-size: 2rem; }
-        .volver { cursor: pointer; margin-bottom: 15px; padding: 5px 10px; font-family: sans-serif; }
-        .fila { margin-bottom: 12px; font-family: sans-serif; }
-        .fila label { display: block; font-weight: bold; margin-bottom: 4px; }
-        .fila input { width: 100%; padding: 6px; box-sizing: border-box; }
-        h1, h2, h3 { font-family: sans-serif; }
-    </style>
+    <!-- Vinculación del archivo de estilos -->
+    <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
 
@@ -121,7 +85,7 @@
             <input type="number" id="espesor" value="1">
         </div>
 
-        <button type="button" style="width:100%; padding:10px; font-weight:bold; margin-bottom:15px;" onclick="calcular()">Calcular</button>
+        <button type="button" class="btn-calcular" onclick="calcular()">Calcular</button>
 
         <h3>Resultado</h3>
         <p>Ancho de canal: <span id="anchoCanal">-</span> mm</p>
@@ -134,7 +98,7 @@
         </div>
     </section>
 
-    <!-- Vinculación del archivo lógico independiente -->
+    <!-- Vinculación del archivo lógico de programación -->
     <script src="script.js"></script>
 </body>
 </html>

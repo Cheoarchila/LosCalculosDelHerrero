@@ -3,6 +3,8 @@ let ultimaMedidaPlancha = 1200;
 let ultimaMedidaFinal = 1000;
 let ultimaProfundidad = 15;
 let ultimoBorde = 20;
+let ultimoCanalCantidad = 3;
+let ultimoEspesor = 1;
 
 // Control de navegación entre pantallas
 function abrirPantalla(idPantalla) {
@@ -21,12 +23,6 @@ function calcular() {
     const profundidad = Number(document.getElementById("profundidad").value);
     const bordes = Number(document.getElementById("bordes").value);
     const espesor = Number(document.getElementById("espesor").value);
-
-    // Validaciones rápidas de seguridad antes de procesar loops
-    if (anchoPlancha <= 0 || canales <= 0) {
-        alert("Por favor introduce valores mayores a 0.");
-        return;
-    }
 
     // Cálculos estructurales
     const anchoCanal = medidaFinal / canales;
@@ -134,7 +130,7 @@ function calcular() {
             temporalContador++;
             
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
-            for (let k = i + 1; k <= finImpresion; k++) {
+            for (let k = i; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
                 let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span style='color:#ef4444; font-weight:bold;'>CORTE ➔</span>" : "";
@@ -180,9 +176,80 @@ function calcular() {
 
     document.getElementById("listaMarcas").innerHTML = htmlFinal;
 
-    // Guardar estados válidos de respaldo
+    // Actualizar estados válidos de respaldo tras un cálculo exitoso
     ultimaMedidaPlancha = anchoPlancha;
     ultimaMedidaFinal = medidaFinal;
     ultimaProfundidad = profundidad;
     ultimoBorde = bordes;
+    ultimoCanalCantidad = canales;
+    ultimoEspesor = espesor;
+}
+
+// --- FUNCIONES DE VERIFICACIÓN Y VALIDACIÓN (ONBLUR) ---
+
+function verificarMedidaPlancha() {
+    const campo = document.getElementById("anchoPlancha");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 1) {
+        alert("Debes ingresar una Medida de Plancha válida.");
+        campo.value = ultimaMedidaPlancha;
+    } else {
+        ultimaMedidaPlancha = valor;
+    }
+}
+
+function verificarMedidaFinal() {
+    const campo = document.getElementById("medidaFinal");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 1) {
+        alert("Debes ingresar una Medida Final válida.");
+        campo.value = ultimaMedidaFinal;
+    } else {
+        ultimaMedidaFinal = valor;
+    }
+}
+
+function verificarCanales() {
+    const campo = document.getElementById("canales");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 1) {
+        alert("Debes ingresar una cantidad de Canales válida.");
+        campo.value = ultimoCanalCantidad;
+    } else {
+        ultimoCanalCantidad = valor;
+    }
+}
+
+function verificarProfundidad() {
+    const campo = document.getElementById("profundidad");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) {
+        alert("Debes ingresar una Profundidad válida.");
+        campo.value = ultimaProfundidad;
+    } else {
+        ultimaProfundidad = valor;
+    }
+}
+
+// Corrección menor: 'bordes' en tu código HTML actual
+function verificarBordes() {
+const campo = document.getElementById("bordes");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) {
+        alert("Debes ingresar un valor de Bordes válido.");
+        campo.value = ultimoBorde;
+        } else {
+        ultimoBorde = valor;
+    }
+}
+
+function verificarEspesor() {
+    const campo = document.getElementById("espesor");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) {
+        alert("Debes ingresar un Espesor válido.");
+        campo.value = ultimoEspesor;
+    } else {
+        ultimoEspesor = valor;
+    }
 }

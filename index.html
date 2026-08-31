@@ -122,13 +122,51 @@
         </div>
     </section>
 
-    <!-- ====================================== -->
-    <!-- PANTALLA 3C: CANALES DIFERENTES 90° (Espacio para programar) -->
+       <!-- ====================================== -->
+    <!-- PANTALLA 3C: CANALES DIFERENTES 90°    -->
     <!-- ====================================== -->
     <section id="pantalla90GradosDiferentes" class="oculto">
         <button class="volver" onclick="abrirPantalla('pantalla90GradosMenu')">← Volver al Menú 90°</button>
         <h2>90° - Canales Diferentes</h2>
-        <p style="font-family: sans-serif; color: #64748b;">Aquí empezaremos a programar las instrucciones para canales con distintas medidas.</p>
+
+        <!-- Datos Generales Estructurales -->
+        <div class="fila">
+            <label for="anchoPlanchaDif">Ancho de plancha:</label>
+            <input type="number" id="anchoPlanchaDif" value="1200" step="1">
+        </div>
+        <div class="fila">
+            <label for="profundidadDif">Profundidad:</label>
+            <input type="number" id="profundidadDif" value="15">
+        </div>
+        <div class="fila">
+            <label for="bordesDif">Bordes:</label>
+            <input type="number" id="bordesDif" value="20">
+        </div>
+        <div class="fila">
+            <label for="espesorDif">Espesor:</label>
+            <input type="number" id="espesorDif" value="1">
+        </div>
+        <div class="fila">
+            <label for="cantidadCanalesDif">Cant. de Canales:</label>
+            <input type="number" id="cantidadCanalesDif" value="3" step="1">
+        </div>
+
+        <!-- Botón para generar los campos independientes de cada canal -->
+        <button type="button" class="btn-calcular" onclick="generarCamposCanales()">Configurar Canales</button>
+
+        <!-- Contenedor dinámico donde aparecerán los inputs de cada canal -->
+        <div id="contenedorCanalesDinamicos"></div>
+
+        <!-- Contenedor para el botón final de cálculo y resultados -->
+        <div id="seccionResultadoDiferentes" class="oculto">
+            <button type="button" class="btn-calcular" style="background-color: #0f766e; color: white;" onclick="calcularCanalesDiferentes()">Calcular Desarrollo</button>
+            <h3>Resultado</h3>
+            <p>Desarrollo Total: <span id="desarrolloDif">-</span> mm</p>
+            <div id="marcasDiferentes">
+                <h3>Marcas y Controles por Plancha</h3>
+                <div id="listaMarcasDif"></div>
+            </div>
+        </div>
     </section>
 
     <!-- ====================================== -->

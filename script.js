@@ -107,7 +107,7 @@ function calcular() {
         if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
-                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span class='texto-corte'>CORTE ➔</span>" : "";
+                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span class='texto-corte'>CORTE</span>" : "";
                 let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
                 let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
 

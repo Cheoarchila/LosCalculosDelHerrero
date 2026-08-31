@@ -41,28 +41,29 @@ h1, h2, h3 {
 }
 
 /* ======================================================== */
-/* 3. FORMULARIOS (CUADROS REDUCIDOS AL 50%)                */
+/* 3. FORMULARIOS (COLUMNAS COMPACTAS Y ALINEADAS)          */
 /* ======================================================== */
 .fila { 
     margin-bottom: 12px; 
     font-family: sans-serif; 
     display: flex;                  
     align-items: center;            
-    justify-content: space-between; 
-    gap: 15px;                      
+    justify-content: flex-start;    /* Empuja el input hacia la etiqueta a la izquierda */
+    gap: 15px;                      /* Espacio fijo exacto entre la etiqueta y el cuadro */
 }
 
 .fila label { 
     font-weight: bold; 
     white-space: nowrap;            
+    width: 160px;                   /* Ancho fijo para la etiqueta (se adapta al texto más largo) */
+    display: inline-block;
 }
 
 .fila input { 
-    width: 30%;                     /* Ocupa la mitad del espacio porcentual previo */
-    max-width: 100px;               /* Ancho máximo cortado a la mitad exacta */
+    width: 100px;                   /* Mantiene el tamaño compacto al 50% anterior */
     padding: 6px; 
     box-sizing: border-box; 
-    text-align: center;             /* Mantiene los números centrados y legibles */
+    text-align: center;             
 }
 
 .btn-calcular {

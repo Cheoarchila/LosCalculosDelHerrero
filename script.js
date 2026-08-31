@@ -23,6 +23,12 @@ function calcular() {
     const bordes = Number(document.getElementById("bordes").value);
     const espesor = Number(document.getElementById("espesor").value);
 
+     // Ajuste de precisión interna para 1 canal
+    let profundidad = Number(inputProfundidad.value);
+    if (canales === 1) {
+        profundidad = 1;
+    }
+
     // Cálculos estructurales
     const anchoCanal = medidaFinal / canales;
     const altoCanal = profundidad;
@@ -194,4 +200,29 @@ function verificarEspesor() {
     let valor = Number(campo.value);
     if (campo.value === "" || valor < 0) { alert("Espesor inválido."); campo.value = ultimoEspesor; } 
     else { ultimoEspesor = valor; }
+}
+
+// Función para controlar el bloqueo visual del input profundidad
+function evaluarCanales() {
+    const inputCanales = document.getElementById("canales");
+    const inputProfundidad = document.getElementById("profundidad");
+    const valorCanales = Number(inputCanales.value);
+
+    if (valorCanales === 1) {
+        // Guarda el valor previo si no era cero para no perderlo al desbloquear
+        if (inputProfundidad.value !== "0" && inputProfundidad.value !== "") {
+            inputProfundidad.dataset.valorReal = inputProfundidad.value;
+        }
+        inputProfundidad.value = 0;
+        inputProfundidad.disabled = true;
+        inputProfundidad.style.backgroundColor = "#e2e8f0";
+        inputProfundidad.style.color = "#94a3b8";
+    } else {
+        inputProfundidad.disabled = false;
+        inputProfundidad.style.backgroundColor = "";
+        inputProfundidad.style.color = "";
+        if (inputProfundidad.dataset.valorReal) {
+            inputProfundidad.value = inputProfundidad.dataset.valorReal;
+        }
+    }
 }

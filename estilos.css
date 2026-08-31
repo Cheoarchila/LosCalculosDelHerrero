@@ -120,15 +120,21 @@ h1, h2, h3 {
     display: inline-block;
 }
 
-/* Letrero de corte centrado en medio de las dos columnas de números */
+/* Cartel de aviso de corte de alta visibilidad para taller */
 .texto-corte {
-    color: #ef4444;
+    background-color: #ef4444;      /* Fondo rojo brillante */
+    color: #ffffff;                 /* Letras blancas de alta pureza */
     font-weight: bold;
     width: 110px;
     display: inline-block;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    padding: 2px 4px;               /* Margen interno para crear un rectángulo */
+    border-radius: 4px;             /* Bordes ligeramente suaves */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra ligera para darle relieve */
+    font-family: sans-serif;        /* Letra limpia sin patitas para lectura rápida */
 }
+
 
 .col-control {
     font-weight: bold;

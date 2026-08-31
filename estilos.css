@@ -1,22 +1,13 @@
-/* Tus estilos originales de alineación perfecta */
-#listaMarcas {
-    font-family: monospace; 
-    font-size: 1.2rem;
-    line-height: 1.8;
-    margin-top: 10px;
-}
-#listaMarcas span {
-    display: inline-block;
-    width: 60px;         
-    text-align: right;   
-    font-weight: bold;
-    color: #1e293b;      
+/* Tipografías y títulos */
+h1, h2, h3 { 
+    font-family: sans-serif; 
 }
 
-/* Estilos de navegación y botones tipo menú */
+/* Estilos de navegación y menús */
 .oculto { 
     display: none !important; 
 }
+
 .tarjeta {
     cursor: pointer;
     border: 1px solid #cbd5e1;
@@ -32,15 +23,19 @@
 .tarjeta:hover { 
     background-color: #f1f5f9; 
 }
+
 .icono { 
     font-size: 2rem; 
 }
+
 .volver { 
     cursor: pointer; 
     margin-bottom: 15px; 
     padding: 5px 10px; 
     font-family: sans-serif; 
 }
+
+/* Formularios */
 .fila { 
     margin-bottom: 12px; 
     font-family: sans-serif; 
@@ -55,13 +50,61 @@
     padding: 6px; 
     box-sizing: border-box; 
 }
-h1, h2, h3 { 
-    font-family: sans-serif; 
-}
+
 .btn-calcular {
     width: 100%; 
     padding: 10px; 
     font-weight: bold; 
     margin-bottom: 15px;
     cursor: pointer;
+}
+
+/* ======================================================== */
+/* SECCIÓN DE MARCAS REESTRUCTURADA PARA ALINEACIÓN PERFECTA */
+/* ======================================================== */
+#listaMarcas {
+    font-family: monospace; 
+    font-size: 1.1rem;
+    margin-top: 15px;
+    background-color: #f8fafc;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.titulo-plancha {
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #1e293b;
+}
+
+.fila-marca {
+    display: flex;
+    align-items: center;
+    line-height: 1.6;
+    margin-bottom: 2px;
+}
+
+/* Ancho fijo exacto para las columnas de datos */
+.col-encabezado {
+    width: 130px;
+    color: #64748b;
+    font-weight: bold;
+}
+
+.col-datos {
+    width: 130px;
+    color: #1e293b;
+}
+
+.col-control {
+    font-weight: bold;
+    color: #0f766e;
+}
+
+.texto-corte {
+    color: #ef4444;
+    font-weight: bold;
+    margin-left: 10px;
 }

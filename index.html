@@ -70,7 +70,8 @@
         </div>
         <div class="fila">
             <label for="canales">Canales:</label>
-            <input type="number" id="canales" value="3" step="1" onblur="verificarCanales()">
+            <input type="number" id="canales" value="3" step="1" oninput="evaluarCanales()" onblur="verificarCanales()">
+
         </div>
         <div class="fila">
             <label for="profundidad">Profundidad:</label>

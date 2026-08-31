@@ -41,27 +41,28 @@ h1, h2, h3 {
 }
 
 /* ======================================================== */
-/* 3. FORMULARIOS (CUADROS AL LADO DE LAS ETIQUETAS)        */
+/* 3. FORMULARIOS (CUADROS REDUCIDOS AL 50%)                */
 /* ======================================================== */
 .fila { 
     margin-bottom: 12px; 
     font-family: sans-serif; 
-    display: flex;                  /* Coloca elementos en línea */
-    align-items: center;            /* Centra verticalmente etiqueta e input */
-    justify-content: space-between; /* Etiqueta a la izquierda, input a la derecha */
-    gap: 15px;                      /* Espacio de separación mínimo */
+    display: flex;                  
+    align-items: center;            
+    justify-content: space-between; 
+    gap: 15px;                      
 }
 
 .fila label { 
     font-weight: bold; 
-    white-space: nowrap;            /* Evita que el texto se parta en dos líneas */
+    white-space: nowrap;            
 }
 
 .fila input { 
-    width: 60%;                     /* Ocupa una proporción equilibrada de la fila */
-    max-width: 200px;               /* Evita que el cuadro se estire demasiado */
+    width: 30%;                     /* Ocupa la mitad del espacio porcentual previo */
+    max-width: 100px;               /* Ancho máximo cortado a la mitad exacta */
     padding: 6px; 
     box-sizing: border-box; 
+    text-align: center;             /* Mantiene los números centrados y legibles */
 }
 
 .btn-calcular {
@@ -100,7 +101,6 @@ h1, h2, h3 {
     margin-bottom: 2px;
 }
 
-/* Ancho fijo idéntico para lograr la alineación de columnas */
 .col-encabezado {
     width: 130px;
     color: #64748b;

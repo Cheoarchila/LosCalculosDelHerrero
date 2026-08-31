@@ -109,7 +109,7 @@ function calcular() {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
                 // Generamos la celda central: si es corte dibuja el cartel apuntando a marcas, si no, se queda en blanco
-                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀--- ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
                 let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
                 let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";

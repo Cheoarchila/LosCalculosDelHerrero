@@ -70,12 +70,13 @@ function calcular() {
     marca += (bordes - espesor);
     marcasArray.push({ num: contador, valor: Math.round(marca), control: null });
 
-        // --- PROCESAMIENTO CÍCLICO DE PLANCHAS CORREGIDO ---
+    // --- PROCESAMIENTO CÍCLICO DE PLANCHAS CORREGIDO ---
     let bloquesPlanchas = [];
     let i = 0;
     let valorPestañaReducida = profundidad - (2 * espesor);
 
-    const encabezadoColumnas = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-encabezado'>CONTROL</span></div>";
+    // Ajustamos el encabezado agregando una columna vacía en medio para mantener la alineación fija
+    const encabezadoColumnas = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-espacio-corte'></span><span class='col-encabezado'>CONTROL</span></div>";
 
     while (i < marcasArray.length) {
         let esUltima = true;
@@ -107,17 +108,18 @@ function calcular() {
         if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
-                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span class='texto-corte'>CORTE</span>" : "";
+                // Si es la línea de corte, agregamos la etiqueta en medio apuntando a la izquierda (←)
+                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>← CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                
                 let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
                 let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
 
-                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span><span class='col-datos col-control'>" + textoControl + "</span>" + sufijoCorte + "</div>");
+                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "<span class='col-datos col-control'>" + textoControl + "</span></div>");
             }
             i = finImpresion; 
         } else {
             // Planchas siguientes: La primera marca física es la pestaña de acople (reducida)
-            let textoMarcaBase = temporalContador + ".-) " + Math.round(valorPestañaReducida);
-            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarcaBase + "</span><span class='col-datos'></span></div>");
+            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(valorPestañaReducida) + "</span><span class='col-espacio-corte'></span><span class='col-datos'></span></div>");
             temporalContador++;
             
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
@@ -126,13 +128,15 @@ function calcular() {
             for (let k = i + 1; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
-                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span class='texto-corte'>CORTE ➔</span>" : "";
+                
+                // Si es la línea de corte, agregamos la etiqueta en medio apuntando a la izquierda (←)
+                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>← CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
                 let textoMarca = temporalContador + ".-) " + Math.round(medidaDesdeCero);
                 let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
                 temporalContador++;
 
-                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span><span class='col-datos col-control'>" + textoControl + "</span>" + sufijoCorte + "</div>");
+                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "<span class='col-datos col-control'>" + textoControl + "</span></div>");
             }
             i = finImpresion;
         }
@@ -142,6 +146,7 @@ function calcular() {
         // Romper si ya alcanzamos la marca de cierre final
         if (i >= marcasArray.length - 1) break;
     }
+
 
 
     // --- CORREGIDO AQUÍ: Se restauraron los índices [0] y [1] correctos ---

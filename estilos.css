@@ -48,19 +48,19 @@ h1, h2, h3 {
     font-family: sans-serif; 
     display: flex;                  
     align-items: center;            
-    justify-content: flex-start;    /* Empuja el input hacia la etiqueta a la izquierda */
+    justify-content: flex-start;    /* Empuja el input hacia la etiqueta */
     gap: 15px;                      /* Espacio fijo exacto entre la etiqueta y el cuadro */
 }
 
 .fila label { 
     font-weight: bold; 
     white-space: nowrap;            
-    width: 160px;                   /* Ancho fijo para la etiqueta (se adapta al texto más largo) */
+    width: 160px;                   /* Ancho fijo para la etiqueta */
     display: inline-block;
 }
 
 .fila input { 
-    width: 100px;                   /* Mantiene el tamaño compacto al 50% anterior */
+    width: 100px;                   /* Cuadros de texto compactos al 50% */
     padding: 6px; 
     box-sizing: border-box; 
     text-align: center;             
@@ -76,7 +76,7 @@ h1, h2, h3 {
 }
 
 /* ======================================================== */
-/* 4. SECCIÓN DE RESULTADOS Y MARCAS EN PLACHA              */
+/* 4. SECCIÓN DE RESULTADOS Y MARCAS EN PLANCHA              */
 /* ======================================================== */
 #listaMarcas {
     font-family: monospace; 
@@ -102,6 +102,7 @@ h1, h2, h3 {
     margin-bottom: 2px;
 }
 
+/* Anchos fijos idénticos para lograr 3 columnas tabulares perfectas */
 .col-encabezado {
     width: 130px;
     color: #64748b;
@@ -113,13 +114,23 @@ h1, h2, h3 {
     color: #1e293b;
 }
 
-.col-control {
-    font-weight: bold;
-    color: #0f766e;
+/* Columna central fija para que el corte no empuje al control */
+.col-espacio-corte {
+    width: 110px;
+    display: inline-block;
 }
 
+/* Letrero de corte centrado en medio de las dos columnas de números */
 .texto-corte {
     color: #ef4444;
     font-weight: bold;
-    margin-left: 10px;
+    width: 110px;
+    display: inline-block;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.col-control {
+    font-weight: bold;
+    color: #0f766e;
 }

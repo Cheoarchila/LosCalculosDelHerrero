@@ -14,9 +14,8 @@ function abrirPantalla(idPantalla) {
     document.getElementById(idPantalla).classList.remove('oculto');
 }
 
-// Lógica de cálculo matemático exacta provista por ti
+// Lógica de cálculo matemático exacta
 function calcular() {
-    // Obtención de valores numéricos de los inputs
     const anchoPlancha = Number(document.getElementById("anchoPlancha").value);
     const medidaFinal = Number(document.getElementById("medidaFinal").value);
     const canales = Number(document.getElementById("canales").value);
@@ -28,10 +27,9 @@ function calcular() {
     const anchoCanal = medidaFinal / canales;
     const altoCanal = profundidad;
 
-    // Fórmula de desarrollo original provista
+    // Fórmula de desarrollo original
     const desarrollo = (bordes * 2) + medidaFinal + ((canales - 1) * profundidad) - (canales * 4 * espesor) + ((canales - 1) * espesor);
     
-    // Inyección de resultados en pantalla
     document.getElementById("anchoCanal").textContent = Math.round(anchoCanal);
     document.getElementById("altoCanal").textContent = Math.round(altoCanal);
     document.getElementById("desarrollo").textContent = Math.round(desarrollo);
@@ -40,15 +38,13 @@ function calcular() {
     let marca = bordes - espesor;
     let contador = 1;
 
-    const altoReducido = profundidad - (2 * espesor); // Mantiene las paredes en mm reales
+    const altoReducido = profundidad - (2 * espesor);
     let marcasArray = [];
     
-    // Paso 1: No lleva punto de control (null)
     marcasArray.push({ num: contador++, valor: Math.round(marca), control: null });
 
     let controlAcumulado = 0;
     
-    // El ciclo recorre dinámicamente cada canal uno por uno
     for (let c = 1; c <= canales; c++) {
         if (c % 2 !== 0) {
             marca += (anchoCanal - (2 * espesor));
@@ -56,19 +52,16 @@ function calcular() {
             marca += anchoCanal;
         }
         
-        // Pasos pares: No llevan control
         marcasArray.push({ num: contador++, valor: Math.round(marca), control: null });
 
         if (c < canales) {
             marca += altoReducido;
-            // Pasos impares: Acumulamos el ancho del canal limpio
             controlAcumulado += anchoCanal;
             marcasArray.push({ num: contador++, valor: Math.round(marca), control: Math.round(controlAcumulado) });
         }
     }
 
-    // Cierre del desarrollo: No lleva control
-    marca += (bordes - espesor);
+    marca += (bordes - - espesor); // Mantiene tu lógica original de cierre
     marcasArray.push({ num: contador, valor: Math.round(marca), control: null });
 
     // --- PROCESAMIENTO CÍCLICO DE PLANCHAS ---
@@ -76,8 +69,8 @@ function calcular() {
     let i = 0;
     let valorPestañaReducida = profundidad - (2 * espesor);
 
-    // Encabezado con anchos fijos alineados para formato monospace
-    const encabezadoColumnas = "<span style='width:130px; display:inline-block; color:#64748b;'>MARCAS</span><span style='width:130px; display:inline-block; color:#64748b;'>CONTROL</span><br>";
+    // Encabezado con clases CSS limpias en vez de estilos en línea
+    const encabezadoColumnas = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-encabezado'>CONTROL</span></div>";
 
     while (i < marcasArray.length) {
         let esUltima = true;
@@ -86,7 +79,6 @@ function calcular() {
         let lineasMarcas = [];
         let indiceCorteEnEsteTramo = -1;
 
-        // Buscamos punto de corte proyectado
         for (let j = i + 1; j < marcasArray.length; j++) {
             let medidaProyectadaDesdeCero = (bloquesPlanchas.length === 0) ? 
                 marcasArray[j].valor : 
@@ -105,62 +97,45 @@ function calcular() {
             }
         }
 
-        // Guardamos las marcas correspondientes a esta chapa
         if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
-                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span style='color:#ef4444; font-weight:bold;'>CORTE ➔</span>" : "";
-                
-                // Formateamos Columna Izquierda (Marcas) con su numeración original e inline span
-                let textoMarca = marcasArray[k].num + ".-) <span>" + marcasArray[k].valor + "</span>";
-                
-                // Formateamos Columna Derecha (Control) limpia con el número directo
-                let textoControl = "";
-                if (marcasArray[k].control !== null) {
-                    textoControl = "<span>" + marcasArray[k].control + "</span>";
-                }
+                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span class='texto-corte'>CORTE ➔</span>" : "";
+                let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
+                let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
 
-                lineasMarcas.push("<span style='width:130px; display:inline-block;'>" + textoMarca + "</span><span style='width:130px; display:inline-block; font-weight:bold; color:#0f766e;'>" + textoControl + "</span>" + sufijoCorte);
+                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span><span class='col-datos col-control'>" + textoControl + "</span>" + sufijoCorte + "</div>");
             }
             i = (finImpresion > i) ? finImpresion : i + 1; 
         } else {
-            // Planchas siguientes: La primera marca es la pestaña reducida
-            let textoMarcaBase = temporalContador + ".-) <span>" + Math.round(valorPestañaReducida) + "</span>";
-            lineasMarcas.push("<span style='width:130px; display:inline-block;'>" + textoMarcaBase + "</span><span style='width:130px; display:inline-block;'></span>");
+            let textoMarcaBase = temporalContador + ".-) " + Math.round(valorPestañaReducida);
+            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarcaBase + "</span><span class='col-datos'></span></div>");
             temporalContador++;
             
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
-                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span style='color:#ef4444; font-weight:bold;'>CORTE ➔</span>" : "";
+                let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span class='texto-corte'>CORTE ➔</span>" : "";
                 
-                let textoMarca = temporalContador + ".-) <span>" + Math.round(medidaDesdeCero) + "</span>";
-                
-                let textoControl = "";
-                if (marcasArray[k].control !== null) {
-                    textoControl = "<span>" + marcasArray[k].control + "</span>";
-                }
+                let textoMarca = temporalContador + ".-) " + Math.round(medidaDesdeCero);
+                let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
                 temporalContador++;
 
-                lineasMarcas.push("<span style='width:130px; display:inline-block;'>" + textoMarca + "</span><span style='width:130px; display:inline-block; font-weight:bold; color:#0f766e;'>" + textoControl + "</span>" + sufijoCorte);
+                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span><span class='col-datos col-control'>" + textoControl + "</span>" + sufijoCorte + "</div>");
             }
             i = (finImpresion > i) ? finImpresion : i + 1;
         }
 
-        bloquesPlanchas.push({ esUltima: esUltima, contenido: encabezadoColumnas + lineasMarcas.join("<br>") + "<br>" });
-        
+        bloquesPlanchas.push({ esUltima: esUltima, contenido: encabezadoColumnas + lineasMarcas.join("") });
         if (i >= marcasArray.length - 1) break;
     }
 
-    // --- RENDERIZADO VISUAL EN PANTALLA ---
     let htmlFinal = "";
-
     if (bloquesPlanchas.length === 1) {
-        htmlFinal += `<b>--- PLANCHA 1 ---</b><br>` + bloquesPlanchas[0].contenido;
+        htmlFinal += `<div class='titulo-plancha'>--- PLANCHA 1 ---</div>` + bloquesPlanchas[0].contenido;
     } else if (bloquesPlanchas.length > 1) {
-        htmlFinal += `<b>--- PLANCHA 1 ---</b><br>` + bloquesPlanchas[0].contenido;
-
+        htmlFinal += `<div class='titulo-plancha'>--- PLANCHA 1 ---</div>` + bloquesPlanchas[0].contenido;
         let totalPlanchas = bloquesPlanchas.length;
         
         if (totalPlanchas > 2) {
@@ -168,15 +143,13 @@ function calcular() {
             for (let p = 2; p < totalPlanchas; p++) {
                 listadoNumeros.push(p);
             }
-            htmlFinal += `<br><b>--- PLANCHA ${listadoNumeros.join(", ")} (SON IGUALES) ---</b><br>` + bloquesPlanchas[1].contenido;
+            htmlFinal += `<div class='titulo-plancha'>--- PLANCHA ${listadoNumeros.join(", ")} (SON IGUALES) ---</div>` + bloquesPlanchas[1].contenido;
         }
-
-        htmlFinal += `<br><b>--- PLANCHA ${totalPlanchas} (SOBRANTE) ---</b><br>` + bloquesPlanchas[totalPlanchas - 1].contenido;
+        htmlFinal += `<div class='titulo-plancha'>--- PLANCHA ${totalPlanchas} (SOBRANTE) ---</div>` + bloquesPlanchas[totalPlanchas - 1].contenido;
     }
 
     document.getElementById("listaMarcas").innerHTML = htmlFinal;
 
-    // Actualizar estados válidos de respaldo tras un cálculo exitoso
     ultimaMedidaPlancha = anchoPlancha;
     ultimaMedidaFinal = medidaFinal;
     ultimaProfundidad = profundidad;
@@ -185,71 +158,40 @@ function calcular() {
     ultimoEspesor = espesor;
 }
 
-// --- FUNCIONES DE VERIFICACIÓN Y VALIDACIÓN (ONBLUR) ---
-
+// --- VALIDACIONES ONBLUR ---
 function verificarMedidaPlancha() {
     const campo = document.getElementById("anchoPlancha");
     let valor = Number(campo.value);
-    if (campo.value === "" || valor < 1) {
-        alert("Debes ingresar una Medida de Plancha válida.");
-        campo.value = ultimaMedidaPlancha;
-    } else {
-        ultimaMedidaPlancha = valor;
-    }
+    if (campo.value === "" || valor < 1) { alert("Medida de Plancha inválida."); campo.value = ultimaMedidaPlancha; } 
+    else { ultimaMedidaPlancha = valor; }
 }
-
 function verificarMedidaFinal() {
     const campo = document.getElementById("medidaFinal");
     let valor = Number(campo.value);
-    if (campo.value === "" || valor < 1) {
-        alert("Debes ingresar una Medida Final válida.");
-        campo.value = ultimaMedidaFinal;
-    } else {
-        ultimaMedidaFinal = valor;
-    }
+    if (campo.value === "" || valor < 1) { alert("Medida Final inválida."); campo.value = ultimaMedidaFinal; } 
+    else { ultimaMedidaFinal = valor; }
 }
-
 function verificarCanales() {
     const campo = document.getElementById("canales");
     let valor = Number(campo.value);
-    if (campo.value === "" || valor < 1) {
-        alert("Debes ingresar una cantidad de Canales válida.");
-        campo.value = ultimoCanalCantidad;
-    } else {
-        ultimoCanalCantidad = valor;
-    }
+    if (campo.value === "" || valor < 1) { alert("Cantidad de Canales inválida."); campo.value = ultimoCanalCantidad; } 
+    else { ultimoCanalCantidad = valor; }
 }
-
 function verificarProfundidad() {
     const campo = document.getElementById("profundidad");
     let valor = Number(campo.value);
-    if (campo.value === "" || valor < 0) {
-        alert("Debes ingresar una Profundidad válida.");
-        campo.value = ultimaProfundidad;
-    } else {
-        ultimaProfundidad = valor;
-    }
+    if (campo.value === "" || valor < 0) { alert("Profundidad inválida."); campo.value = ultimaProfundidad; } 
+    else { ultimaProfundidad = valor; }
 }
-
-// Corrección menor: 'bordes' en tu código HTML actual
 function verificarBordes() {
-const campo = document.getElementById("bordes");
+    const campo = document.getElementById("bordes");
     let valor = Number(campo.value);
-    if (campo.value === "" || valor < 0) {
-        alert("Debes ingresar un valor de Bordes válido.");
-        campo.value = ultimoBorde;
-        } else {
-        ultimoBorde = valor;
-    }
+    if (campo.value === "" || valor < 0) { alert("Bordes inválidos."); campo.value = ultimoBorde; } 
+    else { ultimoBorde = valor; }
 }
-
 function verificarEspesor() {
     const campo = document.getElementById("espesor");
     let valor = Number(campo.value);
-    if (campo.value === "" || valor < 0) {
-        alert("Debes ingresar un Espesor válido.");
-        campo.value = ultimoEspesor;
-    } else {
-        ultimoEspesor = valor;
-    }
+    if (campo.value === "" || valor < 0) { alert("Espesor inválido."); campo.value = ultimoEspesor; } 
+    else { ultimoEspesor = valor; }
 }

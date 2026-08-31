@@ -70,12 +70,12 @@ function calcular() {
     marca += (bordes - espesor);
     marcasArray.push({ num: contador, valor: Math.round(marca), control: null });
 
-    // --- PROCESAMIENTO CÍCLICO DE PLANCHAS CORREGIDO ---
+        // --- PROCESAMIENTO CÍCLICO DE PLANCHAS CORREGIDO ---
     let bloquesPlanchas = [];
     let i = 0;
     let valorPestañaReducida = profundidad - (2 * espesor);
 
-    // Ajustamos el encabezado agregando una columna vacía en medio para mantener la alineación fija
+    // Ajustamos el encabezado agregando una columna vacía en medio para mantener la alineación fija de las 3 columnas
     const encabezadoColumnas = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-espacio-corte'></span><span class='col-encabezado'>CONTROL</span></div>";
 
     while (i < marcasArray.length) {
@@ -108,8 +108,8 @@ function calcular() {
         if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
-                // Si es la línea de corte, agregamos la etiqueta en medio apuntando a la izquierda (←)
-                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>← CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                // Generamos la celda central: si es corte dibuja el cartel apuntando a marcas, si no, se queda en blanco
+                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
                 let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
                 let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
@@ -129,8 +129,8 @@ function calcular() {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
                 
-                // Si es la línea de corte, agregamos la etiqueta en medio apuntando a la izquierda (←)
-                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>← CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                // Generamos la celda central en el sobrante apuntando a la izquierda
+                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
                 let textoMarca = temporalContador + ".-) " + Math.round(medidaDesdeCero);
                 let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
@@ -146,6 +146,7 @@ function calcular() {
         // Romper si ya alcanzamos la marca de cierre final
         if (i >= marcasArray.length - 1) break;
     }
+
 
 
 

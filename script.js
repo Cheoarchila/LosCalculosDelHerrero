@@ -243,3 +243,54 @@ if (campo.value === "" || valor < 0) { alert("Espesor inválido.");
         ultimoEspesor = valor;
     }
     }
+
+// --- LÓGICA PARA PANTALLA: CANALES DIFERENTES ---
+
+// Función para generar los cuadros de texto de cada canal de forma dinámica
+function generarCamposCanales() {
+    const cantidad = Number(document.getElementById("cantidadCanalesDif").value);
+    const contenedor = document.getElementById("contenedorCanalesDinamicos");
+    const seccionResultado = document.getElementById("seccionResultadoDiferentes");
+
+    // Validación básica
+    if (cantidad < 1) {
+        alert("Debes ingresar al menos 1 canal.");
+        return;
+    }
+
+    let htmlCampos = "<h3>Medidas independientes de Canales</h3>";
+    
+    // Ciclo para crear un input por cada canal solicitado
+    for (let i = 1; i <= cantidad; i++) {
+        htmlCampos += `
+            <div class="fila">
+                <label for="inputCanalNo_${i}">Ancho Canal N° ${i} (mm):</label>
+                <input type="number" id="inputCanalNo_${i}" class="input-canal-dinamico" value="${Math.round(1000 / cantidad)}" step="1">
+            </div>
+        `;
+    }
+
+    // Inyectamos los inputs y hacemos visible el botón definitivo de calcular
+    contenedor.innerHTML = htmlCampos;
+    seccionResultado.classList.remove("oculto");
+}
+
+// Función principal donde programaremos tus fórmulas de desarrollo y marcas para canales variables
+function calcularCanalesDiferentes() {
+    const anchoPlancha = Number(document.getElementById("anchoPlanchaDif").value);
+    const profundidad = Number(document.getElementById("profundidadDif").value);
+    const bordes = Number(document.getElementById("bordesDif").value);
+    const espesor = Number(document.getElementById("espesorDif").value);
+    const cantidad = Number(document.getElementById("cantidadCanalesDif").value);
+
+    // Recolectamos las medidas de cada canal dentro de una matriz (Array)
+    let medidasCanales = [];
+    for (let i = 1; i <= cantidad; i++) {
+        const valorCanal = Number(document.getElementById(`inputCanalNo_${i}`).value);
+        medidasCanales.push(valorCanal);
+    }
+
+    // --- AQUÍ EMPEZAREMOS A PROGRAMAR TUS INSTRUCCIONES MATEMÁTICAS ---
+    // De momento dejamos una alerta para comprobar que lee correctamente los canales
+    alert("Medidas capturadas de los canales: " + medidasCanales.join(" mm, ") + " mm.");
+}

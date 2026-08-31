@@ -70,7 +70,7 @@ function calcular() {
     marca += (bordes - espesor);
     marcasArray.push({ num: contador, valor: Math.round(marca), control: null });
 
-    // --- PROCESAMIENTO CÍCLICO DE PLANCHAS ---
+        // --- PROCESAMIENTO CÍCLICO DE PLANCHAS CORREGIDO ---
     let bloquesPlanchas = [];
     let i = 0;
     let valorPestañaReducida = profundidad - (2 * espesor);
@@ -84,6 +84,7 @@ function calcular() {
         let lineasMarcas = [];
         let indiceCorteEnEsteTramo = -1;
 
+        // Buscamos punto de corte proyectado basándonos en longitudes acumuladas reales
         for (let j = i + 1; j < marcasArray.length; j++) {
             let medidaProyectadaDesdeCero = (bloquesPlanchas.length === 0) ? 
                 marcasArray[j].valor : 
@@ -91,6 +92,7 @@ function calcular() {
             
             if (medidaProyectadaDesdeCero > anchoPlancha) {
                 let posibleIndiceCorte = j - 1;
+                // Forzar corte en paso impar para garantizar doblado estructural óptimo
                 if (marcasArray[posibleIndiceCorte].num % 2 === 0) {
                     posibleIndiceCorte--;
                 }
@@ -111,14 +113,17 @@ function calcular() {
 
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span><span class='col-datos col-control'>" + textoControl + "</span>" + sufijoCorte + "</div>");
             }
-            i = (finImpresion > i) ? finImpresion : i + 1; 
+            i = finImpresion; 
         } else {
+            // Planchas siguientes: La primera marca física es la pestaña de acople (reducida)
             let textoMarcaBase = temporalContador + ".-) " + Math.round(valorPestañaReducida);
             lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarcaBase + "</span><span class='col-datos'></span></div>");
             temporalContador++;
             
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
-            for (let k = i; k <= finImpresion; k++) {
+            
+            // Avanzamos k desde i + 1 para NO duplicar mecánicamente el punto donde se realizó el corte
+            for (let k = i + 1; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
                 let sufijoCorte = (k === indiceCorteEnEsteTramo) ? " <span class='texto-corte'>CORTE ➔</span>" : "";
@@ -129,12 +134,15 @@ function calcular() {
 
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span><span class='col-datos col-control'>" + textoControl + "</span>" + sufijoCorte + "</div>");
             }
-            i = (finImpresion > i) ? finImpresion : i + 1;
+            i = finImpresion;
         }
 
         bloquesPlanchas.push({ esUltima: esUltima, contenido: encabezadoColumnas + lineasMarcas.join("") });
+        
+        // Romper si ya alcanzamos la marca de cierre final
         if (i >= marcasArray.length - 1) break;
     }
+
 
     // --- CORREGIDO AQUÍ: Se restauraron los índices [0] y [1] correctos ---
     let htmlFinal = "";

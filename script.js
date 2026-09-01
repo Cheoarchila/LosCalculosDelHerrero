@@ -297,7 +297,7 @@ function calcularDiferentes() {
     const desarrollo = (bordes * 2) + medidaFinal + ((canalesTotales - 1) * profundidad) - (canalesTotales * 4 * espesor) + ((canalesTotales - 1) * espesor);
     document.getElementById("desarrolloDif").textContent = Math.round(desarrollo);
 
-    // --- CICLO DE GENERACIÓN DE MARCAS CON ANCHOS VARIABLES ---
+       // --- CICLO DE GENERACIÓN DE MARCAS CON ANCHOS VARIABLES CORREGIDO ---
     let marca = bordes - espesor;
     let contador = 1;
     let marcasArray = [];
@@ -314,6 +314,9 @@ function calcularDiferentes() {
         let esImpar = (c % 2 !== 0);
         let anchoCanalActual = esImpar ? anchoImpar : anchoPar;
 
+        // Sumamos al control acumulado limpio ANTES de mover la marca física del pliegue
+        controlAcumulado += anchoCanalActual;
+
         if (esImpar) {
             marca += (anchoCanalActual - (2 * espesor));
         } else {
@@ -325,8 +328,7 @@ function calcularDiferentes() {
 
         if (c < canalesTotales) {
             marca += altoReducido;
-            controlAcumulado += anchoCanalActual;
-            // Pasos impares del trazado con su respectivo punto de control acumulado limpio
+            // Pasos impares del trazado: Inyectamos el control acumulado sincronizado perfectamente
             marcasArray.push({ num: contador++, valor: Math.round(marca), control: Math.round(controlAcumulado) });
         }
     }

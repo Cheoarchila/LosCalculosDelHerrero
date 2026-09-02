@@ -12,7 +12,7 @@
     <h1>Mi Calculadora del Herrero</h1>
 
     <!-- ====================================== -->
-    <!-- PANTALLA 1: MENÚ PRINCIPAL -->
+    <!-- PANTALLA 1: MENÚ PRINCIPAL             -->
     <!-- ====================================== -->
     <section id="pantallaInicio">
         <div class="tarjeta" onclick="abrirPantalla('pantallaAcanalados')">
@@ -32,7 +32,7 @@
     </section>
 
     <!-- ====================================== -->
-    <!-- PANTALLA 2: ACANALADOS -->
+    <!-- PANTALLA 2: ACANALADOS                 -->
     <!-- ====================================== -->
     <section id="pantallaAcanalados" class="oculto">
         <button class="volver" onclick="abrirPantalla('pantallaInicio')">← Volver al Menú</button>
@@ -48,13 +48,13 @@
             <div class="icono">📏</div>
             <div>
                 <h2>45 Grados</h2>
-                <p>Cálculos avanzados a 45°</p>
+                <p>Cálculos avanzados a 45° con engrape modular</p>
             </div>
         </div>
     </section>
 
     <!-- ====================================== -->
-    <!-- PANTALLA 3: SELECCIÓN TIPO DE 90° (NUEVA INTERMEDIA) -->
+    <!-- PANTALLA 3: SELECCIÓN TIPO DE 90°      -->
     <!-- ====================================== -->
     <section id="pantalla90GradosMenu" class="oculto">
         <button class="volver" onclick="abrirPantalla('pantallaAcanalados')">← Volver a Acanalados</button>
@@ -64,7 +64,7 @@
             <div class="icono">📊</div>
             <div>
                 <h2>Canales Iguales</h2>
-                <p>Mismo ancho para todos los canales (Calculadora actual)</p>
+                <p>Mismo ancho para todos los canales</p>
             </div>
         </div>
         
@@ -72,13 +72,13 @@
             <div class="icono">🔀</div>
             <div>
                 <h2>Canales Diferentes</h2>
-                <p>Próximamente - Configuración de medidas independientes</p>
+                <p>Configuración de medidas independientes (Pares/Impares)</p>
             </div>
         </div>
     </section>
 
     <!-- ====================================== -->
-    <!-- PANTALLA 3B: CALCULADORA UNIFICADA 90° (Canales Iguales) -->
+    <!-- PANTALLA 3B: CANALES IGUALES 90°       -->
     <!-- ====================================== -->
     <section id="pantalla90Grados" class="oculto">
         <button class="volver" onclick="abrirPantalla('pantalla90GradosMenu')">← Volver al Menú 90°</button>
@@ -122,14 +122,14 @@
         </div>
     </section>
 
-       <!-- ====================================== -->
+    <!-- ====================================== -->
     <!-- PANTALLA 3C: CANALES DIFERENTES 90°    -->
     <!-- ====================================== -->
     <section id="pantalla90GradosDiferentes" class="oculto">
         <button class="volver" onclick="abrirPantalla('pantalla90GradosMenu')">← Volver al Menú 90°</button>
         <h2>90° - Canales Diferentes</h2>
 
-               <div class="fila">
+        <div class="fila">
             <label for="anchoPlanchaDif">Ancho de plancha:</label>
             <input type="number" id="anchoPlanchaDif" value="1200" step="1" onkeydown="return event.key !== '.' && event.key !== ','" onblur="verificarMedidaPlanchaDif()">
         </div>
@@ -165,11 +165,10 @@
         <p>Desarrollo Total: <span id="desarrolloDif">-</span> mm</p>
 
         <div id="marcasDif">
-            <h3>Marcas y Controles por Plancha</h3>
+            <h3>Marcas por Plancha</h3>
             <div id="listaMarcasDif"></div>
         </div>
     </section>
-
 
     <!-- ====================================== -->
     <!-- PANTALLA 4: CALCULADORA UNIFICADA 45°  -->
@@ -180,33 +179,40 @@
 
         <div class="fila">
             <label for="anchoPlancha45">Ancho de plancha:</label>
-            <input type="number" id="anchoPlancha45" value="1200" step="1">
+            <input type="number" id="anchoPlancha45" value="1200" step="1" onkeydown="return event.key !== '.' && event.key !== ','" onblur="verificarMedidaPlancha45()">
         </div>
         <div class="fila">
             <label for="medidaFinal45">Medida final:</label>
-            <input type="number" id="medidaFinal45" value="1000" step="1">
+            <input type="number" id="medidaFinal45" value="1000" step="1" onkeydown="return event.key !== '.' && event.key !== ','" onblur="verificarMedidaFinal45()">
         </div>
         <div class="fila">
             <label for="canales45">Canales:</label>
-            <input type="number" id="canales45" value="3" step="1">
+            <input type="number" id="canales45" value="3" step="1" oninput="evaluarCanales45()" onblur="verificarCanales45()">
         </div>
         <div class="fila">
             <label for="profundidad45">Profundidad:</label>
-            <input type="number" id="profundidad45" value="15">
+            <input type="number" id="profundidad45" value="15" onblur="verificarProfundidad45()">
         </div>
         <div class="fila">
             <label for="bordes45">Bordes:</label>
-            <input type="number" id="bordes45" value="20">
+            <input type="number" id="bordes45" value="20" onblur="verificarBordes45()">
         </div>
         <div class="fila">
             <label for="espesor45">Espesor:</label>
-            <input type="number" id="espesor45" value="1">
+            <input type="number" id="espesor45" value="1" onblur="verificarEspesor45()">
         </div>
 
         <button type="button" class="btn-calcular" onclick="calcular45()">Calcular 45°</button>
 
         <h3>Resultado (45°)</h3>
-        <p>Desarrollo estimado: <span id="desarrollo45">-</span> mm</p>
+        <p>Canal Ancho: <span id="canalAncho45">-</span> mm</p>
+        <p>Canal Inclinado: <span id="canalInclinado45">-</span> mm</p>
+        <p>Desarrollo Total: <span id="desarrollo45">-</span> mm</p>
+
+        <div id="marcas45">
+            <h3>Marcas por Plancha (45°)</h3>
+            <div id="listaMarcas45"></div>
+        </div>
     </section>
 
     <!-- Vinculación del archivo lógico de programación -->

@@ -371,35 +371,62 @@ function calcularDiferentes() {
             }
         }
 
-        if (bloquesPlanchas.length === 0) {
+                if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
+            let controlProgresivo = 0; // Inicializador del acumulado limpio
+
             for (let k = i; k <= finImpresion; k++) {
                 let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
-                let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
+                
+                // Si el paso original tiene control, acumulamos progresivamente su valor real
+                let textoControl = "";
+                if (marcasArray[k].control !== null) {
+                    if (k === 3) controlProgresivo = marcasArray[k].control; // Primer control limpio (500)
+                    else if (k === 5) controlProgresivo = controlProgresivo + 30; // Suma del canal par (530)
+                    else if (k > 5) {
+                        // Para piezas con más canales, determina dinámicamente si suma impar o par
+                        let canalIndex = Math.floor((marcasArray[k].num - 1) / 2);
+                        controlProgresivo += (canalIndex % 2 !== 0) ? anchoImpar : anchoPar;
+                    }
+                    textoControl = Math.round(controlProgresivo);
+                }
 
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "<span class='col-datos col-control'>" + textoControl + "</span></div>");
             }
             i = finImpresion; 
         } else {
-            // Siguientes planchas: la primera marca física es el acople de la pestaña reducida
             lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(valorPestañaReducida) + "</span><span class='col-espacio-corte'></span><span class='col-datos'></span></div>");
             temporalContador++;
             
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
+            // Mantenemos el arrastre del acumulado para las planchas sobrantes
+            let controlProgresivoSobrante = 0; 
+
             for (let k = i + 1; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
                 let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
                 let textoMarca = temporalContador + ".-) " + Math.round(medidaDesdeCero);
-                let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
+                
+                let textoControl = "";
+                if (marcasArray[k].control !== null) {
+                    if (marcasArray[k].num === 3) controlProgresivoSobrante = marcasArray[k].control;
+                    else if (marcasArray[k].num === 5) controlProgresivoSobrante = controlProgresivoSobrante + 30;
+                    else {
+                        let canalIndex = Math.floor((marcasArray[k].num - 1) / 2);
+                        controlProgresivoSobrante += (canalIndex % 2 !== 0) ? anchoImpar : anchoPar;
+                    }
+                    textoControl = Math.round(controlProgresivoSobrante);
+                }
                 temporalContador++;
 
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "<span class='col-datos col-control'>" + textoControl + "</span></div>");
             }
             i = finImpresion;
         }
+
 
         bloquesPlanchas.push({ esUltima: esUltima, contenido: encabezadoColumnas + lineasMarcas.join("") });
         if (i >= marcasArray.length - 1) break;

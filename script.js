@@ -6,6 +6,15 @@ let ultimoBorde = 20;
 let ultimoCanalCantidad = 3;
 let ultimoEspesor = 1;
 
+// Variables globales de respaldo para la pantalla de Canales Diferentes
+let ultimaMedidaPlanchaDif = 1200;
+let ultimaMedidaFinalDif = 1030;
+let ultimoCanalesParesDif = 1;
+let ultimoAnchoCanalParDif = 30;
+let ultimaProfundidadDif = 15;
+let ultimoBordeDif = 20;
+let ultimoEspesorDif = 1;
+
 // Control de navegación entre pantallas (TU CÓDIGO ORIGINAL INTACTO)
 function abrirPantalla(idPantalla) {
     document.querySelectorAll('section').forEach(seccion => {
@@ -428,4 +437,14 @@ function calcularDiferentes() {
     }
 
     document.getElementById("listaMarcasDif").innerHTML = htmlFinal;
+
+        // Guardar estados válidos de respaldo para Canales Diferentes
+    ultimaMedidaPlanchaDif = anchoPlancha;
+    ultimaMedidaFinalDif = medidaFinal;
+    ultimoCanalesParesDif = canalesPares;
+    ultimoAnchoCanalParDif = anchoPar;
+    ultimaProfundidadDif = profundidad;
+    ultimoBordeDif = bordes;
+    ultimoEspesorDif = espesor;
+}
 }

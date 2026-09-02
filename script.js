@@ -105,32 +105,34 @@ function calcular() {
             }
         }
 
-        if (bloquesPlanchas.length === 0) {
+                if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
-                // Generamos la celda central: si es corte dibuja el cartel apuntando a marcas, si no, se queda en blanco
-                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀== ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                // CONDICIÓN UNIFICADA: Si es punto de fraccionamiento O final definitivo del desarrollo, activa el letrero
+                let esUltimaMarcaTotal = (k === marcasArray.length - 1);
+                let celdaCorte = (k === indiceCorteEnEsteTramo || esUltimaMarcaTotal) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
                 let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
                 let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
 
+                // Inyectamos la celda de corte justo en medio de marcas y controles para mantener el diseño limpio
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "<span class='col-datos col-control'>" + textoControl + "</span></div>");
             }
             i = finImpresion; 
         } else {
-            // Planchas siguientes: La primera marca física es la pestaña de acople (reducida)
             lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(valorPestañaReducida) + "</span><span class='col-espacio-corte'></span><span class='col-datos'></span></div>");
             temporalContador++;
             
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             
-            // Avanzamos k desde i + 1 para NO duplicar mecánicamente el punto donde se realizó el corte
+            // Avanzamos k desde i + 1 para corregir el salto y arrastre exacto en esta función
             for (let k = i + 1; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
                 
-                // Generamos la celda central en el sobrante apuntando a la izquierda
-                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                // CONDICIÓN UNIFICADA PARA PLANCHAS SIGUIENTES
+                let esUltimaMarcaTotal = (k === marcasArray.length - 1);
+                let celdaCorte = (k === indiceCorteEnEsteTramo || esUltimaMarcaTotal) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
                 let textoMarca = temporalContador + ".-) " + Math.round(medidaDesdeCero);
                 let textoControl = (marcasArray[k].control !== null) ? marcasArray[k].control : "";
@@ -140,6 +142,7 @@ function calcular() {
             }
             i = finImpresion;
         }
+
 
         bloquesPlanchas.push({ esUltima: esUltima, contenido: encabezadoColumnas + lineasMarcas.join("") });
         

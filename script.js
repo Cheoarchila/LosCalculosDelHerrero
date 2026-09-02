@@ -367,16 +367,20 @@ function calcularDiferentes() {
             }
         }
 
-        if (bloquesPlanchas.length === 0) {
+                if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
-                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                // CONDICIÓN CORREGIDA: Si es el punto de fraccionamiento O si es la mismísima última marca del desarrollo total, mete el cartel de corte
+                let esUltimaMarcaTotal = (k === marcasArray.length - 1);
+                let celdaCorte = (k === indiceCorteEnEsteTramo || esUltimaMarcaTotal) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                
                 let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
 
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "</div>");
             }
             i = finImpresion; 
         } else {
+
             // Siguientes planchas: la primera marca física es el acople de la pestaña reducida
             lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(valorPestañaReducida) + "</span><span class='col-espacio-corte'></span></div>");
             temporalContador++;

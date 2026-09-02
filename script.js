@@ -329,7 +329,7 @@ function calcularDiferentes() {
     }
 
     // Cierre del desarrollo
-    marca += (bordes - - espesor);
+    marca += (bordes - espesor);
     marcasArray.push({ num: contador, valor: Math.round(marca) });
 
     // --- PROCESAMIENTO CÍCLICO DE PLANCHAS Y FRACCIONAMIENTO ---

@@ -367,10 +367,10 @@ function calcularDiferentes() {
             }
         }
 
-                if (bloquesPlanchas.length === 0) {
+                        if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
             for (let k = i; k <= finImpresion; k++) {
-                // CONDICIÓN CORREGIDA: Si es el punto de fraccionamiento O si es la mismísima última marca del desarrollo total, mete el cartel de corte
+                // Si es el punto de quiebre por tamaño O es el final definitivo del desarrollo total
                 let esUltimaMarcaTotal = (k === marcasArray.length - 1);
                 let celdaCorte = (k === indiceCorteEnEsteTramo || esUltimaMarcaTotal) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
@@ -380,7 +380,6 @@ function calcularDiferentes() {
             }
             i = finImpresion; 
         } else {
-
             // Siguientes planchas: la primera marca física es el acople de la pestaña reducida
             lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(valorPestañaReducida) + "</span><span class='col-espacio-corte'></span></div>");
             temporalContador++;
@@ -389,7 +388,10 @@ function calcularDiferentes() {
             for (let k = i + 1; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
-                let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                
+                // VALIDACIÓN GARANTIZADA PARA TODAS LAS PLANCHAS: Si llegamos al final del recorrido (k) o al punto de fraccionamiento de este tramo
+                let esUltimaMarcaTotal = (k === marcasArray.length - 1);
+                let celdaCorte = (k === indiceCorteEnEsteTramo || esUltimaMarcaTotal) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
                 let textoMarca = temporalContador + ".-) " + Math.round(medidaDesdeCero);
                 temporalContador++;
@@ -398,6 +400,7 @@ function calcularDiferentes() {
             }
             i = finImpresion;
         }
+
 
         bloquesPlanchas.push({ esUltima: esUltima, contenido: encabezadoColumnas2Col + lineasMarcas.join("") });
         if (i >= marcasArray.length - 1) break;

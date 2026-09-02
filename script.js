@@ -447,3 +447,82 @@ function calcularDiferentes() {
     ultimoBordeDif = bordes;
     ultimoEspesorDif = espesor;
 }
+
+// --- FUNCIONES DE VERIFICACIÓN PARA CANALES DIFERENTES (ONBLUR) ---
+
+function verificarMedidaPlanchaDif() {
+    const campo = document.getElementById("anchoPlanchaDif");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 1) {
+        alert("Debes ingresar una Medida de Plancha válida.");
+        campo.value = ultimaMedidaPlanchaDif;
+    } else {
+        ultimaMedidaPlanchaDif = valor;
+    }
+}
+
+function verificarMedidaFinalDif() {
+    const campo = document.getElementById("medidaFinalDif");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 1) {
+        alert("Debes ingresar una Medida Final válida.");
+        campo.value = ultimaMedidaFinalDif;
+    } else {
+        ultimaMedidaFinalDif = valor;
+    }
+}
+
+function verificarCanalesParesDif() {
+    const campo = document.getElementById("canalesParesDif");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) {
+        alert("Debes ingresar una cantidad de Canales Finos válida.");
+        campo.value = ultimoCanalesParesDif;
+    } else {
+        ultimoCanalesParesDif = valor;
+    }
+}
+
+function verificarAnchoCanalParDif() {
+    const campo = document.getElementById("anchoCanalParDif");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 1) {
+        alert("Debes ingresar un Ancho de Canal Fino válido.");
+        campo.value = ultimoAnchoCanalParDif;
+    } else {
+        ultimoAnchoCanalParDif = valor;
+    }
+}
+
+function verificarProfundidadDif() {
+    const campo = document.getElementById("profundidadDif");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) {
+        alert("Debes ingresar una Profundidad válida.");
+        campo.value = ultimaProfundidadDif;
+    } else {
+        ultimaProfundidadDif = valor;
+    }
+}
+
+function verificarBordesDif() {
+    const campo = document.getElementById("bordesDif");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) {
+        alert("Debes ingresar un valor de Bordes válido.");
+        campo.value = ultimoBordeDif;
+    } else {
+        ultimoBordeDif = valor;
+    }
+}
+
+function verificarEspesorDif() {
+    const campo = document.getElementById("espesorDif");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) {
+        alert("Debes ingresar un Espesor válido.");
+        campo.value = ultimoEspesorDif;
+    } else {
+        ultimoEspesorDif = valor;
+    }
+}

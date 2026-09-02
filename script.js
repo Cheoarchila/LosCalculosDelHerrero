@@ -15,6 +15,14 @@ let ultimaProfundidadDif = 15;
 let ultimoBordeDif = 20;
 let ultimoEspesorDif = 1;
 
+// Variables globales de respaldo para la pantalla de 45 Grados
+let ultimaMedidaPlancha45 = 1200;
+let ultimaMedidaFinal45 = 1000;
+let ultimoCanalCantidad45 = 3;
+let ultimaProfundidad45 = 15;
+let ultimoBorde45 = 20;
+let ultimoEspesor45 = 1;
+
 // Control de navegación entre pantallas (TU CÓDIGO ORIGINAL INTACTO)
 function abrirPantalla(idPantalla) {
     document.querySelectorAll('section').forEach(seccion => {
@@ -525,4 +533,213 @@ function verificarEspesorDif() {
     } else {
         ultimoEspesorDif = valor;
     }
+}
+
+// Control visual y bloqueos para la pantalla de 45°
+function evaluarCanales45() {
+    const inputCanales = document.getElementById("canales45");
+    const inputProfundidad = document.getElementById("profundidad45");
+    const valorCanales = Number(inputCanales.value);
+
+    if (valorCanales === 1) {
+        if (inputProfundidad.value !== "0" && inputProfundidad.value !== "") {
+            inputProfundidad.dataset.valorReal = inputProfundidad.value;
+        }
+        inputProfundidad.value = 0;
+        inputProfundidad.disabled = true;
+        inputProfundidad.style.backgroundColor = "#e2e8f0";
+        inputProfundidad.style.color = "#94a3b8";
+    } else {
+        inputProfundidad.disabled = false;
+        inputProfundidad.style.backgroundColor = "";
+        inputProfundidad.style.color = "";
+        if (inputProfundidad.dataset.valorReal) {
+            inputProfundidad.value = inputProfundidad.dataset.valorReal;
+        }
+    }
+}
+
+// FUNCIÓN MATEMÁTICA Y DE TRAZADO PRINCIPAL A 45 GRADOS CON ENGRAMPE MODULAR
+function calcular45() {
+    const anchoPlancha = Number(document.getElementById("anchoPlancha45").value);
+    const medidaFinal = Number(document.getElementById("medidaFinal45").value);
+    const canales = Number(document.getElementById("canales45").value);
+    const inputProfundidad = document.getElementById("profundidad45");
+    const bordes = Number(document.getElementById("bordes45").value);
+    const espesor = Number(document.getElementById("espesor45").value);
+
+    let profundidad = Number(inputProfundidad.value);
+    if (canales === 1) profundidad = 1;
+
+    // Tramos estructurales base
+    const canalAncho = (medidaFinal / canales) - (12 * espesor);
+    const canalInclinado = Math.round(profundidad * 1.414);
+    const cantidadInclinados = (canales - 1) * 2;
+    const bordeLimpio = bordes - espesor;
+    const valorEngrape = Math.round(canalInclinado - 5);
+
+    // Desarrollo base de la pieza sin contar pestañas de engrape extras
+    const desarrolloBase = (bordeLimpio * 2) + (canales * canalAncho) + (cantidadInclinados * canalInclinado);
+    const requiereEngrape = (desarrolloBase > anchoPlancha);
+
+    // --- CICLO DE RECONSTRUCCIÓN SECUENCIAL DE TRAMOS ---
+    let listaTramos = [];
+    
+    // Tramo inicial: Borde limpio
+    listaTramos.push({ tipo: 'borde', valor: bordeLimpio });
+    
+    // Alternancia de canales y diagonales
+    for (let c = 1; c <= canales; c++) {
+        listaTramos.push({ tipo: 'ancho', valor: canalAncho });
+        if (c < canales) {
+            listaTramos.push({ tipo: 'inclinado', valor: canalInclinado });
+            listaTramos.push({ tipo: 'inclinado', valor: canalInclinado });
+        }
+    }
+    // Tramo final: Borde limpio
+    listaTramos.push({ tipo: 'borde', valor: bordeLimpio });
+
+    // --- PROCESAMIENTO CÍCLICO DINÁMICO DE PLANCHAS ---
+    let bloquesPlanchas = [];
+    let t = 0; // Puntero del tramo actual
+    let numeroPlancha = 1;
+    let desarrolloAcumuladoImpreso = requiereEngrape ? valorEngrape : 0;
+
+    const encabezadoColumnas2Col = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-espacio-corte'></span></div>";
+
+    while (t < listaTramos.length) {
+        let lineasMarcas = [];
+        let temporalContador = 1;
+        let marcaAcumuladaPlancha = 0;
+
+        let esPrimeraPlancha = (numeroPlancha === 1);
+        
+        let subMarcaPrueba = 0;
+        let tramosQueCaben = 0;
+        let cabeTodoElResto = true;
+
+        for (let pt = t; pt < listaTramos.length; pt++) {
+            subMarcaPrueba += listaTramos[pt].value ? listaTramos[pt].value : listaTramos[pt].valor;
+            let margenInicial = (requiereEngrape) ? valorEngrape : 0;
+            let margenFinalPosible = (pt < listaTramos.length - 1) ? valorEngrape : 0;
+
+            if ((margenInicial + subMarcaPrueba + margenFinalPosible) > anchoPlancha) {
+                cabeTodoElResto = false;
+                break;
+            }
+            tramosQueCaben++;
+        }
+
+        let esPlanchaDelCentro = (requiereEngrape && !esPrimeraPlancha && !cabeTodoElResto);
+        let esPlanchaUltimaSobrante = (requiereEngrape && !esPrimeraPlancha && cabeTodoElResto);
+
+        // --- 1. APLICACIÓN DE LA PESTAÑA INICIAL (TRAZO 1) ---
+        if (requiereEngrape) {
+            marcaAcumuladaPlancha = valorEngrape;
+            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(marcaAcumuladaPlancha) + "</span><span class='col-espacio-corte'></span></div>");
+            temporalContador++;
+            
+            if (esPrimeraPlancha && listaTramos[t].tipo === 'borde') {
+                listaTramos[t].valor = canalInclinado;
+                listaTramos[t].tipo = 'inclinado';
+            }
+        }
+
+        // --- 2. TRAZADO DE LOS TRAMOS INTERNOS ---
+        let limiteTramoEnEstaChapa = cabeTodoElResto ? listaTramos.length : (t + tramosQueCaben);
+        
+        if (!cabeTodoElResto && (limiteTramoEnEstaChapa - t) > 1) {
+            if (listaTramos[limiteTramoEnEstaChapa - 1].tipo === 'inclinado') {
+                limiteTramoEnEstaChapa--;
+            }
+        }
+
+        for (let k = t; k < limiteTramoEnEstaChapa; k++) {
+            marcaAcumuladaPlancha += listaTramos[k].valor;
+            
+            let esUltimoTramoDeEstaChapa = (k === limiteTramoEnEstaChapa - 1);
+            if (!cabeTodoElResto && esUltimoTramoDeEstaChapa) {
+                marcaAcumuladaPlancha = marcaAcumuladaPlancha - listaTramos[k].valor + valorEngrape;
+            }
+
+            let esCierreDeChapa = (k === limiteTramoEnEstaChapa - 1);
+            let celdaCorte = (esCierreDeChapa) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+
+            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(marcaAcumuladaPlancha) + "</span>" + celdaCorte + "</div>");
+            temporalContador++;
+            
+            if (esCierreDeChapa) {
+                desarrolloAcumuladoImpreso += marcaAcumuladaPlancha;
+            }
+        }
+
+        t = limiteTramoEnEstaChapa;
+
+        let prefijoTitulo = `--- PLANCHA ${numeroPlancha} `;
+        if (requiereEngrape) {
+            if (esPrimeraPlancha) prefijoTitulo += "(INICIAL) ---";
+            else if (esPlanchaDelCentro) prefijoTitulo += "(DEL CENTRO - DOBLE ENGRAMPE) ---";
+            else if (esPlanchaUltimaSobrante) prefijoTitulo += "(SOBRANTE) ---";
+        } else {
+            prefijoTitulo += "---";
+        }
+
+        bloquesPlanchas.push({ 
+            titulo: prefijoTitulo,
+            contenido: encabezadoColumnas2Col + lineasMarcas.join("") 
+        });
+
+        numeroPlancha++;
+        if (numeroPlancha > 20) break; 
+    }
+
+    document.getElementById("canalAncho45").textContent = Math.round(canalAncho);
+    document.getElementById("canalInclinado45").textContent = Math.round(canalInclinado);
+    document.getElementById("desarrollo45").textContent = Math.round(desarrolloAcumuladoImpreso);
+
+    let htmlFinal = "";
+    bloquesPlanchas.forEach(bloque => {
+        htmlFinal += `<div class='titulo-plancha'>${bloque.titulo}</div>` + bloque.contenido;
+    });
+
+    document.getElementById("listaMarcas45").innerHTML = htmlFinal;
+
+    ultimaMedidaPlancha45 = anchoPlancha;
+    ultimaMedidaFinal45 = medidaFinal;
+    ultimoCanalCantidad45 = canales;
+    ultimaProfundidad45 = profundidad;
+    ultimoBorde45 = bordes;
+    ultimoEspesor45 = espesor;
+}
+
+// --- VALIDACIONES ONBLUR PANTALLA 45° ---
+function verificarMedidaPlancha45() {
+    const campo = document.getElementById("anchoPlancha45");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 1) { alert("Medida inválida."); campo.value = ultimaMedidaPlancha45; } else { ultimaMedidaPlancha45 = valor; }
+}
+function verificarMedidaFinal45() {
+    const campo = document.getElementById("medidaFinal45");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 1) { alert("Medida inválida."); campo.value = ultimaMedidaFinal45; } else { ultimaMedidaFinal45 = valor; }
+}
+function verificarCanales45() {
+    const campo = document.getElementById("canales45");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 1) { alert("Medida inválida."); campo.value = ultimoCanalCantidad45; } else { ultimoCanalCantidad45 = valor; }
+}
+function verificarProfundidad45() {
+    const campo = document.getElementById("profundidad45");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) { alert("Medida inválida."); campo.value = ultimaProfundidad45; } else { ultimaProfundidad45 = valor; }
+}
+function verificarBordes45() {
+    const campo = document.getElementById("bordes45");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) { alert("Medida inválida."); campo.value = ultimoBorde45; } else { ultimoBorde45 = valor; }
+}
+function verificarEspesor45() {
+    const campo = document.getElementById("espesor45");
+    let valor = Number(campo.value);
+    if (campo.value === "" || valor < 0) { alert("Medida inválida."); campo.value = ultimoEspesor45; } else { ultimoEspesor45 = valor; }
 }

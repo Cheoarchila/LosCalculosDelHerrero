@@ -559,7 +559,7 @@ function evaluarCanales45() {
     }
 }
 
-// FUNCIÓN MATEMÁTICA Y DE TRAZADO PRINCIPAL A 45 GRADOS CON ENGRAMPE MODULAR
+// FUNCIÓN MATEMÁTICA Y DE TRAZADO PRINCIPAL A 45 GRADOS (MARCA INICIAL Y CIERRES AJUSTADOS)
 function calcular45() {
     const anchoPlancha = Number(document.getElementById("anchoPlancha45").value);
     const medidaFinal = Number(document.getElementById("medidaFinal45").value);
@@ -585,10 +585,15 @@ function calcular45() {
     // --- CICLO DE RECONSTRUCCIÓN SECUENCIAL DE TRAMOS ---
     let listaTramos = [];
     
-    // Tramo inicial: Borde limpio
-    listaTramos.push({ tipo: 'borde', valor: bordeLimpio });
+    // Si requiere engrape, la chapa arranca con tu regla: Engrape (16) + Inclinado (21) = 37
+    if (requiereEngrape) {
+        listaTramos.push({ tipo: 'engrape', valor: valorEngrape });
+        listaTramos.push({ tipo: 'inclinado', valor: canalInclinado });
+    } else {
+        listaTramos.push({ tipo: 'borde', valor: bordeLimpio });
+    }
     
-    // Alternancia de canales y diagonales
+    // Alternancia de canales planos y diagonales
     for (let c = 1; c <= canales; c++) {
         listaTramos.push({ tipo: 'ancho', valor: canalAncho });
         if (c < canales) {
@@ -596,34 +601,37 @@ function calcular45() {
             listaTramos.push({ tipo: 'inclinado', valor: canalInclinado });
         }
     }
-    // Tramo final: Borde limpio
-    listaTramos.push({ tipo: 'borde', valor: bordeLimpio });
+
+    // Cierre estándar si no llevó engrape
+    if (!requiereEngrape) {
+        listaTramos.push({ tipo: 'borde', valor: bordeLimpio });
+    }
 
     // --- PROCESAMIENTO CÍCLICO DINÁMICO DE PLANCHAS ---
     let bloquesPlanchas = [];
-    let t = 0; // Puntero del tramo actual
+    let t = 0; 
     let numeroPlancha = 1;
-    let desarrolloAcumuladoImpreso = requiereEngrape ? valorEngrape : 0;
+    let desarrolloAcumuladoImpreso = 0;
 
     const encabezadoColumnas2Col = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-espacio-corte'></span></div>";
 
     while (t < listaTramos.length) {
         let lineasMarcas = [];
-        let temporalContador = 1;
+        let temporalContador = 1; // CORREGIDO: Se reinicia siempre en 1 en cada nueva plancha (1, 2, 3...)
         let marcaAcumuladaPlancha = 0;
-
         let esPrimeraPlancha = (numeroPlancha === 1);
         
         let subMarcaPrueba = 0;
         let tramosQueCaben = 0;
         let cabeTodoElResto = true;
 
+        // Evaluamos cuántos tramos caben físicamente en esta chapa
         for (let pt = t; pt < listaTramos.length; pt++) {
-            subMarcaPrueba += listaTramos[pt].value ? listaTramos[pt].value : listaTramos[pt].valor;
-            let margenInicial = (requiereEngrape) ? valorEngrape : 0;
-            let margenFinalPosible = (pt < listaTramos.length - 1) ? valorEngrape : 0;
+            subMarcaPrueba += listaTramos[pt].valor;
+            let margenInicial = (!esPrimeraPlancha && requiereEngrape && pt === t) ? valorEngrape : 0;
+            let margenFinalPosible = (!cabeTodoElResto && pt === listaTramos.length - 2) ? valorEngrape : 0;
 
-            if ((margenInicial + subMarcaPrueba + margenFinalPosible) > anchoPlancha) {
+            if ((marcaAcumuladaPlancha + subMarcaPrueba + margenInicial + margenFinalPosible) > anchoPlancha) {
                 cabeTodoElResto = false;
                 break;
             }
@@ -633,36 +641,33 @@ function calcular45() {
         let esPlanchaDelCentro = (requiereEngrape && !esPrimeraPlancha && !cabeTodoElResto);
         let esPlanchaUltimaSobrante = (requiereEngrape && !esPrimeraPlancha && cabeTodoElResto);
 
-        // --- 1. APLICACIÓN DE LA PESTAÑA INICIAL (TRAZO 1) ---
-        if (requiereEngrape) {
+        // --- 1. GANCHO INICIAL DE PLANCHAS FRACCIONADAS ---
+        if (requiereEngrape && !esPrimeraPlancha) {
             marcaAcumuladaPlancha = valorEngrape;
             lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(marcaAcumuladaPlancha) + "</span><span class='col-espacio-corte'></span></div>");
             temporalContador++;
-            
-            if (esPrimeraPlancha && listaTramos[t].tipo === 'borde') {
-                listaTramos[t].valor = canalInclinado;
-                listaTramos[t].tipo = 'inclinado';
-            }
         }
 
-        // --- 2. TRAZADO DE LOS TRAMOS INTERNOS ---
         let limiteTramoEnEstaChapa = cabeTodoElResto ? listaTramos.length : (t + tramosQueCaben);
         
+        // Forzar corte óptimo en paso impar estructural
         if (!cabeTodoElResto && (limiteTramoEnEstaChapa - t) > 1) {
             if (listaTramos[limiteTramoEnEstaChapa - 1].tipo === 'inclinado') {
                 limiteTramoEnEstaChapa--;
             }
         }
 
+        // --- 2. TRAZADO DE TRAMOS INTERNOS ---
         for (let k = t; k < limiteTramoEnEstaChapa; k++) {
             marcaAcumuladaPlancha += listaTramos[k].valor;
             
-            let esUltimoTramoDeEstaChapa = (k === limiteTramoEnEstaChapa - 1);
-            if (!cabeTodoElResto && esUltimoTramoDeEstaChapa) {
-                marcaAcumuladaPlancha = marcaAcumuladaPlancha - listaTramos[k].valor + valorEngrape;
+            let esCierreDeChapa = (k === limiteTramoEnEstaChapa - 1);
+            
+            // Si no cabe todo y es el último tramo de esta chapa intermedia, le aplicamos el engrape de salida exacto
+            if (!cabeTodoElResto && esCierreDeChapa) {
+                marcaAcumuladaPlancha = (marcaAcumuladaPlancha - listaTramos[k].valor) + valorEngrape;
             }
 
-            let esCierreDeChapa = (k === limiteTramoEnEstaChapa - 1);
             let celdaCorte = (esCierreDeChapa) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
 
             lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(marcaAcumuladaPlancha) + "</span>" + celdaCorte + "</div>");
@@ -673,7 +678,7 @@ function calcular45() {
             }
         }
 
-        t = limiteTramoEnEstaChapa;
+        t = cabeTodoElResto ? limiteTramoEnEstaChapa : (limiteTramoEnEstaChapa - 1);
 
         let prefijoTitulo = `--- PLANCHA ${numeroPlancha} `;
         if (requiereEngrape) {
@@ -684,24 +689,17 @@ function calcular45() {
             prefijoTitulo += "---";
         }
 
-        bloquesPlanchas.push({ 
-            titulo: prefijoTitulo,
-            contenido: encabezadoColumnas2Col + lineasMarcas.join("") 
-        });
-
+        bloquesPlanchas.push({ titulo: prefijoTitulo, contenido: encabezadoColumnas2Col + lineasMarcas.join("") });
         numeroPlancha++;
         if (numeroPlancha > 20) break; 
     }
 
     document.getElementById("canalAncho45").textContent = Math.round(canalAncho);
     document.getElementById("canalInclinado45").textContent = Math.round(canalInclinado);
-    document.getElementById("desarrollo45").textContent = Math.round(desarrolloAcumuladoImpreso);
+    document.getElementById("desarrollo45").textContent = Math.round(desarrolloBase);
 
     let htmlFinal = "";
-    bloquesPlanchas.forEach(bloque => {
-        htmlFinal += `<div class='titulo-plancha'>${bloque.titulo}</div>` + bloque.contenido;
-    });
-
+    bloquesPlanchas.forEach(bloque => { htmlFinal += `<div class='titulo-plancha'>${bloque.titulo}</div>` + bloque.contenido; });
     document.getElementById("listaMarcas45").innerHTML = htmlFinal;
 
     ultimaMedidaPlancha45 = anchoPlancha;

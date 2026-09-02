@@ -270,7 +270,7 @@ function evaluarCanalesDif() {
     }
 }
 
-// Función principal de cálculo matemático y generación de marcas alternadas
+// FUNCIÓN PRINCIPAL DE CÁLCULO PARA CANALES DIFERENTES (SIN COLUMNA DE CONTROL)
 function calcularDiferentes() {
     // 1. Captura de datos desde la pantalla
     const anchoPlancha = Number(document.getElementById("anchoPlanchaDif").value);
@@ -297,25 +297,20 @@ function calcularDiferentes() {
     const desarrollo = (bordes * 2) + medidaFinal + ((canalesTotales - 1) * profundidad) - (canalesTotales * 4 * espesor) + ((canalesTotales - 1) * espesor);
     document.getElementById("desarrolloDif").textContent = Math.round(desarrollo);
 
-       // --- CICLO DE GENERACIÓN DE MARCAS CON ANCHOS VARIABLES CORREGIDO ---
+    // --- CICLO DE GENERACIÓN DE MARCAS CON ANCHOS VARIABLES ---
     let marca = bordes - espesor;
     let contador = 1;
     let marcasArray = [];
     
     // Paso 1: Primer trazo base
-    marcasArray.push({ num: contador++, valor: Math.round(marca), control: null });
+    marcasArray.push({ num: contador++, valor: Math.round(marca) });
 
-    let controlAcumulado = 0;
     const altoReducido = profundidad - (2 * espesor);
     
     // Recorremos secuencialmente los canales totales de la pieza terminada
     for (let c = 1; c <= canalesTotales; c++) {
-        // Determinamos mecánicamente el tipo de canal actual en el recorrido
         let esImpar = (c % 2 !== 0);
         let anchoCanalActual = esImpar ? anchoImpar : anchoPar;
-
-        // Sumamos al control acumulado limpio ANTES de mover la marca física del pliegue
-        controlAcumulado += anchoCanalActual;
 
         if (esImpar) {
             marca += (anchoCanalActual - (2 * espesor));
@@ -324,25 +319,26 @@ function calcularDiferentes() {
         }
         
         // Pasos pares del trazado
-        marcasArray.push({ num: contador++, valor: Math.round(marca), control: null });
+        marcasArray.push({ num: contador++, valor: Math.round(marca) });
 
         if (c < canalesTotales) {
             marca += altoReducido;
-            // Pasos impares del trazado: Inyectamos el control acumulado sincronizado perfectamente
-            marcasArray.push({ num: contador++, valor: Math.round(marca), control: Math.round(controlAcumulado) });
+            // Pasos impares del trazado
+            marcasArray.push({ num: contador++, valor: Math.round(marca) });
         }
     }
 
     // Cierre del desarrollo
-    marca += (bordes - espesor);
-    marcasArray.push({ num: contador, valor: Math.round(marca), control: null });
+    marca += (bordes - - espesor);
+    marcasArray.push({ num: contador, valor: Math.round(marca) });
 
     // --- PROCESAMIENTO CÍCLICO DE PLANCHAS Y FRACCIONAMIENTO ---
     let bloquesPlanchas = [];
     let i = 0;
     let valorPestañaReducida = profundidad - (2 * espesor);
 
-    const encabezadoColumnas = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-espacio-corte'></span><span class='col-encabezado'>CONTROL</span></div>";
+    // Encabezado con 2 columnas exclusivas para Canales Diferentes: Marcas y Aviso de Corte
+    const encabezadoColumnas2Col = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-espacio-corte'></span></div>";
 
     while (i < marcasArray.length) {
         let esUltima = true;
@@ -371,67 +367,35 @@ function calcularDiferentes() {
             }
         }
 
-                        if (bloquesPlanchas.length === 0) {
+        if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
-            let controlProgresivo = 0;
-
             for (let k = i; k <= finImpresion; k++) {
                 let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
-                
-                let textoControl = "";
-                if (marcasArray[k].control !== null) {
-                    // Evaluamos usando .num (el número físico correlativo que ve el herrero)
-                    if (marcasArray[k].num === 3) {
-                        controlProgresivo = anchoImpar;
-                    } else if (marcasArray[k].num === 5) {
-                        controlProgresivo = anchoImpar + anchoPar;
-                    } else if (marcasArray[k].num > 5) {
-                        // Generalización matemática progresiva si aumentan los canales
-                        let pasoCanal = Math.floor((marcasArray[k].num - 1) / 2);
-                        controlProgresivo += (pasoCanal % 2 !== 0) ? anchoImpar : anchoPar;
-                    }
-                    textoControl = Math.round(controlProgresivo);
-                }
 
-                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "<span class='col-datos col-control'>" + textoControl + "</span></div>");
+                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "</div>");
             }
             i = finImpresion; 
         } else {
-            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(valorPestañaReducida) + "</span><span class='col-espacio-corte'></span><span class='col-datos'></span></div>");
+            // Siguientes planchas: la primera marca física es el acople de la pestaña reducida
+            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(valorPestañaReducida) + "</span><span class='col-espacio-corte'></span></div>");
             temporalContador++;
             
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
-            let controlProgresivoSobrante = 0;
-
             for (let k = i + 1; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
                 let medidaDesdeCero = valorPestañaReducida + distanciaFaltante;
                 let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 
                 let textoMarca = temporalContador + ".-) " + Math.round(medidaDesdeCero);
-                
-                let textoControl = "";
-                if (marcasArray[k].control !== null) {
-                    if (marcasArray[k].num === 3) {
-                        controlProgresivoSobrante = anchoImpar;
-                    } else if (marcasArray[k].num === 5) {
-                        controlProgresivoSobrante = anchoImpar + anchoPar;
-                    } else if (marcasArray[k].num > 5) {
-                        let pasoCanal = Math.floor((marcasArray[k].num - 1) / 2);
-                        controlProgresivoSobrante += (pasoCanal % 2 !== 0) ? anchoImpar : anchoPar;
-                    }
-                    textoControl = Math.round(controlProgresivoSobrante);
-                }
                 temporalContador++;
 
-                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "<span class='col-datos col-control'>" + textoControl + "</span></div>");
+                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + textoMarca + "</span>" + celdaCorte + "</div>");
             }
             i = finImpresion;
         }
 
-
-        bloquesPlanchas.push({ esUltima: esUltima, contenido: encabezadoColumnas + lineasMarcas.join("") });
+        bloquesPlanchas.push({ esUltima: esUltima, contenido: encabezadoColumnas2Col + lineasMarcas.join("") });
         if (i >= marcasArray.length - 1) break;
     }
 

@@ -447,4 +447,3 @@ function calcularDiferentes() {
     ultimoBordeDif = bordes;
     ultimoEspesorDif = espesor;
 }
-}

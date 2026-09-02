@@ -371,23 +371,25 @@ function calcularDiferentes() {
             }
         }
 
-                if (bloquesPlanchas.length === 0) {
+                        if (bloquesPlanchas.length === 0) {
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
-            let controlProgresivo = 0; // Inicializador del acumulado limpio
+            let controlProgresivo = 0;
 
             for (let k = i; k <= finImpresion; k++) {
                 let celdaCorte = (k === indiceCorteEnEsteTramo) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 let textoMarca = marcasArray[k].num + ".-) " + marcasArray[k].valor;
                 
-                // Si el paso original tiene control, acumulamos progresivamente su valor real
                 let textoControl = "";
                 if (marcasArray[k].control !== null) {
-                    if (k === 3) controlProgresivo = marcasArray[k].control; // Primer control limpio (500)
-                    else if (k === 5) controlProgresivo = controlProgresivo + 30; // Suma del canal par (530)
-                    else if (k > 5) {
-                        // Para piezas con más canales, determina dinámicamente si suma impar o par
-                        let canalIndex = Math.floor((marcasArray[k].num - 1) / 2);
-                        controlProgresivo += (canalIndex % 2 !== 0) ? anchoImpar : anchoPar;
+                    // Evaluamos usando .num (el número físico correlativo que ve el herrero)
+                    if (marcasArray[k].num === 3) {
+                        controlProgresivo = anchoImpar;
+                    } else if (marcasArray[k].num === 5) {
+                        controlProgresivo = anchoImpar + anchoPar;
+                    } else if (marcasArray[k].num > 5) {
+                        // Generalización matemática progresiva si aumentan los canales
+                        let pasoCanal = Math.floor((marcasArray[k].num - 1) / 2);
+                        controlProgresivo += (pasoCanal % 2 !== 0) ? anchoImpar : anchoPar;
                     }
                     textoControl = Math.round(controlProgresivo);
                 }
@@ -400,8 +402,7 @@ function calcularDiferentes() {
             temporalContador++;
             
             let finImpresion = (indiceCorteEnEsteTramo !== -1) ? indiceCorteEnEsteTramo : marcasArray.length - 1;
-            // Mantenemos el arrastre del acumulado para las planchas sobrantes
-            let controlProgresivoSobrante = 0; 
+            let controlProgresivoSobrante = 0;
 
             for (let k = i + 1; k <= finImpresion; k++) {
                 let distanciaFaltante = marcasArray[k].valor - marcaBaseInicioTramo;
@@ -412,11 +413,13 @@ function calcularDiferentes() {
                 
                 let textoControl = "";
                 if (marcasArray[k].control !== null) {
-                    if (marcasArray[k].num === 3) controlProgresivoSobrante = marcasArray[k].control;
-                    else if (marcasArray[k].num === 5) controlProgresivoSobrante = controlProgresivoSobrante + 30;
-                    else {
-                        let canalIndex = Math.floor((marcasArray[k].num - 1) / 2);
-                        controlProgresivoSobrante += (canalIndex % 2 !== 0) ? anchoImpar : anchoPar;
+                    if (marcasArray[k].num === 3) {
+                        controlProgresivoSobrante = anchoImpar;
+                    } else if (marcasArray[k].num === 5) {
+                        controlProgresivoSobrante = anchoImpar + anchoPar;
+                    } else if (marcasArray[k].num > 5) {
+                        let pasoCanal = Math.floor((marcasArray[k].num - 1) / 2);
+                        controlProgresivoSobrante += (pasoCanal % 2 !== 0) ? anchoImpar : anchoPar;
                     }
                     textoControl = Math.round(controlProgresivoSobrante);
                 }

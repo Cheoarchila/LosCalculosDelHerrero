@@ -129,33 +129,33 @@
         <button class="volver" onclick="abrirPantalla('pantalla90GradosMenu')">← Volver al Menú 90°</button>
         <h2>90° - Canales Diferentes</h2>
 
-        <div class="fila">
+               <div class="fila">
             <label for="anchoPlanchaDif">Ancho de plancha:</label>
-            <input type="number" id="anchoPlanchaDif" value="1200" step="1" onkeydown="return event.key !== '.' && event.key !== ','">
+            <input type="number" id="anchoPlanchaDif" value="1200" step="1" onkeydown="return event.key !== '.' && event.key !== ','" onblur="verificarMedidaPlanchaDif()">
         </div>
         <div class="fila">
             <label for="medidaFinalDif">Medida final:</label>
-            <input type="number" id="medidaFinalDif" value="1030" step="1" onkeydown="return event.key !== '.' && event.key !== ','">
+            <input type="number" id="medidaFinalDif" value="1030" step="1" onkeydown="return event.key !== '.' && event.key !== ','" onblur="verificarMedidaFinalDif()">
         </div>
         <div class="fila">
             <label for="canalesParesDif">Canales Finos (Pares):</label>
-            <input type="number" id="canalesParesDif" value="1" step="1" oninput="evaluarCanalesDif()">
+            <input type="number" id="canalesParesDif" value="1" step="1" oninput="evaluarCanalesDif()" onblur="verificarCanalesParesDif()">
         </div>
         <div class="fila">
             <label for="anchoCanalParDif">Ancho Canal Fino:</label>
-            <input type="number" id="anchoCanalParDif" value="30" step="1">
+            <input type="number" id="anchoCanalParDif" value="30" step="1" onblur="verificarAnchoCanalParDif()">
         </div>
         <div class="fila">
             <label for="profundidadDif">Profundidad:</label>
-            <input type="number" id="profundidadDif" value="15">
+            <input type="number" id="profundidadDif" value="15" onblur="verificarProfundidadDif()">
         </div>
         <div class="fila">
             <label for="bordesDif">Bordes:</label>
-            <input type="number" id="bordesDif" value="20">
+            <input type="number" id="bordesDif" value="20" onblur="verificarBordesDif()">
         </div>
         <div class="fila">
             <label for="espesorDif">Espesor:</label>
-            <input type="number" id="espesorDif" value="1">
+            <input type="number" id="espesorDif" value="1" onblur="verificarEspesorDif()">
         </div>
 
         <button type="button" class="btn-calcular" onclick="calcularDiferentes()">Calcular</button>

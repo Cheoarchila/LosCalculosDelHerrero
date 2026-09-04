@@ -679,7 +679,7 @@ function calcular45() {
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + valorEngrape + "</span><span class='col-espacio-corte'></span></div>");
             }
 
-            // 2. Mapeamos de forma secuencial y acumulativa los valores reales que corresponden a este tramo
+                       // 2. Mapeamos de forma secuencial y acumulativa los valores reales que corresponden a este tramo CORREGIDO
             for (let k = m; k <= finRango; k++) {
                 let valorImprimir = marcasContinuas[k].valor - valorAcumuladoDeCortesPrevios;
                 if (!esPrimeraPlancha) {
@@ -693,9 +693,12 @@ function calcular45() {
                     valorImprimir += valorEngrape;
                 }
 
-                let celdaCorte = esElPuntoDeCorteCalculado ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                // CONDICIÓN FORZADA: Si es la última marca física asignada a esta plancha o es el cierre total, activa la tijera
+                let celdaCorte = (esElPuntoDeCorteCalculado) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+                
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + Math.round(valorImprimir) + "</span>" + celdaCorte + "</div>");
             }
+
 
             // Guardamos el contenido generado para esta plancha
             let tipoChapaTexto = esPrimeraPlancha ? "(INICIAL)" : (esUltimaPlancha ? "(SOBRANTE)" : "(DEL CENTRO - DOBLE ENGRAMPE)");

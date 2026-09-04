@@ -559,7 +559,7 @@ function evaluarCanales45() {
     }
 }
 
-// FUNCIÓN MATEMÁTICA Y DE TRAZADO PRINCIPAL A 45 GRADOS (VERSIÓN INDUSTRIAL BLINDADA SIN MARCAS FANTASMAS)
+// FUNCIÓN MATEMÁTICA PRINCIPAL A 45°: ALGORITMO POR CONTROL DE MILÍMETROS REALES DISPONIBLES
 function calcular45() {
     const anchoPlancha = Number(document.getElementById("anchoPlancha45").value);
     const medidaFinal = Number(document.getElementById("medidaFinal45").value);
@@ -571,181 +571,139 @@ function calcular45() {
     let profundidad = Number(inputProfundidad.value);
     if (canales === 1) profundidad = 1;
 
-    // Deducción milimétrica de tramos exactos de tu tabla
+    // 1. Cálculo exacto de las medidas de los tramos según tus reglas
     const canalAncho = (medidaFinal / canales) - (12 * espesor);
     const canalInclinado = Math.round(profundidad * 1.414);
     const cantidadInclinados = (canales - 1) * 2;
     const bordeLimpio = bordes - espesor;
     const valorEngrape = Math.round(canalInclinado - 5);
 
-    // Desarrollo base limpio sin contar pestañas de engrape extras
+    // Desarrollo neto de la pieza
     const desarrolloBase = (bordeLimpio * 2) + (canales * canalAncho) + (cantidadInclinados * canalInclinado);
     const requiereEngrape = (desarrolloBase > anchoPlancha);
 
-    // --- FASE 1: GENERACIÓN DEL MAPA DE TRAZADO CONTINUO EXACTO DE TU TABLA ---
-    let marcasContinuas = [];
-    let marcaAcumulada = 0;
-
+    // --- FASE 1: CREAR LA SECUENCIA EXACTA DE TRAMOS FÍSICOS CONTINUOS ---
+    let secuenciaTramos = [];
     if (requiereEngrape) {
-        marcaAcumulada += valorEngrape;
-        marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'engrape' });
-        marcaAcumulada += canalInclinado;
-        marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'inclinado' });
+        secuenciaTramos.push({ tipo: 'engrape', valor: valorEngrape });
+        secuenciaTramos.push({ tipo: 'inclinado', valor: canalInclinado });
     } else {
-        marcaAcumulada += bordeLimpio;
-        marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'borde' });
+        secuenciaTramos.push({ tipo: 'borde', valor: bordeLimpio });
     }
-    
+
     for (let c = 1; c <= canales; c++) {
-        marcaAcumulada += canalAncho;
-        marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'ancho' });
+        secuenciaTramos.push({ tipo: 'ancho', valor: canalAncho });
         if (c < canales) {
-            marcaAcumulada += canalInclinado;
-            marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'inclinado' });
-            marcaAcumulada += canalInclinado;
-            marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'inclinado' });
+            secuenciaTramos.push({ tipo: 'inclinado', valor: canalInclinado });
+            secuenciaTramos.push({ tipo: 'inclinado', valor: canalInclinado });
         }
     }
 
-    if (!requiereEngrape) {
-        marcaAcumulada += bordeLimpio;
-        marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'borde' });
-    } else {
-        marcaAcumulada += bordeLimpio;
-        marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'borde_final' });
-    }
+    secuenciaTramos.push({ tipo: 'borde', valor: bordeLimpio });
 
-    // Inyectamos resultados base informativos en pantalla
+    // --- FASE 2: SIMULACIÓN DE TRAZADO POR MILÍMETROS DISPONIBLES ---
+    let bloquesPlanchas = [];
+    let t = 0; // Puntero del tramo actual
+    let numeroPlancha = 1;
+
+    // Calculamos el desarrollo total real impreso acumulando la secuencia base
+    let desarrolloCalculadoTotal = secuenciaTramos.reduce((acc, tramo) => acc + tramo.valor, 0);
     document.getElementById("canalAncho45").textContent = Math.round(canalAncho);
     document.getElementById("canalInclinado45").textContent = Math.round(canalInclinado);
-    document.getElementById("desarrollo45").textContent = Math.round(marcaAcumulada);
+    document.getElementById("desarrollo45").textContent = Math.round(desarrolloCalculadoTotal);
 
     const encabezadoColumnas2Col = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-espacio-corte'></span></div>";
     let htmlFinal = "";
 
-    // ========================================================
-    // CASO 1: LA PIEZA CABE ENTERA EN UNA SOLA PLANCHA
-    // ========================================================
-    if (!requiereEngrape) {
+    while (t < secuenciaTramos.length) {
         let lineasMarcas = [];
         let temporalContador = 1;
-        for (let k = 0; k < marcasContinuas.length; k++) {
-            let esCierre = (k === marcasContinuas.length - 1);
-            let celdaCorte = esCierre ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
-            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + marcasContinuas[k].valor + "</span>" + celdaCorte + "</div>");
+        let marcaAcumuladaPlancha = 0;
+
+        let esPrimeraPlancha = (numeroPlancha === 1);
+        let tramosEnEstaPlancha = [];
+        let espacioConsumido = 0;
+
+        // Si no es la primera plancha y requiere engrape, guardamos el espacio inicial obligatorio (16 mm)
+        if (!esPrimeraPlancha && requiereEngrape) {
+            marcaAcumuladaPlancha = valorEngrape;
+            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + marcaAcumuladaPlancha + "</span><span class='col-espacio-corte'></span></div>");
         }
-        htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 ---</div>" + encabezadoColumnas2Col + lineasMarcas.join("");
-    } 
-    // ========================================================
-    // CASO 2: LA PIEZA SE FRACCIONA (MECANISMO DE CORTE AJUSTADO)
-    // ========================================================
-    else {
-        let bloquesPlanchas = [];
-        let m = 0;
-        let numeroPlancha = 1;
-        let valorAcumuladoDeCortesPrevios = 0;
 
-        while (m < marcasContinuas.length) {
-            let lineasMarcas = [];
-            let temporalContador = 1;
-            let esPrimeraPlancha = (numeroPlancha === 1);
-            let corteEnEsteTramo = -1;
-            let esUltimaPlancha = true;
+        // Medimos milímetro a milímetro qué tramos entran en la plancha actual
+        let k = t;
+        let esUltimaPlancha = true;
 
-            // Buscamos cuántas marcas reales de tu lista continua caben en la plancha de 1200mm
-            for (let pt = m; pt < marcasContinuas.length; pt++) {
-                let medidaDesdeCeroChapa = marcasContinuas[pt].valor - valorAcumuladoDeCortesPrevios;
-                if (!esPrimeraPlancha) {
-                    medidaDesdeCeroChapa += valorEngrape;
-                }
+        while (k < secuenciaTramos.length) {
+            let valorTramoProximo = secuenciaTramos[k].valor;
+            
+            // Si vemos que quedan más tramos por procesar adelante, contemplamos si habrá un engrape de salida (16 mm)
+            let provisionEngrapeSalida = (k < secuenciaTramos.length - 1 && requiereEngrape) ? valorEngrape : 0;
 
-                // AJUSTE CRÍTICO: Si la marca proyectada supera el ancho de la plancha, cortamos de inmediato
-                if (medidaDesdeCeroChapa > anchoPlancha) {
-                    esUltimaPlancha = false;
-                    let indicePosibleCorte = pt - 1;
-                    
-                    // Forzar corte óptimo en paso impar estructural para el doblado limpio
-                    if ((indicePosibleCorte - m) % 2 === 0 && indicePosibleCorte > m) {
-                        indicePosibleCorte--;
-                    }
-                    corteEnEsteTramo = indicePosibleCorte;
-                    break;
-                }
-            }
-
-            // CORRECCIÓN BI-DIRECCIONAL: Si para 1500mm con 3 canales la matemática se pasa por milímetros,
-            // forzamos el corte exacto en la marca 6 (el 1055 de tu tabla de control)
-            if (medidaFinal === 1500 && canales === 3 && esPrimeraPlancha) {
-                corteEnEsteTramo = 5; // Fuerza el corte exactamente en el índice de la marca 1055
+            // Si el tramo actual + la marca acumulada + la previsión de salida supera el ancho de la plancha, cortamos aquí
+            if ((marcaAcumuladaPlancha + valorTramoProximo + provisionEngrapeSalida) > anchoPlancha) {
                 esUltimaPlancha = false;
+                break;
             }
 
-            let finRango = (corteEnEsteTramo !== -1) ? corteEnEsteTramo : marcasContinuas.length - 1;
-
-            // 1. Gancho inicial si es chapa posterior
-            if (!esPrimeraPlancha) {
-                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + valorEngrape + "</span><span class='col-espacio-corte'></span></div>");
-            }
-
-            // 2. Mapeamos de forma secuencial los valores reales asignados a este tramo
-            for (let k = m; k <= finRango; k++) {
-                let valorImprimir = marcasContinuas[k].valor - valorAcumuladoDeCortesPrevios;
-                if (!esPrimeraPlancha) {
-                    valorImprimir += valorEngrape;
-                }
-
-                let esElPuntoDeCorteCalculado = (k === finRango);
-                
-                // Si la plancha se corta y es intermedia (o primera), le añade físicamente la pestaña extra de engrape de salida
-                if (!esUltimaPlancha && esElPuntoDeCorteCalculado) {
-                    valorImprimir += valorEngrape;
-                }
-
-                let celdaCorte = esElPuntoDeCorteCalculado ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
-                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + Math.round(valorImprimir) + "</span>" + celdaCorte + "</div>");
-            }
-
-            // Guardamos el contenido generado para esta plancha
-            let tipoChapaTexto = esPrimeraPlancha ? "(INICIAL)" : (esUltimaPlancha ? "(SOBRANTE)" : "(DEL CENTRO - DOBLE ENGRAMPE)");
-            bloquesPlanchas.push({
-                numero: numeroPlancha,
-                tipo: tipoChapaTexto,
-                htmlMarcas: lineasMarcas.join(""),
-                huellaDigital: lineasMarcas.join("")
-            });
-
-            if (!esUltimaPlancha) {
-                valorAcumuladoDeCortesPrevios = marcasContinuas[finRango].valor;
-                m = finRango + 1;
-            } else {
-                m = marcasContinuas.length;
-            }
-            numeroPlancha++;
-            if (numeroPlancha > 30) break;
+            // El tramo cabe perfectamente en el metro real, lo acumulamos
+            marcaAcumuladaPlancha += valorTramoProximo;
+            tramosEnEstaPlancha.push({ numPaso: temporalContador, valorFinal: marcaAcumuladaPlancha });
+            
+            let esCierreDeChapaNatural = (k === secuenciaTramos.length - 1);
+            let celdaCorte = esCierreDeChapaNatural ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
+            
+            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + Math.round(marcaAcumuladaPlancha) + "</span>" + celdaCorte + "</div>");
+            
+            k++;
         }
 
-        // --- FASE 3: AGRUPACIÓN COMPACTA DE PLANCHAS IDÉNTICAS EN LA SALIDA ---
-        let b = 0;
-        while (b < bloquesPlanchas.length) {
-            let bloqueActual = bloquesPlanchas[b];
-            let grupoIdénticas = [bloqueActual.numero];
-            let incremento = 1;
-
-            while ((b + incremento) < bloquesPlanchas.length && bloquesPlanchas[b + incremento].huellaDigital === bloqueActual.huellaDigital) {
-                grupoIdénticas.push(bloquesPlanchas[b + incremento].numero);
-                incremento++;
-            }
-
-            let tituloFormateado = "";
-            if (grupoIdénticas.length > 1) {
-                tituloFormateado = `--- PLANCHA ${grupoIdénticas.join(", ")} (SON ${grupoIdénticas.length} IGUALES) ---`;
-            } else {
-                tituloFormateado = `--- PLANCHA ${bloqueActual.numero} ${bloqueActual.tipo} ---`;
-            }
-
-            htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>${tituloFormateado}</div>` + encabezadoColumnas2Col + bloqueActual.htmlMarcas;
-            b += incremento;
+        // Si la plancha se vio obligada a cortar a mitad de la pieza por falta de espacio físico
+        if (!esUltimaPlancha) {
+            // Le añadimos físicamente los 16 mm del engrape de salida a la última marca visible
+            marcaAcumuladaPlancha += valorEngrape;
+            
+            // Reemplazamos la última línea de texto para que muestre el valor con el engrape sumado y la tijera
+            lineasMarcas.pop();
+            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + (temporalContador - 1) + ".-) " + Math.round(marcaAcumuladaPlancha) + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
         }
+
+        // Avanzamos el puntero global de tramos al punto exacto donde se detuvo el metro
+        t = k;
+
+        let tipoChapaTexto = esPrimeraPlancha ? "(INICIAL)" : (esUltimaPlancha ? "(SOBRANTE)" : "(DEL CENTRO - DOBLE ENGRAMPE)");
+        bloquesPlanchas.push({
+            numero: numeroPlancha,
+            tipo: tipoChapaTexto,
+            htmlMarcas: lineasMarcas.join(""),
+            huellaDigital: lineasMarcas.join("") // Llave de comparación exacta de milímetros
+        });
+
+        numeroPlancha++;
+        if (numeroPlancha > 35) break; // Blindaje
+    }
+
+    // --- FASE 3: AGRUPACIÓN COMPACTA DE PLANCHAS IDÉNTICAS EN LA COMPUTADORA ---
+    let b = 0;
+    while (b < bloquesPlanchas.length) {
+        let bloqueActual = bloquesPlanchas[b];
+        let grupoIdénticas = [bloqueActual.numero];
+        let incremento = 1;
+
+        while ((b + incremento) < bloquesPlanchas.length && bloquesPlanchas[b + incremento].huellaDigital === bloqueActual.huellaDigital) {
+            grupoIdénticas.push(bloquesPlanchas[b + incremento].numero);
+            incremento++;
+        }
+
+        let tituloFormateado = "";
+        if (grupoIdénticas.length > 1) {
+            tituloFormateado = `--- PLANCHA ${grupoIdénticas.join(", ")} (SON ${grupoIdénticas.length} IGUALES) ---`;
+        } else {
+            tituloFormateado = `--- PLANCHA ${bloqueActual.numero} ${bloqueActual.tipo} ---`;
+        }
+
+        htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>${tituloFormateado}</div>` + encabezadoColumnas2Col + bloqueActual.htmlMarcas;
+        b += incremento;
     }
 
     document.getElementById("listaMarcas45").innerHTML = htmlFinal;

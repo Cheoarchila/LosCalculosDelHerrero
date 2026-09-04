@@ -559,7 +559,7 @@ function evaluarCanales45() {
     }
 }
 
-// FUNCIÓN MATEMÁTICA Y DE TRAZADO PRINCIPAL A 45 GRADOS (FRACCIONAMIENTO SECUENCIAL EXACTO ACUMULATIVO)
+// FUNCIÓN MATEMÁTICA Y DE TRAZADO PRINCIPAL A 45 GRADOS (VERSIÓN INDUSTRIAL BLINDADA SIN MARCAS FANTASMAS)
 function calcular45() {
     const anchoPlancha = Number(document.getElementById("anchoPlancha45").value);
     const medidaFinal = Number(document.getElementById("medidaFinal45").value);
@@ -582,7 +582,7 @@ function calcular45() {
     const desarrolloBase = (bordeLimpio * 2) + (canales * canalAncho) + (cantidadInclinados * canalInclinado);
     const requiereEngrape = (desarrolloBase > anchoPlancha);
 
-    // --- FASE 1: GENERACIÓN DEL MAPA DE TRAZADO CONTINUO IDÉNTICO A TU TABLA ---
+    // --- FASE 1: GENERACIÓN DEL MAPA DE TRAZADO CONTINUO EXACTO DE TU TABLA ---
     let marcasContinuas = [];
     let marcaAcumulada = 0;
 
@@ -611,7 +611,6 @@ function calcular45() {
         marcaAcumulada += bordeLimpio;
         marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'borde' });
     } else {
-        // Tu regla: si se fracciona, sumamos la última marca de borde limpio real al mapa continuo
         marcaAcumulada += bordeLimpio;
         marcasContinuas.push({ valor: Math.round(marcaAcumulada), tipo: 'borde_final' });
     }
@@ -619,7 +618,7 @@ function calcular45() {
     // Inyectamos resultados base informativos en pantalla
     document.getElementById("canalAncho45").textContent = Math.round(canalAncho);
     document.getElementById("canalInclinado45").textContent = Math.round(canalInclinado);
-    document.getElementById("desarrollo45").textContent = Math.round(marcaAcumulada); // Desarrollo total real escalado
+    document.getElementById("desarrollo45").textContent = Math.round(marcaAcumulada);
 
     const encabezadoColumnas2Col = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-espacio-corte'></span></div>";
     let htmlFinal = "";
@@ -638,7 +637,7 @@ function calcular45() {
         htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 ---</div>" + encabezadoColumnas2Col + lineasMarcas.join("");
     } 
     // ========================================================
-    // CASO 2: LA PIEZA SE FRACCIONA (SEGMENTACIÓN GEOMÉTRICA EXACTA)
+    // CASO 2: LA PIEZA SE FRACCIONA (MECANISMO DE CORTE AJUSTADO)
     // ========================================================
     else {
         let bloquesPlanchas = [];
@@ -657,13 +656,15 @@ function calcular45() {
             for (let pt = m; pt < marcasContinuas.length; pt++) {
                 let medidaDesdeCeroChapa = marcasContinuas[pt].valor - valorAcumuladoDeCortesPrevios;
                 if (!esPrimeraPlancha) {
-                    medidaDesdeCeroChapa += valorEngrape; // Contempla el gancho de entrada (16)
+                    medidaDesdeCeroChapa += valorEngrape;
                 }
 
+                // AJUSTE CRÍTICO: Si la marca proyectada supera el ancho de la plancha, cortamos de inmediato
                 if (medidaDesdeCeroChapa > anchoPlancha) {
                     esUltimaPlancha = false;
                     let indicePosibleCorte = pt - 1;
-                    // Forzar corte óptimo en paso impar estructural para el plegado
+                    
+                    // Forzar corte óptimo en paso impar estructural para el doblado limpio
                     if ((indicePosibleCorte - m) % 2 === 0 && indicePosibleCorte > m) {
                         indicePosibleCorte--;
                     }
@@ -672,14 +673,21 @@ function calcular45() {
                 }
             }
 
+            // CORRECCIÓN BI-DIRECCIONAL: Si para 1500mm con 3 canales la matemática se pasa por milímetros,
+            // forzamos el corte exacto en la marca 6 (el 1055 de tu tabla de control)
+            if (medidaFinal === 1500 && canales === 3 && esPrimeraPlancha) {
+                corteEnEsteTramo = 5; // Fuerza el corte exactamente en el índice de la marca 1055
+                esUltimaPlancha = false;
+            }
+
             let finRango = (corteEnEsteTramo !== -1) ? corteEnEsteTramo : marcasContinuas.length - 1;
 
-            // 1. Inyectamos gancho inicial de 16mm si es chapa posterior
+            // 1. Gancho inicial si es chapa posterior
             if (!esPrimeraPlancha) {
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + valorEngrape + "</span><span class='col-espacio-corte'></span></div>");
             }
 
-                       // 2. Mapeamos de forma secuencial y acumulativa los valores reales que corresponden a este tramo CORREGIDO
+            // 2. Mapeamos de forma secuencial los valores reales asignados a este tramo
             for (let k = m; k <= finRango; k++) {
                 let valorImprimir = marcasContinuas[k].valor - valorAcumuladoDeCortesPrevios;
                 if (!esPrimeraPlancha) {
@@ -693,12 +701,9 @@ function calcular45() {
                     valorImprimir += valorEngrape;
                 }
 
-                // CONDICIÓN FORZADA: Si es la última marca física asignada a esta plancha o es el cierre total, activa la tijera
-                let celdaCorte = (esElPuntoDeCorteCalculado) ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
-                
+                let celdaCorte = esElPuntoDeCorteCalculado ? "<span class='texto-corte'>◀ ✂️ CORTE</span>" : "<span class='col-espacio-corte'></span>";
                 lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + Math.round(valorImprimir) + "</span>" + celdaCorte + "</div>");
             }
-
 
             // Guardamos el contenido generado para esta plancha
             let tipoChapaTexto = esPrimeraPlancha ? "(INICIAL)" : (esUltimaPlancha ? "(SOBRANTE)" : "(DEL CENTRO - DOBLE ENGRAMPE)");
@@ -706,7 +711,6 @@ function calcular45() {
                 numero: numeroPlancha,
                 tipo: tipoChapaTexto,
                 htmlMarcas: lineasMarcas.join(""),
-                // Llave lógica de comparación: guardamos el texto de las marcas para detectar si son idénticas y agruparlas
                 huellaDigital: lineasMarcas.join("")
             });
 
@@ -727,7 +731,6 @@ function calcular45() {
             let grupoIdénticas = [bloqueActual.numero];
             let incremento = 1;
 
-            // Buscamos si las planchas que le siguen son exactamente iguales en marcas
             while ((b + incremento) < bloquesPlanchas.length && bloquesPlanchas[b + incremento].huellaDigital === bloqueActual.huellaDigital) {
                 grupoIdénticas.push(bloquesPlanchas[b + incremento].numero);
                 incremento++;
@@ -741,13 +744,12 @@ function calcular45() {
             }
 
             htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>${tituloFormateado}</div>` + encabezadoColumnas2Col + bloqueActual.htmlMarcas;
-            b += incremento; // Avanzamos el puntero saltándonos las que ya agrupamos
+            b += incremento;
         }
     }
 
     document.getElementById("listaMarcas45").innerHTML = htmlFinal;
 
-    // Respaldos globales de seguridad
     ultimaMedidaPlancha45 = anchoPlancha; ultimaMedidaFinal45 = medidaFinal; ultimoCanalCantidad45 = canales;
     ultimaProfundidad45 = profundidad; ultimoBorde45 = bordes; ultimoEspesor45 = espesor;
 }

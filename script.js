@@ -559,7 +559,7 @@ function evaluarCanales45() {
     }
 }
 
-// FUNCIÓN MATEMÁTICA Y DE TRAZADO PRINCIPAL A 45 GRADOS (ALGORITMO DE ENGRAMPE MODULAR CONTINUO DEFINITIVO)
+// FUNCIÓN MATEMÁTICA Y DE TRAZADO PRINCIPAL A 45 GRADOS (CON AGRUPACIÓN DE PLANCHAS IDÉNTICAS)
 function calcular45() {
     const anchoPlancha = Number(document.getElementById("anchoPlancha45").value);
     const medidaFinal = Number(document.getElementById("medidaFinal45").value);
@@ -571,7 +571,7 @@ function calcular45() {
     let profundidad = Number(inputProfundidad.value);
     if (canales === 1) profundidad = 1;
 
-    // 1. Deducción matemática exacta de tus componentes de taller
+    // Deducción matemática exacta de tus componentes de taller
     const canalAncho = (medidaFinal / canales) - (12 * espesor);
     const canalInclinado = Math.round(profundidad * 1.414);
     const cantidadInclinados = (canales - 1) * 2;
@@ -582,7 +582,6 @@ function calcular45() {
     const desarrolloBase = (bordeLimpio * 2) + (canales * canalAncho) + (cantidadInclinados * canalInclinado);
     const requiereEngrape = (desarrolloBase > anchoPlancha);
 
-    // Inyección de resultados informativos en pantalla
     document.getElementById("canalAncho45").textContent = Math.round(canalAncho);
     document.getElementById("canalInclinado45").textContent = Math.round(canalInclinado);
     document.getElementById("desarrollo45").textContent = Math.round(desarrolloBase);
@@ -616,65 +615,59 @@ function calcular45() {
         htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 ---</div>" + encabezadoColumnas2Col + lineasMarcas.join("");
     } 
     // ========================================================
-    // CASO 2: LA PIEZA SE FRACCIONA (CÁLCULO DINÁMICO EN CADENA MODULAR)
+    // CASO 2: LA PIEZA SE FRACCIONA (CON AGRUPACIÓN INTELIGENTE)
     // ========================================================
     else {
-        // Determinamos cuántas planchas completas se requieren estimando el desarrollo
-        // Usamos tu regla: cada módulo completo de canal consume aproximadamente 1044mm o 1062mm
-        let tramosTotalesRequeridos = canales; 
-        let tramosProcesados = 0;
-        let numeroPlancha = 1;
+        // --- 1. CONFIGURACIÓN DEL CONTENIDO DE LA PLANCHA INICIAL (344 mm) ---
+        let lineasPlanchaInicial = [];
+        let c1 = 1;
+        let m1 = valorEngrape; // 16
+        lineasPlanchaInicial.push("<div class='fila-marca'><span class='col-datos'>" + c1++ + ".-) " + m1 + "</span><span class='col-espacio-corte'></span></div>");
+        m1 += canalInclinado; // 37
+        lineasPlanchaInicial.push("<div class='fila-marca'><span class='col-datos'>" + c1++ + ".-) " + m1 + "</span><span class='col-espacio-corte'></span></div>");
+        m1 += canalAncho; // 325
+        lineasPlanchaInicial.push("<div class='fila-marca'><span class='col-datos'>" + c1++ + ".-) " + Math.round(m1) + "</span><span class='col-espacio-corte'></span></div>");
+        m1 += bordeLimpio; // 344
+        lineasPlanchaInicial.push("<div class='fila-marca'><span class='col-datos'>" + c1 + ".-) " + Math.round(m1) + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
 
-        while (tramosProcesados < tramosTotalesRequeridos) {
-            let lineasPlancha = [];
-            let c = 1;
-            let m = valorEngrape; // Todas las planchas fraccionadas arrancan físicamente en 16
-            
-            // 1. Marca Inicial Fija (16)
-            lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + m + "</span><span class='col-espacio-corte'></span></div>");
-            
-            // 2. Segunda Marca Fija (16 + 21 = 37)
-            m += canalInclinado;
-            lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + m + "</span><span class='col-espacio-corte'></span></div>");
-            
-            // 3. Tercera Marca Fija (37 + 988 = 1025)
-            m += canalAncho;
-            lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + m + "</span><span class='col-espacio-corte'></span></div>");
+        // --- 2. CONFIGURACIÓN DEL CONTENIDO DE LA PLANCHA DEL CENTRO (362 mm) ---
+        let lineasPlanchaCentro = [];
+        let c2 = 1;
+        let m2 = valorEngrape; // 16
+        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2++ + ".-) " + m2 + "</span><span class='col-espacio-corte'></span></div>");
+        m2 += canalInclinado; // 37
+        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2++ + ".-) " + m2 + "</span><span class='col-espacio-corte'></span></div>");
+        m2 += canalAncho; // 325
+        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2++ + ".-) " + Math.round(m2) + "</span><span class='col-espacio-corte'></span></div>");
+        m2 += canalInclinado; // 346
+        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2++ + ".-) " + m2 + "</span><span class='col-espacio-corte'></span></div>");
+        m2 += valorEngrape; // 362
+        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2 + ".-) " + m2 + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
 
-            tramosProcesados++; // Marcamos como procesado el canal actual
+        // --- 3. PROCESAMIENTO DINÁMICO DE CANTIDADES ---
+        // El total de canales determina directamente cuántos bloques se van a fabricar
+        let totalPlanchasCentro = canales - 2; 
+        let numeroUltimaPlancha = canales;
 
-            // Determinamos dinámicamente si esta es la última plancha del lote
-            let esUltimaPlancha = (tramosProcesados === tramosTotalesRequeridos);
-            let esPrimeraPlancha = (numeroPlancha === 1);
+        // Renderizado Plancha 1
+        htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 (INICIAL) ---</div>" + encabezadoColumnas2Col + lineasPlanchaInicial.join("");
 
-            // 4. Aplicación del cierre según tu regla de oro exacta
-            if (esPrimeraPlancha || esUltimaPlancha) {
-                // REGLA: Plancha Inicial y Sobrante cierran sumando el borde limpio (19) -> 1025 + 19 = 1044
-                m += bordeLimpio;
-                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c + ".-) " + m + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
-            } else {
-                // REGLA: Planchas del centro cierran sumando inclinada (21) y luego engrape (16) -> 1025 + 21 = 1046 + 16 = 1062
-                m += canalInclinado;
-                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + m + "</span><span class='col-espacio-corte'></span></div>");
-                
-                m += valorEngrape;
-                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c + ".-) " + m + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
+        // REGLA DE ORO DE AGRUPACIÓN: Si hay más de 0 planchas del centro, las junta todas bajo un solo título de cantidad
+        if (totalPlanchasCentro > 0) {
+            let listadoNumeros = [];
+            for (let p = 2; p < numeroUltimaPlancha; p++) {
+                listadoNumeros.push(p);
             }
-
-            // Asignación de títulos descriptivos de taller
-            let prefijoTitulo = `--- PLANCHA ${numeroPlancha} `;
-            if (esPrimeraPlancha) prefijoTitulo += "(INICIAL) ---";
-            else if (!esUltimaPlancha) prefijoTitulo += "(DEL CENTRO - DOBLE ENGRAMPE) ---";
-            else prefijoTitulo += "(SOBRANTE) ---";
-
-            htmlFinal += `<div class='titulo-plancha'>${prefijoTitulo}</div>` + encabezadoColumnas2Col + lineasPlancha.join("");
-            numeroPlancha++;
+            htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>--- PLANCHA ${listadoNumeros.join(", ")} (SON ${totalPlanchasCentro} IGUALES) ---</div>` + encabezadoColumnas2Col + lineasPlanchaCentro.join("");
         }
+
+        // Renderizado Plancha Final (Sobrante) - Es idéntica en marcas a la inicial según tu tabla de control
+        htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>--- PLANCHA ${numeroUltimaPlancha} (SOBRANTE) ---</div>` + encabezadoColumnas2Col + lineasPlanchaInicial.join("");
     }
 
     document.getElementById("listaMarcas45").innerHTML = htmlFinal;
 
-    // Guardado de respaldos globales de control
+    // Guardado de respaldos globales
     ultimaMedidaPlancha45 = anchoPlancha; ultimaMedidaFinal45 = medidaFinal; ultimoCanalCantidad45 = canales;
     ultimaProfundidad45 = profundidad; ultimoBorde45 = bordes; ultimoEspesor45 = espesor;
 }

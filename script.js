@@ -560,7 +560,22 @@ function evaluarCanales45() {
     }
 }
 
-// FUNCIÓN MATEMÁTICA PRINCIPAL A 45°: ALGORITMO POR CONTROL DE MILÍMETROS REALES DISPONIBLES
+// ========================================================
+// 5. CALCULADORA: UNIFICADA 45 GRADOS (REGLA MODULAR DE TALLER DEFINITIVA)
+// ========================================================
+function evaluarCanales45() {
+    const inputCanales = document.getElementById("canales45");
+    const inputProfundidad = document.getElementById("profundidad45");
+    if (Number(inputCanales.value) === 1) {
+        if (inputProfundidad.value !== "0" && inputProfundidad.value !== "") inputProfundidad.dataset.valorReal = inputProfundidad.value;
+        inputProfundidad.value = 0; inputProfundidad.disabled = true;
+        inputProfundidad.style.backgroundColor = "#e2e8f0"; inputProfundidad.style.color = "#94a3b8";
+    } else {
+        inputProfundidad.disabled = false; inputProfundidad.style.backgroundColor = ""; inputProfundidad.style.color = "";
+        if (inputProfundidad.dataset.valorReal) inputProfundidad.value = inputProfundidad.dataset.valorReal;
+    }
+}
+
 function calcular45() {
     const anchoPlancha = Number(document.getElementById("anchoPlancha45").value);
     const medidaFinal = Number(document.getElementById("medidaFinal45").value);
@@ -572,7 +587,7 @@ function calcular45() {
     let profundidad = Number(inputProfundidad.value);
     if (canales === 1) profundidad = 1;
 
-    // Deducción milimétrica de tramos (Descuento exacto de 11 espesores validado por el operario)
+    // Deducción milimétrica de tramos base (Física confirmada por el operario)
     const canalAncho = (medidaFinal / canales) - (11 * espesor);
     const canalInclinado = Math.round(profundidad * 1.414);
     const bordeLimpio = bordes - espesor;
@@ -586,7 +601,7 @@ function calcular45() {
     let htmlFinal = "";
 
     // ========================================================
-    // CASO 1: LA PIEZA CABE ENTERA EN UNA SOLA PLANCHA
+    // CASO 1: LA PIEZA CABE ENTERA EN UNA SOLA PLANCHA (HASTA 1200)
     // ========================================================
     if (!requiereEngrape) {
         let lineasMarcas = [];
@@ -610,61 +625,152 @@ function calcular45() {
         htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 ---</div>" + encabezadoColumnas2Col + lineasMarcas.join("");
     } 
     // ========================================================
-    // CASO 2 Y 3: LA PIEZA SE FRACCIONA (MÉTODO MODULAR DE TU LIBRETA)
+    // CASO 2 Y 3: LA PIEZA SE FRACCIONA (MÉTODO MODULAR DE TU LIBRETA ACUMULANDO CANALES)
     // ========================================================
     else {
-        // --- 1. CONFIGURACIÓN VISUAL DEL EXTREMO (PLANCHA INICIAL / SOBRANTE) ---
-        let lineasPlanchaExtremo = [];
-        let c1 = 1;
-        let m1 = valorEngrape; // 16
-        lineasPlanchaExtremo.push("<div class='fila-marca'><span class='col-datos'>" + c1++ + ".-) " + m1 + "</span><span class='col-espacio-corte'></span></div>");
-        m1 += canalInclinado; // 37
-        lineasPlanchaExtremo.push("<div class='fila-marca'><span class='col-datos'>" + c1++ + ".-) " + m1 + "</span><span class='col-espacio-corte'></span></div>");
-        m1 += canalAncho; // Suma el canal ancho dinámico
-        lineasPlanchaExtremo.push("<div class='fila-marca'><span class='col-datos'>" + c1++ + ".-) " + Math.round(m1) + "</span><span class='col-espacio-corte'></span></div>");
-        m1 += bordeLimpio; // Cierre Extremo (1044 o 545 según tus entradas)
-        lineasPlanchaExtremo.push("<div class='fila-marca'><span class='col-datos'>" + c1 + ".-) " + Math.round(m1) + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
+        let bloquesPlanchas = [];
+        let canalesProcesados = 0;
+        let numeroPlancha = 1;
 
-        // --- 2. CONFIGURACIÓN VISUAL DE LAS PLANCHAS DEL CENTRO (DOBLE ENGRAMPE) ---
-        let lineasPlanchaCentro = [];
-        let c2 = 1;
-        let m2 = valorEngrape; // 16
-        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2++ + ".-) " + m2 + "</span><span class='col-espacio-corte'></span></div>");
-        m2 += canalInclinado; // 37
-        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2++ + ".-) " + m2 + "</span><span class='col-espacio-corte'></span></div>");
-        m2 += canalAncho; 
-        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2++ + ".-) " + Math.round(m2) + "</span><span class='col-espacio-corte'></span></div>");
-        m2 += canalInclinado; // 1047 / 547
-        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2++ + ".-) " + m2 + "</span><span class='col-espacio-corte'></span></div>");
-        m2 += valorEngrape; // Cierre Centro (1066 / 562)
-        lineasPlanchaCentro.push("<div class='fila-marca'><span class='col-datos'>" + c2 + ".-) " + Math.round(m2) + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
+        while (canalesProcesados < canales) {
+            let lineasPlancha = [];
+            let c = 1;
+            let m = valorEngrape; // Todas las planchas fraccionadas arrancan físicamente en 16
+            
+            // 1. Marca Inicial Fija (16)
+            lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + m + "</span><span class='col-espacio-corte'></span></div>");
+            
+            // 2. Segunda Marca Fija (16 + 21 = 37)
+            m += canalInclinado;
+            lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + m + "</span><span class='col-espacio-corte'></span></div>");
 
-        let totalPlanchasCentro = canales - 2; 
-        let numeroUltimaPlancha = canales;
+            // --- MOTOR DE ACUMULACIÓN DE CORRIDO POR PLANCHA ---
+            let canalesEnEstaPlancha = 0;
+            let espacioDisponible = anchoPlancha; // 1200 mm reales de metro en mano
 
-        let desarrolloRealCompra = (m1 * 2) + (totalPlanchasCentro > 0 ? (m2 * totalPlanchasCentro) : 0);
-        document.getElementById("desarrollo45").textContent = Math.round(desarrolloRealCompra);
-
-        htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 (INICIAL) ---</div>" + encabezadoColumnas2Col + lineasPlanchaExtremo.join("");
-
-        if (totalPlanchasCentro > 0) {
-            let listadoNumeros = [];
-            for (let p = 2; p < numeroUltimaPlancha; p++) {
-                listadoNumeros.push(p);
+            while (canalesProcesados + canalesEnEstaPlancha < canales) {
+                let esUltimoCanalTotal = (canalesProcesados + canalesEnEstaPlancha + 1 === canales);
+                let esPrimeraOÚltimaChapa = (numeroPlancha === 1 || esUltimoCanalTotal);
+                
+                // Evaluamos el espacio estimado que consumiría este bloque antes de meterlo en la chapa
+                let espacioRequerido = esPrimeraOÚltimaChapa ? 
+                    (valorEngrape + canalInclinado + canalAncho + bordeLimpio) : 
+                    (valorEngrape + canalInclinado + canalAncho + canalInclinado + valorEngrape);
+                
+                if (espacioRequerido <= espacioDisponible || canalesEnEstaPlancha === 0) {
+                    canalesEnEstaPlancha++;
+                    espacioDisponible -= (canalAncho + canalInclinado * 2); // Descontamos el metal consumido
+                } else {
+                    break; // Ya no cabe otro canal plano con sus dobleces enteros dentro de los 1200mm, frenamos
+                }
             }
-            htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>--- PLANCHA ${listadoNumeros.join(", ")} (SON ${totalPlanchasCentro} IGUALES) ---</div>` + encabezadoColumnas2Col + lineasPlanchaCentro.join("");
+
+            // Tramos de forma acumulada y continua las marcas de los canales asignados a este lote chapa
+            for (let i = 0; i < canalesEnEstaPlancha; i++) {
+                m += canalAncho;
+                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + Math.round(m) + "</span><span class='col-espacio-corte'></span></div>");
+                
+                // Si quedan más canales dentro de esta misma chapa, añade sus inclinadas intermedias de corrido
+                if (i < canalesEnEstaPlancha - 1) {
+                    m += canalInclinado;
+                    lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + Math.round(m) + "</span><span class='col-espacio-corte'></span></div>");
+                    m += canalInclinado;
+                    lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + Math.round(m) + "</span><span class='col-espacio-corte'></span></div>");
+                }
+            }
+
+            canalesProcesados += canalesEnEstaPlancha;
+
+            let esUltimaPlancha = (canalesProcesados === canales);
+            let esPrimeraPlancha = (numeroPlancha === 1);
+
+            // 4. Aplicación estricta de tus reglas de cierre de corte de taller
+            if (esPrimeraPlancha || esUltimaPlancha) {
+                // REGLA DEL EXTREMO: Cierra sumando el borde limpio (19 mm)
+                m += bordeLimpio;
+                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c + ".-) " + Math.round(m) + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
+            } else {
+                // REGLA DEL CENTRO: Cierra sumando inclinada (21) y engrape (16)
+                m += canalInclinado;
+                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + Math.round(m) + "</span><span class='col-espacio-corte'></span></div>");
+                m += valorEngrape;
+                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c + ".-) " + Math.round(m) + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
+            }
+
+            // Registro estructurado del bloque generado
+            let tipoChapaTexto = esPrimeraPlancha ? "(INICIAL)" : (esUltimaPlancha ? "(SOBRANTE)" : "(DEL CENTRO - DOBLE ENGRAMPE)");
+            bloquesPlanchas.push({
+                numero: numeroPlancha,
+                tipo: tipoChapaTexto,
+                htmlMarcas: lineasPlancha.join(""),
+                huellaDigital: lineasPlancha.join("") // Registra las marcas exactas para la agrupación inteligente
+            });
+
+            numeroPlancha++;
+            if (numeroPlancha > 25) break;
         }
 
-        htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>--- PLANCHA ${numeroUltimaPlancha} (SOBRANTE) ---</div>` + encabezadoColumnas2Col + lineasPlanchaExtremo.join("");
+        // --- FASE 3: AGRUPACIÓN VISUAL DE LAS PLANCHAS IDÉNTICAS EN LA PANTALLA ---
+        let b = 0;
+        let conteoFilaRealPlancha = 1;
+        let desarrolloRealCompra = 0;
+
+        while (b < bloquesPlanchas.length) {
+            let bloqueActual = bloquesPlanchas[b];
+            let grupoIdénticas = [conteoFilaRealPlancha];
+            let incremento = 1;
+
+            while ((b + incremento) < bloquesPlanchas.length && bloquesPlanchas[b + incremento].huellaDigital === bloqueActual.huellaDigital) {
+                conteoFilaRealPlancha++;
+                grupoIdénticas.push(conteoFilaRealPlancha);
+                incremento++;
+            }
+
+            let tituloFormateado = "";
+            if (grupoIdénticas.length > 1) {
+                tituloFormateado = `--- PLANCHA ${grupoIdénticas.join(", ")} (SON ${grupoIdénticas.length} IGUALES) ---`;
+                let partesTexto = bloqueActual.htmlMarcas.split("◀ ✂️ CORTE");
+                let ultimaFilaDatos = partesTexto[partesTexto.length - 2];
+                let ultimoNumeroMarca = Number(ultimaFilaDatos.substring(ultimaFilaDatos.lastIndexOf('">') + 1, ultimaFilaDatos.lastIndexOf("</span>")));
+                desarrolloRealCompra += (ultimoNumeroMarca * grupoIdénticas.length);
+            } else {
+                tituloFormateado = `--- PLANCHA ${conteoFilaRealPlancha} ${bloqueActual.tipo} ---`;
+                let partesTexto = bloqueActual.htmlMarcas.split("◀ ✂️ CORTE");
+                let ultimaFilaDatos = partesTexto[partesTexto.length - 2];
+                let regexNumero = />\s*([0-9]+)\s*<\/span><\/div>$/;
+                let coincidencia = ultimaFilaDatos.match(regexNumero);
+                let ultimoNumeroMarca = coincidencia ? Number(coincidencia) : 0;
+                if(ultimoNumeroMarca === 0){
+                     let finTextoNum = ultimaFilaDatos.lastIndexOf("</span>");
+                     let inicioTextoNum = ultimaFilaDatos.lastIndexOf('">') + 2;
+                     ultimoNumeroMarca = Number(ultimaFilaDatos.substring(inicioTextoNum, finTextoNum).trim());
+                }
+                desarrolloRealCompra += ultimoNumeroMarca;
+            }
+
+            htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>${tituloFormateado}</div>` + encabezadoColumnas2Col + bloqueActual.htmlMarcas;
+            b += incremento;
+            conteoFilaRealPlancha++;
+        }
+        document.getElementById("desarrollo45").textContent = Math.round(desarrolloRealCompra);
     }
 
     document.getElementById("canalAncho45").textContent = Math.round(canalAncho);
     document.getElementById("canalInclinado45").textContent = Math.round(canalInclinado);
     document.getElementById("listaMarcas45").innerHTML = htmlFinal;
 
+    // Respaldo de estados válidos de seguridad
     ultimaMedidaPlancha45 = anchoPlancha; ultimaMedidaFinal45 = medidaFinal; ultimoCanalCantidad45 = canales;
     ultimaProfundidad45 = profundidad; ultimoBorde45 = bordes; ultimoEspesor45 = espesor;
 }
+
+// --- VALIDACIONES ONBLUR PANTALLA 45° ---
+function verificarMedidaPlancha45() { const c = document.getElementById("anchoPlancha45"); let v = Number(c.value); if (c.value === "" || v < 1) { alert("Medida inválida."); c.value = ultimaMedidaPlancha45; } else { ultimaMedidaPlancha45 = v; } }
+function verificarMedidaFinal45() { const c = document.getElementById("medidaFinal45"); let v = Number(c.value); if (c.value === "" || v < 1) { alert("Medida inválida."); c.value = ultimaMedidaFinal45; } else { ultimaMedidaFinal45 = v; } }
+function verificarCanales45() { const c = document.getElementById("canales45"); let v = Number(c.value); if (c.value === "" || v < 1) { alert("Medida inválida."); c.value = ultimoCanalCantidad45; } else { ultimoCanalCantidad45 = v; } }
+function verificarProfundidad45() { const c = document.getElementById("profundidad45"); let v = Number(c.value); if (c.value === "" || v < 0) { alert("Medida inválida."); c.value = ultimaProfundidad45; } else { ultimaProfundidad45 = v; } }
+function verificarBordes45() { const c = document.getElementById("bordes45"); let v = Number(c.value); if (c.value === "" || v < 0) { alert("Medida inválida."); c.value = ultimoBorde45; } else { ultimoBorde45 = v; } }
+function verificarEspesor45() { const c = document.getElementById("espesor45"); let v = Number(c.value); if (c.value === "" || v < 0) { alert("Medida inválida."); c.value = ultimoEspesor45; } else { ultimoEspesor45 = v; } }
 
 // --- VALIDACIONES ONBLUR PANTALLA 45° ---
 function verificarMedidaPlancha45() {

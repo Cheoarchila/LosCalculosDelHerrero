@@ -610,7 +610,7 @@ function calcular45() {
         htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 ---</div>" + encabezadoColumnas2Col + lineasMarcas.join("");
     } 
     // ========================================================
-    // CASO 2 Y 3: LA PIEZA SE FRACCIONA (MÉTODO MODULAR AGRUPADO DE TU LIBRETA)
+    // CASO 2 Y 3: LA PIEZA SE FRACCIONA (MÉTODO MODULAR DE TU LIBRETA)
     // ========================================================
     else {
         // --- 1. CONFIGURACIÓN VISUAL DEL EXTREMO (PLANCHA INICIAL / SOBRANTE) ---

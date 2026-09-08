@@ -587,45 +587,49 @@ function calcular45() {
     let profundidad = Number(inputProfundidad.value);
     if (canales === 1) profundidad = 1;
 
-    // Deducción milimétrica de tramos base (Física confirmada por el operario)
+    // Deducción milimétrica de tramos base
     const canalAncho = (medidaFinal / canales) - (11 * espesor);
     const canalInclinado = Math.round(profundidad * 1.414);
     const bordeLimpio = bordes - espesor;
     const valorEngrape = Math.round(canalInclinado - 5);
 
-    // INTEGRACIÓN DIRECTA DE TU FÓRMULA MAESTRA DE DESARROLLO NETO
+    // Integración de fórmula de desarrollo neto
     const desarrolloBase = ((bordes * 2) + (canalAncho * canales) + (canalInclinado * (canales - 1))) - ((canales + 1) * 2);
     const requiereEngrape = (desarrolloBase > anchoPlancha);
 
-    const encabezadoColumnas2Col = "<div class='fila-marca'><span class='col-encabezado'>MARCAS</span><span class='col-espacio-corte'></span></div>";
+    // Encabezado actualizado con las 3 columnas tabulares solicitadas
+    const encabezadoColumnas3Col = "<div class='fila-marca'><span class='col-datos-medida' style='font-weight:bold; color:#64748b;'>MEDIDA</span><span class='col-datos-num' style='font-weight:bold; color:#64748b;'>N°</span><span class='col-datos-marca' style='font-weight:bold; color:#64748b;'>MARCA</span><span class='col-espacio-corte'></span></div>";
     let htmlFinal = "";
 
     // ========================================================
-    // CASO 1: LA PIEZA CABE ENTERA EN UNA SOLA PLANCHA (HASTA 1200)
+    // CASO 1: LA PIEZA CABE ENTERA EN UNA SOLA PLANCHA
     // ========================================================
     if (!requiereEngrape) {
         let lineasMarcas = [];
         let temporalContador = 1;
         let marca = bordeLimpio;
         
-        lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + Math.round(marca) + "</span><span class='col-espacio-corte'></span></div>");
+        // Primera marca (Borde inicial)
+        lineasMarcas.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(bordeLimpio)}</span><span class='col-datos-num'>${temporalContador++}</span><span class='col-datos-marca'>${Math.round(marca)}</span><span class='col-espacio-corte'></span></div>`);
         
         for (let c = 1; c <= canales; c++) {
             marca += canalAncho;
-            lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + Math.round(marca) + "</span><span class='col-espacio-corte'></span></div>");
+            lineasMarcas.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalAncho)}</span><span class='col-datos-num'>${temporalContador++}</span><span class='col-datos-marca'>${Math.round(marca)}</span><span class='col-espacio-corte'></span></div>`);
+            
             if (c < canales) {
                 marca += canalInclinado;
-                lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador++ + ".-) " + Math.round(marca) + "</span><span class='col-espacio-corte'></span></div>");
+                lineasMarcas.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${temporalContador++}</span><span class='col-datos-marca'>${Math.round(marca)}</span><span class='col-espacio-corte'></span></div>`);
             }
         }
+        
         marca += bordeLimpio;
-        lineasMarcas.push("<div class='fila-marca'><span class='col-datos'>" + temporalContador + ".-) " + Math.round(marca) + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
+        lineasMarcas.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(bordeLimpio)}</span><span class='col-datos-num'>${temporalContador}</span><span class='col-datos-marca'>${Math.round(marca)}</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>`);
 
         document.getElementById("desarrollo45").textContent = Math.round(desarrolloBase);
-        htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 ---</div>" + encabezadoColumnas2Col + lineasMarcas.join("");
+        htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 ---</div>" + encabezadoColumnas3Col + lineasMarcas.join("");
     } 
     // ========================================================
-    // CASO 2 Y 3: LA PIEZA SE FRACCIONA (MÉTODO MODULAR DE TU LIBRETA ACUMULANDO CANALES)
+    // CASO 2 Y 3: LA PIEZA SE FRACCIONA EN VARIAS PLANCHAS
     // ========================================================
     else {
         let bloquesPlanchas = [];
@@ -635,47 +639,45 @@ function calcular45() {
         while (canalesProcesados < canales) {
             let lineasPlancha = [];
             let c = 1;
-            let m = valorEngrape; // Todas las planchas fraccionadas arrancan físicamente en 16
+            let m = valorEngrape; 
             
-            // 1. Marca Inicial Fija (16)
-            lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + m + "</span><span class='col-espacio-corte'></span></div>");
+            // 1. Marca Inicial Fija (Engrape)
+            lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${valorEngrape}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${m}</span><span class='col-espacio-corte'></span></div>`);
             
-            // 2. Segunda Marca Fija (16 + 21 = 37)
+            // 2. Segunda Marca Fija (Engrape + Inclinada)
             m += canalInclinado;
-            lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + m + "</span><span class='col-espacio-corte'></span></div>");
+            lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${m}</span><span class='col-espacio-corte'></span></div>`);
 
-            // --- MOTOR DE ACUMULACIÓN DE CORRIDO POR PLANCHA ---
+            // --- MOTOR DE ACUMULACIÓN ---
             let canalesEnEstaPlancha = 0;
-            let espacioDisponible = anchoPlancha; // 1200 mm reales de metro en mano
+            let espacioDisponible = anchoPlancha; 
 
             while (canalesProcesados + canalesEnEstaPlancha < canales) {
                 let esUltimoCanalTotal = (canalesProcesados + canalesEnEstaPlancha + 1 === canales);
                 let esPrimeraOÚltimaChapa = (numeroPlancha === 1 || esUltimoCanalTotal);
                 
-                // Evaluamos el espacio estimado que consumiría este bloque antes de meterlo en la chapa
                 let espacioRequerido = esPrimeraOÚltimaChapa ? 
                     (valorEngrape + canalInclinado + canalAncho + bordeLimpio) : 
                     (valorEngrape + canalInclinado + canalAncho + canalInclinado + valorEngrape);
                 
                 if (espacioRequerido <= espacioDisponible || canalesEnEstaPlancha === 0) {
                     canalesEnEstaPlancha++;
-                    espacioDisponible -= (canalAncho + canalInclinado * 2); // Descontamos el metal consumido
+                    espacioDisponible -= (canalAncho + canalInclinado * 2); 
                 } else {
-                    break; // Ya no cabe otro canal plano con sus dobleces enteros dentro de los 1200mm, frenamos
+                    break; 
                 }
             }
 
-            // Tramos de forma acumulada y continua las marcas de los canales asignados a este lote chapa
+            // Trazado acumulativo de los canales asignados a esta plancha
             for (let i = 0; i < canalesEnEstaPlancha; i++) {
                 m += canalAncho;
-                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + Math.round(m) + "</span><span class='col-espacio-corte'></span></div>");
+                lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalAncho)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='col-espacio-corte'></span></div>`);
                 
-                // Si quedan más canales dentro de esta misma chapa, añade sus inclinadas intermedias de corrido
                 if (i < canalesEnEstaPlancha - 1) {
                     m += canalInclinado;
-                    lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + Math.round(m) + "</span><span class='col-espacio-corte'></span></div>");
+                    lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='col-espacio-corte'></span></div>`);
                     m += canalInclinado;
-                    lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + Math.round(m) + "</span><span class='col-espacio-corte'></span></div>");
+                    lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='col-espacio-corte'></span></div>`);
                 }
             }
 
@@ -684,33 +686,30 @@ function calcular45() {
             let esUltimaPlancha = (canalesProcesados === canales);
             let esPrimeraPlancha = (numeroPlancha === 1);
 
-            // 4. Aplicación estricta de tus reglas de cierre de corte de taller
+            // Reglas de cierre
             if (esPrimeraPlancha || esUltimaPlancha) {
-                // REGLA DEL EXTREMO: Cierra sumando el borde limpio (19 mm)
                 m += bordeLimpio;
-                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c + ".-) " + Math.round(m) + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
+                lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(bordeLimpio)}</span><span class='col-datos-num'>${c}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>`);
             } else {
-                // REGLA DEL CENTRO: Cierra sumando inclinada (21) y engrape (16)
                 m += canalInclinado;
-                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c++ + ".-) " + Math.round(m) + "</span><span class='col-espacio-corte'></span></div>");
+                lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='col-espacio-corte'></span></div>`);
                 m += valorEngrape;
-                lineasPlancha.push("<div class='fila-marca'><span class='col-datos'>" + c + ".-) " + Math.round(m) + "</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>");
+                lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${valorEngrape}</span><span class='col-datos-num'>${c}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>`);
             }
 
-            // Registro estructurado del bloque generado
             let tipoChapaTexto = esPrimeraPlancha ? "(INICIAL)" : (esUltimaPlancha ? "(SOBRANTE)" : "(DEL CENTRO - DOBLE ENGRAMPE)");
             bloquesPlanchas.push({
                 numero: numeroPlancha,
                 tipo: tipoChapaTexto,
                 htmlMarcas: lineasPlancha.join(""),
-                huellaDigital: lineasPlancha.join("") // Registra las marcas exactas para la agrupación inteligente
+                huellaDigital: lineasPlancha.join("") 
             });
 
             numeroPlancha++;
             if (numeroPlancha > 25) break;
         }
 
-        // --- FASE 3: AGRUPACIÓN VISUAL DE LAS PLANCHAS IDÉNTICAS EN LA PANTALLA ---
+        // --- RENDERIZADO Y AGRUPACIÓN VISUAL ---
         let b = 0;
         let conteoFilaRealPlancha = 1;
         let desarrolloRealCompra = 0;
@@ -731,24 +730,28 @@ function calcular45() {
                 tituloFormateado = `--- PLANCHA ${grupoIdénticas.join(", ")} (SON ${grupoIdénticas.length} IGUALES) ---`;
                 let partesTexto = bloqueActual.htmlMarcas.split("◀ ✂️ CORTE");
                 let ultimaFilaDatos = partesTexto[partesTexto.length - 2];
-                let ultimoNumeroMarca = Number(ultimaFilaDatos.substring(ultimaFilaDatos.lastIndexOf('">') + 1, ultimaFilaDatos.lastIndexOf("</span>")));
+                let ultimoNumeroMarca = Number(ultimaFilaDatos.substring(ultimaFilaDatos.lastIndexOf("col-datos-marca\">") + 17, ultimaFilaDatos.lastIndexOf("</span><span class=\"texto-corte\"")));
+                if (isNaN(ultimoNumeroMarca)) {
+                    let match = ultimaFilaDatos.match(/col-datos-marca'>\s*([0-9]+)\s*<\/span>/);
+                    ultimoNumeroMarca = match ? Number(match) : 0;
+                }
                 desarrolloRealCompra += (ultimoNumeroMarca * grupoIdénticas.length);
             } else {
                 tituloFormateado = `--- PLANCHA ${conteoFilaRealPlancha} ${bloqueActual.tipo} ---`;
                 let partesTexto = bloqueActual.htmlMarcas.split("◀ ✂️ CORTE");
                 let ultimaFilaDatos = partesTexto[partesTexto.length - 2];
-                let regexNumero = />\s*([0-9]+)\s*<\/span><\/div>$/;
-                let coincidencia = ultimaFilaDatos.match(regexNumero);
-                let ultimoNumeroMarca = coincidencia ? Number(coincidencia) : 0;
+                let match = ultimaFilaDatos.match(/col-datos-marca'>\s*([0-9]+)\s*<\/span>/);
+                let ultimoNumeroMarca = match ? Number(match) : 0;
                 if(ultimoNumeroMarca === 0){
                      let finTextoNum = ultimaFilaDatos.lastIndexOf("</span>");
-                     let inicioTextoNum = ultimaFilaDatos.lastIndexOf('">') + 2;
+                     let inicioTextoNum = ultimaFilaDatos.lastIndexOf("col-datos-marca'>") + 17;
+                     if(inicioTextoNum < 17) inicioTextoNum = ultimaFilaDatos.lastIndexOf('col-datos-marca">') + 17;
                      ultimoNumeroMarca = Number(ultimaFilaDatos.substring(inicioTextoNum, finTextoNum).trim());
                 }
                 desarrolloRealCompra += ultimoNumeroMarca;
             }
 
-            htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>${tituloFormateado}</div>` + encabezadoColumnas2Col + bloqueActual.htmlMarcas;
+            htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>${tituloFormateado}</div>` + encabezadoColumnas3Col + bloqueActual.htmlMarcas;
             b += incremento;
             conteoFilaRealPlancha++;
         }

@@ -141,3 +141,22 @@ h1, h2, h3 {
     font-weight: bold;
     color: #0f766e;
 }
+/* Modificación de anchos fijos para la tabla de 45° con 3 columnas */
+.col-datos-medida {
+    width: 90px;         /* Columna de lo que se va sumando */
+    color: #64748b;
+    display: inline-block;
+}
+
+.col-datos-num {
+    width: 50px;         /* Columna del N° de marca */
+    color: #94a3b8;
+    display: inline-block;
+}
+
+.col-datos-marca {
+    width: 110px;        /* Columna del total acumulado (Marca) */
+    color: #1e293b;
+    font-weight: bold;
+    display: inline-block;
+}

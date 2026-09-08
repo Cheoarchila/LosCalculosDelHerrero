@@ -628,7 +628,7 @@ function calcular45() {
         document.getElementById("desarrollo45").textContent = Math.round(desarrolloBase);
         htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 ---</div>" + encabezadoColumnas3Col + lineasMarcas.join("");
     } 
-    // ========================================================
+        // ========================================================
     // CASO 2 Y 3: LA PIEZA SE FRACCIONA EN VARIAS PLANCHAS
     // ========================================================
     else {
@@ -686,21 +686,25 @@ function calcular45() {
             let esUltimaPlancha = (canalesProcesados === canales);
             let esPrimeraPlancha = (numeroPlancha === 1);
 
-            // Reglas de cierre
+            // Reglas de cierre e inyección del último valor absoluto
+            let marcaCorteFinal = 0;
             if (esPrimeraPlancha || esUltimaPlancha) {
                 m += bordeLimpio;
-                lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(bordeLimpio)}</span><span class='col-datos-num'>${c}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>`);
+                marcaCorteFinal = Math.round(m);
+                lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(bordeLimpio)}</span><span class='col-datos-num'>${c}</span><span class='col-datos-marca'>${marcaCorteFinal}</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>`);
             } else {
                 m += canalInclinado;
                 lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='col-espacio-corte'></span></div>`);
                 m += valorEngrape;
-                lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${valorEngrape}</span><span class='col-datos-num'>${c}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>`);
+                marcaCorteFinal = Math.round(m);
+                lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${valorEngrape}</span><span class='col-datos-num'>${c}</span><span class='col-datos-marca'>${marcaCorteFinal}</span><span class='texto-corte'>◀ ✂️ CORTE</span></div>`);
             }
 
             let tipoChapaTexto = esPrimeraPlancha ? "(INICIAL)" : (esUltimaPlancha ? "(SOBRANTE)" : "(DEL CENTRO - DOBLE ENGRAMPE)");
             bloquesPlanchas.push({
                 numero: numeroPlancha,
                 tipo: tipoChapaTexto,
+                valorCorte: marcaCorteFinal,
                 htmlMarcas: lineasPlancha.join(""),
                 huellaDigital: lineasPlancha.join("") 
             });
@@ -709,7 +713,7 @@ function calcular45() {
             if (numeroPlancha > 25) break;
         }
 
-        // --- RENDERIZADO Y AGRUPACIÓN VISUAL ---
+        // --- RENDERIZADO Y AGRUPACIÓN VISUAL SIN MÉTODOS DE RIESGO DE TEXTO ---
         let b = 0;
         let conteoFilaRealPlancha = 1;
         let desarrolloRealCompra = 0;
@@ -728,27 +732,10 @@ function calcular45() {
             let tituloFormateado = "";
             if (grupoIdénticas.length > 1) {
                 tituloFormateado = `--- PLANCHA ${grupoIdénticas.join(", ")} (SON ${grupoIdénticas.length} IGUALES) ---`;
-                let partesTexto = bloqueActual.htmlMarcas.split("◀ ✂️ CORTE");
-                let ultimaFilaDatos = partesTexto[partesTexto.length - 2];
-                let ultimoNumeroMarca = Number(ultimaFilaDatos.substring(ultimaFilaDatos.lastIndexOf("col-datos-marca\">") + 17, ultimaFilaDatos.lastIndexOf("</span><span class=\"texto-corte\"")));
-                if (isNaN(ultimoNumeroMarca)) {
-                    let match = ultimaFilaDatos.match(/col-datos-marca'>\s*([0-9]+)\s*<\/span>/);
-                    ultimoNumeroMarca = match ? Number(match) : 0;
-                }
-                desarrolloRealCompra += (ultimoNumeroMarca * grupoIdénticas.length);
+                desarrolloRealCompra += (bloqueActual.valorCorte * grupoIdénticas.length);
             } else {
                 tituloFormateado = `--- PLANCHA ${conteoFilaRealPlancha} ${bloqueActual.tipo} ---`;
-                let partesTexto = bloqueActual.htmlMarcas.split("◀ ✂️ CORTE");
-                let ultimaFilaDatos = partesTexto[partesTexto.length - 2];
-                let match = ultimaFilaDatos.match(/col-datos-marca'>\s*([0-9]+)\s*<\/span>/);
-                let ultimoNumeroMarca = match ? Number(match) : 0;
-                if(ultimoNumeroMarca === 0){
-                     let finTextoNum = ultimaFilaDatos.lastIndexOf("</span>");
-                     let inicioTextoNum = ultimaFilaDatos.lastIndexOf("col-datos-marca'>") + 17;
-                     if(inicioTextoNum < 17) inicioTextoNum = ultimaFilaDatos.lastIndexOf('col-datos-marca">') + 17;
-                     ultimoNumeroMarca = Number(ultimaFilaDatos.substring(inicioTextoNum, finTextoNum).trim());
-                }
-                desarrolloRealCompra += ultimoNumeroMarca;
+                desarrolloRealCompra += bloqueActual.valorCorte;
             }
 
             htmlFinal += `<div class='titulo-plancha' style='margin-top: 15px;'>${tituloFormateado}</div>` + encabezadoColumnas3Col + bloqueActual.htmlMarcas;

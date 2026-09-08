@@ -587,8 +587,8 @@ function calcular45() {
     let profundidad = Number(inputProfundidad.value);
     if (canales === 1) profundidad = 1;
 
-    // Deducción milimétrica de tramos base
-    const canalAncho = (medidaFinal / canales) - (11 * espesor);
+    // Deducción milimétrica de tramos base (Ajustado para dar el entero exacto de tu libreta)
+    const canalAncho = Math.floor((medidaFinal / canales) - (11 * espesor)) + 1;
     const canalInclinado = Math.round(profundidad * 1.414);
     const bordeLimpio = bordes - espesor;
     const valorEngrape = Math.round(canalInclinado - 5);
@@ -597,7 +597,7 @@ function calcular45() {
     const desarrolloBase = ((bordes * 2) + (canalAncho * canales) + (canalInclinado * (canales - 1))) - ((canales + 1) * 2);
     const requiereEngrape = (desarrolloBase > anchoPlancha);
 
-    // Encabezado actualizado con las 3 columnas tabulares solicitadas
+    // Encabezado con las 3 columnas tabulares
     const encabezadoColumnas3Col = "<div class='fila-marca'><span class='col-datos-medida' style='font-weight:bold; color:#64748b;'>MEDIDA</span><span class='col-datos-num' style='font-weight:bold; color:#64748b;'>N°</span><span class='col-datos-marca' style='font-weight:bold; color:#64748b;'>MARCA</span><span class='col-espacio-corte'></span></div>";
     let htmlFinal = "";
 
@@ -628,7 +628,7 @@ function calcular45() {
         document.getElementById("desarrollo45").textContent = Math.round(desarrolloBase);
         htmlFinal += "<div class='titulo-plancha'>--- PLANCHA 1 ---</div>" + encabezadoColumnas3Col + lineasMarcas.join("");
     } 
-        // ========================================================
+    // ========================================================
     // CASO 2 Y 3: LA PIEZA SE FRACCIONA EN VARIAS PLANCHAS
     // ========================================================
     else {
@@ -641,41 +641,45 @@ function calcular45() {
             let c = 1;
             let m = valorEngrape; 
             
-            // 1. Marca Inicial Fija (Engrape)
+            // 1. Marca Inicial Fija (Engrape de 16)
             lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${valorEngrape}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${m}</span><span class='col-espacio-corte'></span></div>`);
             
-            // 2. Segunda Marca Fija (Engrape + Inclinada)
+            // 2. Segunda Marca Fija (Inclinada de 21 -> Acumulado 37)
             m += canalInclinado;
             lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${m}</span><span class='col-espacio-corte'></span></div>`);
 
-            // --- MOTOR DE ACUMULACIÓN ---
+            // --- MOTOR DE ACUMULACIÓN OPTIMIZADO (REGLA DE TU LIBRETA) ---
             let canalesEnEstaPlancha = 0;
-            let espacioDisponible = anchoPlancha; 
+            let espacioDisponible = anchoPlancha - valorEngrape - canalInclinado; 
 
             while (canalesProcesados + canalesEnEstaPlancha < canales) {
                 let esUltimoCanalTotal = (canalesProcesados + canalesEnEstaPlancha + 1 === canales);
                 let esPrimeraOÚltimaChapa = (numeroPlancha === 1 || esUltimoCanalTotal);
                 
-                let espacioRequerido = esPrimeraOÚltimaChapa ? 
-                    (valorEngrape + canalInclinado + canalAncho + bordeLimpio) : 
-                    (valorEngrape + canalInclinado + canalAncho + canalInclinado + valorEngrape);
+                // Calculamos cuánto ocupa el canal + su respectivo cierre
+                let espacioRequerido = canalAncho;
+                if (!esUltimoCanalTotal) {
+                    espacioRequerido += canalInclinado; // Si siguen más canales, añade una inclinada intermedia
+                }
                 
-                if (espacioRequerido <= espacioDisponible || canalesEnEstaPlancha === 0) {
+                // Añadimos el extremo final según corresponda para verificar si cabe en los 1200mm
+                let espacioConCierre = espacioRequerido + (esPrimeraOÚltimaChapa ? bordeLimpio : valorEngrape + canalInclinado);
+
+                if (espacioConCierre <= espacioDisponible || canalesEnEstaPlancha === 0) {
                     canalesEnEstaPlancha++;
-                    espacioDisponible -= (canalAncho + canalInclinado * 2); 
+                    espacioDisponible -= espacioRequerido;
                 } else {
                     break; 
                 }
             }
 
-            // Trazado acumulativo de los canales asignados a esta plancha
+            // Trazado acumulativo exacto (Un canal plano -> Una inclinada -> Un canal plano)
             for (let i = 0; i < canalesEnEstaPlancha; i++) {
                 m += canalAncho;
                 lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalAncho)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='col-espacio-corte'></span></div>`);
                 
+                // Solo añade la inclinada si NO es el último canal asignado a ESTA plancha
                 if (i < canalesEnEstaPlancha - 1) {
-                    m += canalInclinado;
-                    lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='col-espacio-corte'></span></div>`);
                     m += canalInclinado;
                     lineasPlancha.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${c++}</span><span class='col-datos-marca'>${Math.round(m)}</span><span class='col-espacio-corte'></span></div>`);
                 }
@@ -686,7 +690,7 @@ function calcular45() {
             let esUltimaPlancha = (canalesProcesados === canales);
             let esPrimeraPlancha = (numeroPlancha === 1);
 
-            // Reglas de cierre e inyección del último valor absoluto
+            // Reglas estrictas de cierre de corte
             let marcaCorteFinal = 0;
             if (esPrimeraPlancha || esUltimaPlancha) {
                 m += bordeLimpio;
@@ -713,7 +717,7 @@ function calcular45() {
             if (numeroPlancha > 25) break;
         }
 
-        // --- RENDERIZADO Y AGRUPACIÓN VISUAL SIN MÉTODOS DE RIESGO DE TEXTO ---
+        // --- RENDERIZADO Y AGRUPACIÓN VISUAL ---
         let b = 0;
         let conteoFilaRealPlancha = 1;
         let desarrolloRealCompra = 0;

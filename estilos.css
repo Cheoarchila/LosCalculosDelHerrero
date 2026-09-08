@@ -169,6 +169,16 @@ h1, h2, h3 {
     display: inline-block;
 }
 
+.icono-imagen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0; /* Evita que la imagen se deforme en pantallas chicas */
+}
+
+
 .texto-corte {
     color: #dc2626;
     font-weight: bold;

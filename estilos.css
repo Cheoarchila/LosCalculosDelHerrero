@@ -141,22 +141,36 @@ h1, h2, h3 {
     font-weight: bold;
     color: #0f766e;
 }
-/* Modificación de anchos fijos para la tabla de 45° con 3 columnas */
+/* ======================================================== */
+/* 5. CORREGIDO: ANCHOS FIJOS Y FILAS EN LINEA (3 COLS)    */
+/* ======================================================== */
+.fila-marca {
+    display: flex !important; /* Fuerza a que los elementos se pongan uno al lado del otro */
+    align-items: center;
+    margin-bottom: 4px;
+}
+
 .col-datos-medida {
-    width: 90px;         /* Columna de lo que se va sumando */
+    width: 90px !important;    /* Espacio para lo que se va sumando */
     color: #64748b;
     display: inline-block;
 }
 
 .col-datos-num {
-    width: 50px;         /* Columna del N° de marca */
+    width: 50px !important;    /* Espacio para el número de marca */
     color: #94a3b8;
     display: inline-block;
 }
 
 .col-datos-marca {
-    width: 110px;        /* Columna del total acumulado (Marca) */
+    width: 110px !important;   /* Espacio para el acumulado total */
     color: #1e293b;
     font-weight: bold;
     display: inline-block;
+}
+
+.texto-corte {
+    color: #dc2626;
+    font-weight: bold;
+    margin-left: 10px;
 }

@@ -225,6 +225,50 @@
         </div>
     </section>
 
+<!-- ====================================== -->
+<!-- PANTALLA 5: CALCULADORA TIPO V         -->
+<!-- ====================================== -->
+<section id="pantallaTipoV" class="oculto">
+    <button class="volver" onclick="abrirPantalla('pantallaAcanalados')">← Volver a Acanalados</button>
+    <h2>Calculadora Tipo V</h2>
+
+    <div class="fila">
+        <label for="anchoPlanchaV">Ancho de plancha:</label>
+        <input type="number" id="anchoPlanchaV" value="1200" step="1" onkeydown="return event.key !== '.' && event.key !== ','" onblur="verificarMedidaPlanchaV()">
+    </div>
+    <div class="fila">
+        <label for="medidaFinalV">Medida final:</label>
+        <input type="number" id="medidaFinalV" value="1000" step="1" onkeydown="return event.key !== '.' && event.key !== ','" onblur="verificarMedidaFinalV()">
+    </div>
+    <div class="fila">
+        <label for="canalesV">Cantidad de V:</label>
+        <input type="number" id="canalesV" value="2" step="1" onblur="verificarCanalesV()">
+    </div>
+    <div class="fila">
+        <label for="profundidadV">Profundidad (H):</label>
+        <input type="number" id="profundidadV" value="15" onblur="verificarProfundidadV()">
+    </div>
+    <div class="fila">
+        <label for="bordesV">Bordes:</label>
+        <input type="number" id="bordesV" value="20" onblur="verificarBordesV()">
+    </div>
+    <div class="fila">
+        <label for="espesorV">Espesor:</label>
+        <input type="number" id="espesorV" value="1" onblur="verificarEspesorV()">
+    </div>
+
+    <button type="button" class="btn-calcular" onclick="calcularTipoV()">Calcular Tipo V</button>
+
+    <h3>Resultado (Tipo V)</h3>
+    <p>Distancia entre V: <span id="distanciaV">-</span> mm</p>
+    <p>Desarrollo Total: <span id="desarrolloV">-</span> mm</p>
+
+    <div id="marcasV">
+        <h3>Marcas por Plancha (Tipo V)</h3>
+        <div id="listaMarcasV"></div>
+    </div>
+</section>
+    
     <!-- Vinculación del archivo lógico de programación -->
     <script src="script.js"></script>
 </body>

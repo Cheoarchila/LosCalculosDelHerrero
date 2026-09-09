@@ -23,6 +23,13 @@ let ultimaProfundidad45 = 15;
 let ultimoBorde45 = 20;
 let ultimoEspesor45 = 1;
 
+// Variables globales de respaldo para la pantalla de Tipo V
+let ultimaMedidaPlanchaV = 1200;
+let ultimaMedidaFinalV = 1000;
+let ultimoCanalCantidadV = 2;
+let ultimaProfundidadV = 15;
+let ultimoBordeV = 20;
+let ultimoEspesorV = 1;
 
 // Control de navegación entre pantallas (TU CÓDIGO ORIGINAL INTACTO)
 function abrirPantalla(idPantalla) {

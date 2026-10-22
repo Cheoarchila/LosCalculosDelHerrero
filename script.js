@@ -603,7 +603,7 @@ function calcular45() {
     const valorEngrape = Math.round(canalInclinado - 5);
 
     // Integración de fórmula de desarrollo neto
-    const desarrolloBase = ((bordes * 2) + (canalAncho * canales) + (canalInclinado * (canales - 1))) - ((canales + 1) * 2);
+    const desarrolloBase = ((bordes * 2) + (canalAnchoReal * canales) + (canalInclinadoReal * (canales - 1))) - ((canales + 1) * 2);
     const requiereEngrape = (desarrolloBase > anchoPlancha);
 
     // Encabezado con las 3 columnas tabulares

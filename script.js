@@ -758,7 +758,7 @@ function calcular45() {
         document.getElementById("desarrollo45").textContent = Math.round(desarrolloRealCompra);
     }
 
-    document.getElementById("canalAncho45").textContent = Math.round(canalAncho);
+    document.getElementById("canalAncho45").textContent = Math.round(canalAnchoReal);
     document.getElementById("canalInclinado45").textContent = Math.round(canalInclinado);
     document.getElementById("listaMarcas45").innerHTML = htmlFinal;
 

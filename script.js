@@ -626,7 +626,7 @@ function calcular45() {
             lineasMarcas.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalAncho)}</span><span class='col-datos-num'>${temporalContador++}</span><span class='col-datos-marca'>${Math.round(marca)}</span><span class='col-espacio-corte'></span></div>`);
             
             if (c < canales) {
-                marca += canalInclinado;
+                marca += canalInclinadoReal;
                 lineasMarcas.push(`<div class='fila-marca'><span class='col-datos-medida'>${Math.round(canalInclinado)}</span><span class='col-datos-num'>${temporalContador++}</span><span class='col-datos-marca'>${Math.round(marca)}</span><span class='col-espacio-corte'></span></div>`);
             }
         }

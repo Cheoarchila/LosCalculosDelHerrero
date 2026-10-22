@@ -596,7 +596,12 @@ function calcular45() {
 
     // Deducción milimétrica de tramos base (Ajustado para dar el entero exacto de tu libreta)
    const canalAncho = (medidaFinal - ((canales - 1) * profundidad)) / canales;
-    const canalInclinado = Math.round(profundidad * 1.414);
+    const canalInclinadoReal = Math.sqrt(
+    (profundidad * profundidad) +
+    (profundidad * profundidad)
+);
+
+const canalInclinado = Math.round(canalInclinadoReal);
     const bordeLimpio = bordes - espesor;
     const valorEngrape = Math.round(canalInclinado - 5);
 

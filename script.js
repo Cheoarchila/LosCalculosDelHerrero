@@ -806,3 +806,284 @@ function verificarEspesor45() {
     let valor = Number(campo.value);
     if (campo.value === "" || valor < 0) { alert("Medida inválida."); campo.value = ultimoEspesor45; } else { ultimoEspesor45 = valor; }
 }
+
+
+
+/* =====================================================
+   CALCULADORA TIPO V - PRIMERA VERSION
+   No modifica las calculadoras 90° ni 45° existentes
+   ===================================================== */
+
+function calcularTipoV() {
+    const anchoPlancha = Number(document.getElementById("anchoPlanchaV").value);
+    const medidaFinal = Number(document.getElementById("medidaFinalV").value);
+    const canales = Math.floor(Number(document.getElementById("canalesV").value));
+    const profundidad = Number(document.getElementById("profundidadV").value);
+    const bordes = Number(document.getElementById("bordesV").value);
+    const espesor = Number(document.getElementById("espesorV").value);
+
+    // Comprobar que los datos sean válidos.
+    if (
+        anchoPlancha < 1 ||
+        medidaFinal < 1 ||
+        canales < 1 ||
+        profundidad < 1 ||
+        bordes < 0 ||
+        espesor <= 0 ||
+        ![anchoPlancha, medidaFinal, canales, profundidad, bordes, espesor]
+            .every(Number.isFinite)
+    ) {
+        alert("Revisa las medidas ingresadas.");
+        return;
+    }
+
+    // Descuentos definidos para el taller.
+    const descuento90 = 2 * espesor;
+    const descuento45 = 1 * espesor;
+
+    // Longitud inclinada de cada lateral a 45 grados.
+    const lateralReal = Math.sqrt(
+        profundidad * profundidad +
+        profundidad * profundidad
+    );
+
+    // Espacio plano teórico entre las V y los extremos.
+    const distanciaReal =
+        (medidaFinal - (2 * profundidad * canales)) /
+        (canales + 1);
+
+    if (distanciaReal <= 0) {
+        alert("La medida final es demasiado pequeña para esas V.");
+        return;
+    }
+
+    // Cada tramo se agrega a la lista en el orden de las marcas.
+    const tramos = [];
+    let acumulado = 0;
+    let numeroMarca = 1;
+
+    function agregarTramo(nombre, longitud, tipo, descuento) {
+        const medidaMarca = longitud - descuento;
+
+        if (medidaMarca <= 0) {
+            throw new Error(
+                "Un tramo quedó en cero o negativo. Revisa el espesor y las medidas."
+            );
+        }
+
+        acumulado += medidaMarca;
+
+        tramos.push({
+            numero: numeroMarca++,
+            nombre: nombre,
+            tipo: tipo,
+            medida: medidaMarca,
+            acumulado: acumulado
+        });
+    }
+
+    try {
+        // Primera pestaña: doblez de 90 grados.
+        agregarTramo(
+            "Pestaña inicial",
+            bordes,
+            "90",
+            descuento90
+        );
+
+        for (let v = 1; v <= canales; v++) {
+            // Espacio plano antes de la V.
+            agregarTramo(
+                "Espacio antes de V " + v,
+                distanciaReal,
+                "plano",
+                descuento90
+            );
+
+            // Primer lateral de la V: 45 grados.
+            agregarTramo(
+                "Lateral 45° de V " + v,
+                lateralReal,
+                "45",
+                descuento45
+            );
+
+            // Fondo de la V: doblez de 90 grados.
+            agregarTramo(
+                "Fondo 90° de V " + v,
+                lateralReal,
+                "90",
+                descuento90
+            );
+
+            // Segundo lateral de la V: 45 grados.
+            agregarTramo(
+                "Lateral 45° de V " + v,
+                lateralReal,
+                "45",
+                descuento45
+            );
+        }
+
+        // Último espacio plano y pestaña final.
+        agregarTramo(
+            "Espacio final",
+            distanciaReal,
+            "plano",
+            descuento90
+        );
+
+        agregarTramo(
+            "Pestaña final",
+            bordes,
+            "90",
+            descuento90
+        );
+    } catch (error) {
+        alert(error.message);
+        return;
+    }
+
+    // El desarrollo total es la última marca acumulada.
+    document.getElementById("distanciaV").textContent =
+        Math.round(distanciaReal);
+
+    document.getElementById("desarrolloV").textContent =
+        Math.round(acumulado);
+
+    // Buscar el último tramo completo de 45° que cabe
+    // dentro del ancho de una plancha.
+    let indiceCorte = -1;
+
+    if (acumulado > anchoPlancha) {
+        for (let i = 0; i < tramos.length; i++) {
+            if (
+                tramos[i].tipo === "45" &&
+                tramos[i].acumulado <= anchoPlancha
+            ) {
+                indiceCorte = i;
+            }
+        }
+    }
+
+    // Mostrar las marcas acumuladas.
+    let html = `
+        <div class="fila-marca">
+            <span class="col-datos"><b>TRAMO</b></span>
+            <span class="col-datos-medida"><b>MEDIDA</b></span>
+            <span class="col-datos-marca"><b>ACUMULADO</b></span>
+        </div>
+    `;
+
+    tramos.forEach((tramo, indice) => {
+        const esCorte = indice === indiceCorte;
+
+        html += `
+            <div class="fila-marca">
+                <span class="col-datos">
+                    ${tramo.numero}.-) ${tramo.nombre}
+                </span>
+                <span class="col-datos-medida">
+                    ${tramo.medida.toFixed(2)}
+                </span>
+                <span class="col-datos-marca">
+                    ${tramo.acumulado.toFixed(2)}
+                </span>
+                ${esCorte
+                    ? "<span class='texto-corte'>◀ ✂ CORTE</span>"
+                    : ""}
+            </div>
+        `;
+    });
+
+    if (acumulado > anchoPlancha && indiceCorte === -1) {
+        html += `
+            <p class="texto-corte">
+                No se encontró un tramo completo de 45° antes del límite.
+            </p>
+        `;
+    }
+
+    document.getElementById("listaMarcasV").innerHTML = html;
+
+    // Guardar los últimos valores válidos.
+    ultimaMedidaPlanchaV = anchoPlancha;
+    ultimaMedidaFinalV = medidaFinal;
+    ultimoCanalCantidadV = canales;
+    ultimaProfundidadV = profundidad;
+    ultimoBordeV = bordes;
+    ultimoEspesorV = espesor;
+}
+
+// Validaciones de los campos Tipo V.
+function verificarMedidaPlanchaV() {
+    const c = document.getElementById("anchoPlanchaV");
+    const v = Number(c.value);
+
+    if (c.value === "" || !Number.isFinite(v) || v < 1) {
+        alert("Medida de plancha inválida.");
+        c.value = ultimaMedidaPlanchaV;
+    } else {
+        ultimaMedidaPlanchaV = v;
+    }
+}
+
+function verificarMedidaFinalV() {
+    const c = document.getElementById("medidaFinalV");
+    const v = Number(c.value);
+
+    if (c.value === "" || !Number.isFinite(v) || v < 1) {
+        alert("Medida final inválida.");
+        c.value = ultimaMedidaFinalV;
+    } else {
+        ultimaMedidaFinalV = v;
+    }
+}
+
+function verificarCanalesV() {
+    const c = document.getElementById("canalesV");
+    const v = Number(c.value);
+
+    if (c.value === "" || !Number.isInteger(v) || v < 1) {
+        alert("La cantidad de V debe ser un entero mayor que cero.");
+        c.value = ultimoCanalCantidadV;
+    } else {
+        ultimoCanalCantidadV = v;
+    }
+}
+
+function verificarProfundidadV() {
+    const c = document.getElementById("profundidadV");
+    const v = Number(c.value);
+
+    if (c.value === "" || !Number.isFinite(v) || v < 1) {
+        alert("Profundidad inválida.");
+        c.value = ultimaProfundidadV;
+    } else {
+        ultimaProfundidadV = v;
+    }
+}
+
+function verificarBordesV() {
+    const c = document.getElementById("bordesV");
+    const v = Number(c.value);
+
+    if (c.value === "" || !Number.isFinite(v) || v < 0) {
+        alert("Bordes inválidos.");
+        c.value = ultimoBordeV;
+    } else {
+        ultimoBordeV = v;
+    }
+}
+
+function verificarEspesorV() {
+    const c = document.getElementById("espesorV");
+    const v = Number(c.value);
+
+    if (c.value === "" || !Number.isFinite(v) || v <= 0) {
+        alert("Espesor inválido.");
+        c.value = ultimoEspesorV;
+    } else {
+        ultimoEspesorV = v;
+    }
+}

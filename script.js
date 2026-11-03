@@ -875,7 +875,7 @@ function calcularTipoV() {
     }
 
     // Borde inicial.
-    agregarTramo(bordes);
+    agregarTramo(bordes - 1);
 
     // Espacio inicial, laterales de cada V y espacios intermedios.
     for (let v = 1; v <= canales; v++) {
@@ -886,7 +886,7 @@ function calcularTipoV() {
 
     // Espacio final y borde final.
     agregarTramo(distanciaReal);
-    agregarTramo(bordes);
+    agregarTramo(bordes - 1);
 
     // Mostrar resultados.
     document.getElementById("distanciaV").textContent =

@@ -810,155 +810,98 @@ function verificarEspesor45() {
 
 
 /* =====================================================
-   CALCULADORA TIPO V - PRIMERA VERSION
-   No modifica las calculadoras 90° ni 45° existentes
+   CALCULADORA TIPO V
+   Geometría de dos laterales a 45°, sin fondo horizontal
    ===================================================== */
 
 function calcularTipoV() {
     const anchoPlancha = Number(document.getElementById("anchoPlanchaV").value);
     const medidaFinal = Number(document.getElementById("medidaFinalV").value);
-    const canales = Math.floor(Number(document.getElementById("canalesV").value));
+    const canales = Number(document.getElementById("canalesV").value);
     const profundidad = Number(document.getElementById("profundidadV").value);
     const bordes = Number(document.getElementById("bordesV").value);
     const espesor = Number(document.getElementById("espesorV").value);
 
-    // Comprobar que los datos sean válidos.
+    // Validar los datos.
     if (
+        ![anchoPlancha, medidaFinal, canales, profundidad, bordes, espesor].every(Number.isFinite) ||
         anchoPlancha < 1 ||
         medidaFinal < 1 ||
+        !Number.isInteger(canales) ||
         canales < 1 ||
         profundidad < 1 ||
         bordes < 0 ||
-        espesor <= 0 ||
-        ![anchoPlancha, medidaFinal, canales, profundidad, bordes, espesor]
-            .every(Number.isFinite)
+        espesor <= 0
     ) {
         alert("Revisa las medidas ingresadas.");
         return;
     }
 
-    // Descuentos definidos para el taller.
-    const descuento90 = 2 * espesor;
-    const descuento45 = 1 * espesor;
+    // Geometría de la V.
+    const lateralReal = profundidad * Math.sqrt(2);
 
-    // Longitud inclinada de cada lateral a 45 grados.
-    const lateralReal = Math.sqrt(
-        profundidad * profundidad +
-        profundidad * profundidad
-    );
+    // Reducción horizontal por cada V.
+    const reduccionV = 2 * profundidad * (Math.sqrt(2) - 1);
 
-    // Espacio plano teórico entre las V y los extremos.
+    // Distancia plana entre las V y los extremos.
     const distanciaReal =
-        (medidaFinal - (2 * profundidad * canales)) /
-        (canales + 1);
+        (medidaFinal - (2 * profundidad * canales)) / (canales + 1);
 
     if (distanciaReal <= 0) {
         alert("La medida final es demasiado pequeña para esas V.");
         return;
     }
 
-    // Cada tramo se agrega a la lista en el orden de las marcas.
+    // Desarrollo total, sin descuentos por espesor.
+    const desarrollo =
+        (bordes * 2) +
+        medidaFinal +
+        (canales * reduccionV);
+
+    // Construcción de las marcas.
     const tramos = [];
     let acumulado = 0;
     let numeroMarca = 1;
 
-    function agregarTramo(nombre, longitud, tipo, descuento) {
-        const medidaMarca = longitud - descuento;
-
-        if (medidaMarca <= 0) {
-            throw new Error(
-                "Un tramo quedó en cero o negativo. Revisa el espesor y las medidas."
-            );
-        }
-
-        acumulado += medidaMarca;
+    function agregarTramo(medida, esLateralV = false) {
+        acumulado += medida;
 
         tramos.push({
             numero: numeroMarca++,
-            nombre: nombre,
-            tipo: tipo,
-            medida: medidaMarca,
-            acumulado: acumulado
+            medida: medida,
+            acumulado: acumulado,
+            esLateralV: esLateralV
         });
     }
 
-    try {
-        // Primera pestaña: doblez de 90 grados.
-        agregarTramo(
-            "Pestaña inicial",
-            bordes,
-            "90",
-            descuento90
-        );
+    // Borde inicial.
+    agregarTramo(bordes);
 
-        for (let v = 1; v <= canales; v++) {
-            // Espacio plano antes de la V.
-            agregarTramo(
-                "Espacio antes de V " + v,
-                distanciaReal,
-                "plano",
-                descuento90
-            );
-
-            // Primer lateral de la V: 45 grados.
-            agregarTramo(
-                "Lateral 45° de V " + v,
-                lateralReal,
-                "45",
-                descuento45
-            );
-
-            // Fondo de la V: doblez de 90 grados.
-            agregarTramo(
-                "Fondo 90° de V " + v,
-                lateralReal,
-                "90",
-                descuento90
-            );
-
-            // Segundo lateral de la V: 45 grados.
-            agregarTramo(
-                "Lateral 45° de V " + v,
-                lateralReal,
-                "45",
-                descuento45
-            );
-        }
-
-        // Último espacio plano y pestaña final.
-        agregarTramo(
-            "Espacio final",
-            distanciaReal,
-            "plano",
-            descuento90
-        );
-
-        agregarTramo(
-            "Pestaña final",
-            bordes,
-            "90",
-            descuento90
-        );
-    } catch (error) {
-        alert(error.message);
-        return;
+    // Espacio inicial, laterales de cada V y espacios intermedios.
+    for (let v = 1; v <= canales; v++) {
+        agregarTramo(distanciaReal);
+        agregarTramo(lateralReal, true);
+        agregarTramo(lateralReal, true);
     }
 
-    // El desarrollo total es la última marca acumulada.
+    // Espacio final y borde final.
+    agregarTramo(distanciaReal);
+    agregarTramo(bordes);
+
+    // Mostrar resultados.
     document.getElementById("distanciaV").textContent =
         Math.round(distanciaReal);
 
     document.getElementById("desarrolloV").textContent =
-        Math.round(acumulado);
+        Math.round(desarrollo);
 
-    // Buscar el último tramo completo de 45° que cabe
-    // dentro del ancho de una plancha.
+    // Buscar el último lateral completo que cabe en la plancha.
     let indiceCorte = -1;
 
-    if (acumulado > anchoPlancha) {
+    if (desarrollo > anchoPlancha) {
         for (let i = 0; i < tramos.length; i++) {
             if (
-                tramos[i].tipo === "45" &&
+                tramos[i].esLateralV &&
                 tramos[i].acumulado <= anchoPlancha
             ) {
                 indiceCorte = i;
@@ -966,40 +909,44 @@ function calcularTipoV() {
         }
     }
 
-    // Mostrar las marcas acumuladas.
+    // Tabla de marcas: Medidas / N.º / Marcas.
     let html = `
         <div class="fila-marca">
-            <span class="col-datos"><b>TRAMO</b></span>
-            <span class="col-datos-medida"><b>MEDIDA</b></span>
-            <span class="col-datos-marca"><b>ACUMULADO</b></span>
+            <span class="col-datos-medida"><b>MEDIDAS</b></span>
+            <span class="col-datos-num"><b>N.º</b></span>
+            <span class="col-datos-marca"><b>MARCAS</b></span>
         </div>
     `;
 
     tramos.forEach((tramo, indice) => {
-        const esCorte = indice === indiceCorte;
+        const resaltar = tramo.numero % 3 === 0
+            ? "font-weight:bold;"
+            : "";
+
+        const avisoCorte = indice === indiceCorte
+            ? "<span class='texto-corte'>◀ ✂ CORTE</span>"
+            : "";
 
         html += `
-            <div class="fila-marca">
-                <span class="col-datos">
-                    ${tramo.numero}.-) ${tramo.nombre}
-                </span>
+            <div class="fila-marca" style="${resaltar}">
                 <span class="col-datos-medida">
-                    ${tramo.medida.toFixed(2)}
+                    ${Math.round(tramo.medida)}
+                </span>
+                <span class="col-datos-num">
+                    ${tramo.numero}
                 </span>
                 <span class="col-datos-marca">
-                    ${tramo.acumulado.toFixed(2)}
+                    ${Math.round(tramo.acumulado)}
                 </span>
-                ${esCorte
-                    ? "<span class='texto-corte'>◀ ✂ CORTE</span>"
-                    : ""}
+                ${avisoCorte}
             </div>
         `;
     });
 
-    if (acumulado > anchoPlancha && indiceCorte === -1) {
+    if (desarrollo > anchoPlancha && indiceCorte === -1) {
         html += `
             <p class="texto-corte">
-                No se encontró un tramo completo de 45° antes del límite.
+                No hay un lateral completo de V que quepa antes del límite de la plancha.
             </p>
         `;
     }
@@ -1014,6 +961,7 @@ function calcularTipoV() {
     ultimoBordeV = bordes;
     ultimoEspesorV = espesor;
 }
+
 
 // Validaciones de los campos Tipo V.
 function verificarMedidaPlanchaV() {

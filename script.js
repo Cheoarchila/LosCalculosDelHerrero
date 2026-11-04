@@ -860,16 +860,15 @@ function calcularTipoV() {
     let acumulado = 0;
     let numeroMarca = 1;
 
-    function agregarTramo(medida, esLateralV = false) {
-        acumulado += medida;
-
-        tramos.push({
-            numero: numeroMarca++,
-            medida: medida,
-            acumulado: acumulado,
-            esLateralV: esLateralV
-        });
-    }
+   function agregarTramo(medida, esFondoV = false) {
+    acumulado += medida;
+    tramos.push({
+        numero: numeroMarca++,
+        medida: medida,
+        acumulado: acumulado,
+        esFondoV: esFondoV
+    });
+}
 
     // Borde inicial.
     agregarTramo(bordes - 1);
@@ -878,7 +877,7 @@ function calcularTipoV() {
     for (let v = 1; v <= canales; v++) {
         agregarTramo(distanciaReal);
         agregarTramo(lateralReal, true);
-        agregarTramo(lateralReal, true);
+        agregarTramo(lateralReal);
     }
 
     // Espacio final y borde final.
@@ -932,8 +931,8 @@ function calcularTipoV() {
                 <span class="col-datos-num">
                     ${tramo.numero}
                 </span>
-                <span class="col-datos-marca">
-                    ${Math.round(tramo.acumulado)}
+               <span class="col-datos-marca">
+                ${Math.round(tramo.acumulado)}${tramo.esFondoV ? " ←" : ""}
                 </span>
                 ${avisoCorte}
             </div>

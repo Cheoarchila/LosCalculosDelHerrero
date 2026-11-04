@@ -853,10 +853,7 @@ function calcularTipoV() {
     }
 
     // Desarrollo total, sin descuentos por espesor.
-    const desarrollo =
-        (bordes * 2) +
-        medidaFinal +
-        (canales * reduccionV);
+    const desarrollo = ((bordes - 1) * 2) + medidaFinal + (canales * reduccionV);
 
     // Construcción de las marcas.
     const tramos = [];

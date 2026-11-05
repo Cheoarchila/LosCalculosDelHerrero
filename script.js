@@ -1044,4 +1044,3 @@ function calcularTipoV() {
     ultimoBordeV = bordes;
     ultimoEspesorV = espesor;
 }
-}

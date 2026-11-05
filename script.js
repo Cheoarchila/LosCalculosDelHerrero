@@ -877,7 +877,7 @@ function calcularTipoV() {
     for (let v = 1; v <= canales; v++) {
         agregarTramo(distanciaReal);
         agregarTramo(lateralReal, true);
-        agregarTramo(lateralReal, true);
+        agregarTramo(lateralReal);
     }
 
     // Espacio final y borde final.

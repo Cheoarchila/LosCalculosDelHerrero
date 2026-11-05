@@ -814,6 +814,7 @@ function verificarEspesor45() {
    Geometría de dos laterales a 45°, sin fondo horizontal
    ===================================================== */
 
+
 function calcularTipoV() {
     const anchoPlancha = Number(document.getElementById("anchoPlanchaV").value);
     const medidaFinal = Number(document.getElementById("medidaFinalV").value);
@@ -822,7 +823,7 @@ function calcularTipoV() {
     const bordes = Number(document.getElementById("bordesV").value);
     const espesor = Number(document.getElementById("espesorV").value);
 
-    // Validar los datos.
+    // VALIDACIÓN
     if (
         ![anchoPlancha, medidaFinal, canales, profundidad, bordes, espesor].every(Number.isFinite) ||
         anchoPlancha < 1 ||
@@ -837,7 +838,7 @@ function calcularTipoV() {
         return;
     }
 
-    // Geometría de la V.
+    // GEOMETRÍA DE LA V
     const lateralReal = profundidad * Math.sqrt(2);
     const reduccionV = 2 * profundidad * (Math.sqrt(2) - 1);
 
@@ -849,7 +850,7 @@ function calcularTipoV() {
         return;
     }
 
-    // Desarrollo total.
+    // DESARROLLO TOTAL
     const desarrollo =
         ((bordes - 1) * 2) + medidaFinal + (canales * reduccionV);
 
@@ -859,13 +860,11 @@ function calcularTipoV() {
     document.getElementById("desarrolloV").textContent =
         Math.round(desarrollo);
 
-    // Construcción de los tramos.
+    // CONSTRUCCIÓN DE LOS TRAMOS
     const tramos = [];
-    let numeroMarca = 1;
 
     function agregarTramo(medida, tipo = "normal") {
         tramos.push({
-            numero: numeroMarca++,
             medida: medida,
             tipo: tipo
         });
@@ -875,117 +874,169 @@ function calcularTipoV() {
 
     for (let v = 1; v <= canales; v++) {
         agregarTramo(distanciaReal, "normal");
-
         agregarTramo(lateralReal, "primerLateral");
-
         agregarTramo(lateralReal, "segundoLateral");
     }
 
     agregarTramo(distanciaReal, "normal");
     agregarTramo(bordes - 1, "borde");
 
-// ------------------------------------------------
-// FRACCIONAMIENTO DE PLANCHAS TIPO V
-// ------------------------------------------------
+    // FRACCIONAMIENTO DE PLANCHAS
+    const planchas = [];
 
-let planchas = [];
-let indice = 0;
-let medidaReferencia = 0;
-let repetirPrimerLateral = false;
+    let indice = 0;
+    let medidaReferencia = 0;
+    let primeraPlancha = true;
 
-while (indice < tramos.length) {
+    while (indice < tramos.length) {
 
-    let contenido = [];
-    let acumulado = medidaReferencia;
-    let numeroLocal = 1;
-    let inicio = indice;
+        let acumulado = medidaReferencia;
+        let contenido = [];
+        let numeroLocal = 1;
 
-    // Primera marca de la plancha.
-    contenido.push({
-        numero: numeroLocal++,
-        medida: 0,
-        marca: medidaReferencia,
-        corte: false
-    });
-
-    // Si la plancha anterior terminó en el primer lateral,
-    // repetirlo como referencia, sin sumarlo nuevamente.
-    if (repetirPrimerLateral) {
-
-        contenido.push({
-            numero: numeroLocal++,
-            medida: tramos[indice].medida,
-            marca: medidaReferencia,
-            corte: false
-        });
-
-        repetirPrimerLateral = false;
-    }
-
-    let ultimoIndiceValido = -1;
-    let acumuladoValido = 0;
-
-    // Buscar el último punto de corte permitido.
-    for (let j = inicio; j < tramos.length; j++) {
-
-        let nuevaMedida = acumulado + tramos[j].medida;
-
-        if (nuevaMedida > anchoPlancha) {
-            break;
+        // En las planchas siguientes se repite
+        // únicamente la última marca como referencia.
+        if (!primeraPlancha) {
+            contenido.push({
+                numero: numeroLocal++,
+                medida: medidaReferencia,
+                marca: medidaReferencia,
+                referencia: true,
+                corte: false
+            });
         }
 
-        acumulado = nuevaMedida;
+        // Comprobar si todos los tramos restantes caben.
+        let totalRestante = acumulado;
 
-        if (
-            tramos[j].tipo === "primerLateral" ||
-            tramos[j].tipo === "segundoLateral" ||
-            j === tramos.length - 1
-        ) {
-            ultimoIndiceValido = j;
-            acumuladoValido = acumulado;
+        for (let j = indice; j < tramos.length; j++) {
+            totalRestante += tramos[j].medida;
         }
-    }
 
-    if (ultimoIndiceValido === -1) {
-        alert(
-            "No hay espacio suficiente en la plancha para continuar con un tramo completo."
-        );
-        return;
-    }
+        let ultimoIndiceValido = -1;
+        let hayCorte = totalRestante > anchoPlancha;
 
-    // Construir las marcas.
-    acumulado = medidaReferencia;
+        if (!hayCorte) {
+            ultimoIndiceValido = tramos.length - 1;
 
-    for (let j = inicio; j <= ultimoIndiceValido; j++) {
+        } else {
+            let ultimoPrimerLateral = -1;
+            let ultimoSegundoLateral = -1;
+            let sumaTemporal = acumulado;
 
-        acumulado += tramos[j].medida;
+            // Buscar los puntos de corte que caben.
+            for (let j = indice; j < tramos.length; j++) {
 
-        contenido.push({
-            numero: numeroLocal++,
-            medida: tramos[j].medida,
-            marca: acumulado,
-            corte: j === ultimoIndiceValido
+                const nuevaMedida = sumaTemporal + tramos[j].medida;
+
+                if (nuevaMedida > anchoPlancha) {
+                    break;
+                }
+
+                sumaTemporal = nuevaMedida;
+
+                if (tramos[j].tipo === "primerLateral") {
+                    ultimoPrimerLateral = j;
+                }
+
+                if (tramos[j].tipo === "segundoLateral") {
+                    ultimoSegundoLateral = j;
+                }
+            }
+
+            // Preferir cortar en el primer lateral
+            // para completar la V en la siguiente plancha.
+            if (ultimoPrimerLateral !== -1) {
+                ultimoIndiceValido = ultimoPrimerLateral;
+
+            } else if (ultimoSegundoLateral !== -1) {
+                ultimoIndiceValido = ultimoSegundoLateral;
+            }
+        }
+
+        if (ultimoIndiceValido === -1) {
+            alert("No hay espacio suficiente para continuar con un tramo completo.");
+            return;
+        }
+
+        // CONSTRUIR LAS MARCAS
+        for (let j = indice; j <= ultimoIndiceValido; j++) {
+
+            acumulado += tramos[j].medida;
+
+            contenido.push({
+                numero: numeroLocal++,
+                medida: tramos[j].medida,
+                marca: acumulado,
+                referencia: false,
+                corte: hayCorte && j === ultimoIndiceValido
+            });
+        }
+
+        planchas.push({
+            contenido: contenido
         });
-    }
 
-    planchas.push({
-        contenido: contenido,
-        ultimoTipo: tramos[ultimoIndiceValido].tipo
-    });
-
-    // Guardar la referencia para la siguiente plancha.
-    medidaReferencia = tramos[ultimoIndiceValido].medida;
-
-    // Continuar desde el siguiente tramo.
-    indice = ultimoIndiceValido + 1;
-
-    // Si el corte ocurrió en el primer lateral,
-    // repetirlo como referencia en la siguiente plancha.
-    if (
-        tramos[ultimoIndiceValido].tipo === "primerLateral" &&
-        indice < tramos.length
-    ) {
-        repetirPrimerLateral = true;
+        // PREPARAR LA SIGUIENTE PLANCHA
+        medidaReferencia = tramos[ultimoIndiceValido].medida;
         indice = ultimoIndiceValido + 1;
+        primeraPlancha = false;
     }
+
+    // PRESENTACIÓN DE RESULTADOS
+    let resultadoHTML = "";
+
+    planchas.forEach((plancha, indicePlancha) => {
+
+        resultadoHTML += `
+            <h3>Plancha ${indicePlancha + 1}</h3>
+
+            <table class="tabla-marcas">
+                <thead>
+                    <tr>
+                        <th>MEDIDAS</th>
+                        <th>N°</th>
+                        <th>MARCAS</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        plancha.contenido.forEach(fila => {
+
+            const medida = Math.round(fila.medida);
+            const marca = Math.round(fila.marca);
+
+            const marcaHTML =
+                fila.numero % 3 === 0
+                    ? `<strong>${marca}</strong>`
+                    : marca;
+
+            resultadoHTML += `
+                <tr>
+                    <td>${medida}</td>
+                    <td>${fila.numero}</td>
+                    <td>
+                        ${marcaHTML}
+                        ${fila.corte ? "<strong> CORTE</strong>" : ""}
+                    </td>
+                </tr>
+            `;
+        });
+
+        resultadoHTML += `
+                </tbody>
+            </table>
+        `;
+    });
+
+    document.getElementById("listaMarcasV").innerHTML = resultadoHTML;
+
+    // GUARDAR LOS ÚLTIMOS VALORES
+    ultimaMedidaPlanchaV = anchoPlancha;
+    ultimaMedidaFinalV = medidaFinal;
+    ultimoCanalCantidadV = canales;
+    ultimaProfundidadV = profundidad;
+    ultimoBordeV = bordes;
+    ultimoEspesorV = espesor;
 }

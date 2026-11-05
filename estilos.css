@@ -167,6 +167,8 @@ h1, h2, h3 {
     color: #1e293b;
     font-weight: bold;
     display: inline-block;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
 }
 
 .icono-imagen {

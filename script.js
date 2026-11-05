@@ -884,14 +884,14 @@ function calcularTipoV() {
     agregarTramo(distanciaReal, "normal");
     agregarTramo(bordes - 1, "borde");
 
-    // ------------------------------------------------
-    // ------------------------------------------------
+// ------------------------------------------------
 // FRACCIONAMIENTO DE PLANCHAS TIPO V
 // ------------------------------------------------
 
 let planchas = [];
 let indice = 0;
 let medidaReferencia = 0;
+let repetirPrimerLateral = false;
 
 while (indice < tramos.length) {
 
@@ -907,6 +907,20 @@ while (indice < tramos.length) {
         marca: medidaReferencia,
         corte: false
     });
+
+    // Si la plancha anterior terminó en el primer lateral,
+    // repetirlo como referencia, sin sumarlo nuevamente.
+    if (repetirPrimerLateral) {
+
+        contenido.push({
+            numero: numeroLocal++,
+            medida: tramos[indice].medida,
+            marca: medidaReferencia,
+            corte: false
+        });
+
+        repetirPrimerLateral = false;
+    }
 
     let ultimoIndiceValido = -1;
     let acumuladoValido = 0;
@@ -959,92 +973,19 @@ while (indice < tramos.length) {
         ultimoTipo: tramos[ultimoIndiceValido].tipo
     });
 
-    // La última medida realizada será la referencia
-    // de la siguiente plancha.
+    // Guardar la referencia para la siguiente plancha.
     medidaReferencia = tramos[ultimoIndiceValido].medida;
 
-    // Continuar con el siguiente tramo.
+    // Continuar desde el siguiente tramo.
     indice = ultimoIndiceValido + 1;
-}
-        // Si se cortó en el primer lateral,
-        // la siguiente plancha debe completar esa V.
-        if (
-            tramos[ultimoIndiceValido].tipo === "primerLateral" &&
-            indice < tramos.length
-        ) {
-            // Se vuelve a incluir el primer lateral
-            // para formar la V completa en la nueva plancha.
-            indice = ultimoIndiceValido;
-        }
+
+    // Si el corte ocurrió en el primer lateral,
+    // repetirlo como referencia en la siguiente plancha.
+    if (
+        tramos[ultimoIndiceValido].tipo === "primerLateral" &&
+        indice < tramos.length
+    ) {
+        repetirPrimerLateral = true;
+        indice = ultimoIndiceValido + 1;
     }
-
-    // ------------------------------------------------
-    // MOSTRAR TODAS LAS PLANCHAS
-    // ------------------------------------------------
-
-    let html = "";
-
-    planchas.forEach((plancha, indicePlancha) => {
-
-        let titulo = `--- PLANCHA ${indicePlancha + 1} ---`;
-
-        if (indicePlancha === planchas.length - 1 && planchas.length > 1) {
-            titulo = `--- PLANCHA ${indicePlancha + 1} (SOBRANTE) ---`;
-        } else if (
-            indicePlancha > 0 &&
-            indicePlancha < planchas.length - 1
-        ) {
-            titulo = `--- PLANCHA ${indicePlancha + 1} ---`;
-        }
-
-        html += `<div class="titulo-plancha">${titulo}</div>`;
-
-        html += `
-            <div class="fila-marca">
-                <span class="col-datos-medida"><b>MEDIDAS</b></span>
-                <span class="col-datos-num"><b>N.º</b></span>
-                <span class="col-datos-marca"><b>MARCAS</b></span>
-                <span></span>
-            </div>
-        `;
-
-        plancha.contenido.forEach((marca, i) => {
-
-            const resaltar = marca.numero % 3 === 0
-                ? "font-weight:bold;"
-                : "";
-
-            const avisoCorte = marca.corte
-                ? "<span class='texto-corte'>◀ ✂ CORTE</span>"
-                : "";
-
-            html += `
-                <div class="fila-marca" style="${resaltar}">
-                    <span class="col-datos-medida">
-                        ${i === 0 ? "" : Math.round(marca.medida)}
-                    </span>
-
-                    <span class="col-datos-num">
-                        ${marca.numero}
-                    </span>
-
-                    <span class="col-datos-marca">
-                        ${Math.round(marca.marca)}
-                    </span>
-
-                    ${avisoCorte}
-                </div>
-            `;
-        });
-    });
-
-    document.getElementById("listaMarcasV").innerHTML = html;
-
-    // Guardar los últimos valores válidos.
-    ultimaMedidaPlanchaV = anchoPlancha;
-    ultimaMedidaFinalV = medidaFinal;
-    ultimoCanalCantidadV = canales;
-    ultimaProfundidadV = profundidad;
-    ultimoBordeV = bordes;
-    ultimoEspesorV = espesor;
 }

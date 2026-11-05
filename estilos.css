@@ -1,17 +1,20 @@
+
 /* ======================================================== */
 /* 1. TIPOGRAFÍAS Y GENERALES                               */
 /* ======================================================== */
-h1, h2, h3 { 
-    font-family: sans-serif; 
+
+h1, h2, h3 {
+    font-family: sans-serif;
 }
 
-.oculto { 
-    display: none !important; 
+.oculto {
+    display: none !important;
 }
 
 /* ======================================================== */
 /* 2. COMPONENTES DE MENÚ Y TARJETAS                        */
 /* ======================================================== */
+
 .tarjeta {
     cursor: pointer;
     border: 1px solid #cbd5e1;
@@ -25,61 +28,64 @@ h1, h2, h3 {
     font-family: sans-serif;
 }
 
-.tarjeta:hover { 
-    background-color: #f1f5f9; 
+.tarjeta:hover {
+    background-color: #f1f5f9;
 }
 
-.icono { 
-    font-size: 2rem; 
+.icono {
+    font-size: 2rem;
 }
 
-.volver { 
-    cursor: pointer; 
-    margin-bottom: 15px; 
-    padding: 5px 10px; 
-    font-family: sans-serif; 
+.volver {
+    cursor: pointer;
+    margin-bottom: 15px;
+    padding: 5px 10px;
+    font-family: sans-serif;
 }
 
 /* ======================================================== */
-/* 3. FORMULARIOS (COLUMNAS COMPACTAS Y ALINEADAS)          */
+/* 3. FORMULARIOS                                           */
 /* ======================================================== */
-.fila { 
-    margin-bottom: 12px; 
-    font-family: sans-serif; 
-    display: flex;                  
-    align-items: center;            
-    justify-content: flex-start;    /* Empuja el input hacia la etiqueta */
-    gap: 15px;                      /* Espacio fijo exacto entre la etiqueta y el cuadro */
+
+.fila {
+    margin-bottom: 12px;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
 }
 
-.fila label { 
-    font-weight: bold; 
-    white-space: nowrap;            
-    width: 160px;                   /* Ancho fijo para la etiqueta */
+.fila label {
+    font-weight: bold;
+    white-space: nowrap;
+    width: 160px;
     display: inline-block;
 }
 
-.fila input { 
-    width: 100px;                   /* Cuadros de texto compactos al 50% */
-    padding: 6px; 
-    box-sizing: border-box; 
-    text-align: center;             
+.fila input {
+    width: 100px;
+    padding: 6px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .btn-calcular {
-    width: 100%; 
-    padding: 10px; 
-    font-weight: bold; 
+    width: 100%;
+    padding: 10px;
+    font-weight: bold;
     margin-top: 10px;
     margin-bottom: 15px;
     cursor: pointer;
 }
 
 /* ======================================================== */
-/* 4. SECCIÓN DE RESULTADOS Y MARCAS EN PLANCHA              */
+/* 4. SECCIÓN DE RESULTADOS                                 */
 /* ======================================================== */
-#listaMarcas {
-    font-family: monospace; 
+
+#listaMarcas,
+#listaMarcasV {
+    font-family: monospace;
     font-size: 1.1rem;
     margin-top: 15px;
     background-color: #f8fafc;
@@ -95,14 +101,48 @@ h1, h2, h3 {
     color: #1e293b;
 }
 
+/* ======================================================== */
+/* 5. FILAS Y ALINEACIÓN DE LAS MARCAS                      */
+/* ======================================================== */
+
 .fila-marca {
     display: flex;
     align-items: center;
     line-height: 1.6;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
+    white-space: nowrap;
 }
 
-/* Anchos fijos idénticos para lograr 3 columnas tabulares perfectas */
+/* Columnas alineadas en las tres calculadoras */
+
+.col-datos-medida,
+.col-datos-num,
+.col-datos-marca {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+}
+
+.col-datos-medida {
+    width: 90px;
+    color: #64748b;
+}
+
+.col-datos-num {
+    width: 50px;
+    color: #94a3b8;
+}
+
+.col-datos-marca {
+    width: 110px;
+    color: #1e293b;
+    font-weight: bold;
+}
+
+/* Encabezados */
+
 .col-encabezado {
     width: 130px;
     color: #64748b;
@@ -114,61 +154,39 @@ h1, h2, h3 {
     color: #1e293b;
 }
 
-/* Columna central fija para que el corte no empuje al control */
+/* ======================================================== */
+/* 6. AVISO DE CORTE                                        */
+/* ======================================================== */
+
 .col-espacio-corte {
     width: 110px;
     display: inline-block;
+    flex-shrink: 0;
 }
 
-/* Aviso de corte alineado y limpio SIN COLOR DE FONDO (Forzado) */
 .texto-corte {
-    background: transparent !important;   /* Elimina cualquier color o rastro de fondo */
+    background: transparent !important;
     background-color: transparent !important;
-    box-shadow: none !important;          /* Quita cualquier sombra residual */
-    padding: 0 !important;                /* Quita los márgenes internos que creaban el rectángulo */
-    color: #ef4444 !important;            /* Mantiene solo las letras y la tijera en rojo */
+    box-shadow: none !important;
+    padding: 0 !important;
+    color: #dc2626 !important;
     font-weight: bold;
     width: 110px;
     display: inline-block;
     text-align: center;
     font-size: 0.9rem;
     font-family: monospace;
+    margin-left: 0;
+    flex-shrink: 0;
 }
 
-
+/* ======================================================== */
+/* 7. OTROS COMPONENTES                                     */
+/* ======================================================== */
 
 .col-control {
     font-weight: bold;
     color: #0f766e;
-}
-/* ======================================================== */
-/* 5. CORREGIDO: ANCHOS FIJOS Y FILAS EN LINEA (3 COLS)    */
-/* ======================================================== */
-.fila-marca {
-    display: flex !important; /* Fuerza a que los elementos se pongan uno al lado del otro */
-    align-items: center;
-    margin-bottom: 4px;
-}
-
-.col-datos-medida {
-    width: 90px !important;    /* Espacio para lo que se va sumando */
-    color: #64748b;
-    display: inline-block;
-}
-
-.col-datos-num {
-    width: 50px !important;    /* Espacio para el número de marca */
-    color: #94a3b8;
-    display: inline-block;
-}
-
-.col-datos-marca {
-    width: 110px !important;   /* Espacio para el acumulado total */
-    color: #1e293b;
-    font-weight: bold;
-    display: inline-block;
-    text-align: right;
-    font-variant-numeric: tabular-nums;
 }
 
 .icono-imagen {
@@ -177,12 +195,27 @@ h1, h2, h3 {
     justify-content: center;
     width: 45px;
     height: 45px;
-    flex-shrink: 0; /* Evita que la imagen se deforme en pantallas chicas */
+    flex-shrink: 0;
 }
 
+/* ======================================================== */
+/* 8. ALINEACIÓN ESPECIAL PARA TIPO V                       */
+/* ======================================================== */
 
-.texto-corte {
+#listaMarcasV .fila-marca {
+    display: grid !important;
+    grid-template-columns: 90px 50px 110px 110px;
+    align-items: center;
+    column-gap: 0;
+    white-space: nowrap;
+}
+
+#listaMarcasV .texto-corte {
+    width: 110px;
+    margin-left: 0;
+    text-align: center;
+    display: inline-block;
     color: #dc2626;
     font-weight: bold;
-    margin-left: 10px;
+    font-size: 0.9rem;
 }

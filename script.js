@@ -839,11 +839,8 @@ function calcularTipoV() {
 
     // Geometría de la V.
     const lateralReal = profundidad * Math.sqrt(2);
-
-    // Reducción horizontal por cada V.
     const reduccionV = 2 * profundidad * (Math.sqrt(2) - 1);
 
-    // Distancia plana entre las V y los extremos.
     const distanciaReal =
         (medidaFinal - (2 * profundidad * canales)) / (canales + 1);
 
@@ -852,100 +849,190 @@ function calcularTipoV() {
         return;
     }
 
-    // Desarrollo total, sin descuentos por espesor.
-    const desarrollo = ((bordes - 1) * 2) + medidaFinal + (canales * reduccionV);
+    // Desarrollo total.
+    const desarrollo =
+        ((bordes - 1) * 2) + medidaFinal + (canales * reduccionV);
 
-    // Construcción de las marcas.
-    const tramos = [];
-    let acumulado = 0;
-    let numeroMarca = 1;
-
-   function agregarTramo(medida, esFondoV = false) {
-    acumulado += medida;
-    tramos.push({
-        numero: numeroMarca++,
-        medida: medida,
-        acumulado: acumulado,
-        esFondoV: esFondoV
-    });
-}
-
-    // Borde inicial.
-    agregarTramo(bordes - 1);
-
-    // Espacio inicial, laterales de cada V y espacios intermedios.
-    for (let v = 1; v <= canales; v++) {
-        agregarTramo(distanciaReal);
-      agregarTramo(lateralReal, true);
-agregarTramo(lateralReal);
-    }
-
-    // Espacio final y borde final.
-    agregarTramo(distanciaReal);
-    agregarTramo(bordes - 1);
-
-    // Mostrar resultados.
     document.getElementById("distanciaV").textContent =
         Math.round(distanciaReal);
 
     document.getElementById("desarrolloV").textContent =
         Math.round(desarrollo);
 
-   // Buscar el último lateral inclinado completo que cabe.
-let indiceCorte = -1;
+    // Construcción de los tramos.
+    const tramos = [];
+    let numeroMarca = 1;
 
-if (desarrollo > anchoPlancha) {
-    for (let i = 0; i < tramos.length; i++) {
+    function agregarTramo(medida, tipo = "normal") {
+        tramos.push({
+            numero: numeroMarca++,
+            medida: medida,
+            tipo: tipo
+        });
+    }
+
+    agregarTramo(bordes - 1, "borde");
+
+    for (let v = 1; v <= canales; v++) {
+        agregarTramo(distanciaReal, "normal");
+
+        agregarTramo(lateralReal, "primerLateral");
+
+        agregarTramo(lateralReal, "segundoLateral");
+    }
+
+    agregarTramo(distanciaReal, "normal");
+    agregarTramo(bordes - 1, "borde");
+
+    // ------------------------------------------------
+    // FRACCIONAMIENTO DE PLANCHAS TIPO V
+    // ------------------------------------------------
+
+    let planchas = [];
+    let indice = 0;
+
+    while (indice < tramos.length) {
+
+        let contenido = [];
+        let acumulado = 0;
+        let numeroLocal = 1;
+        let inicio = indice;
+
+        // Primera marca de cada plancha: cero.
+        contenido.push({
+            numero: numeroLocal++,
+            medida: 0,
+            marca: 0,
+            corte: false
+        });
+
+        let ultimoIndiceValido = -1;
+        let acumuladoValido = 0;
+
+        // Buscar el último punto de corte permitido.
+        for (let j = inicio; j < tramos.length; j++) {
+
+            let nuevaMedida = acumulado + tramos[j].medida;
+
+            if (nuevaMedida > anchoPlancha) {
+                break;
+            }
+
+            acumulado = nuevaMedida;
+
+            // Se permite cortar al terminar un lateral.
+            if (
+                tramos[j].tipo === "primerLateral" ||
+                tramos[j].tipo === "segundoLateral" ||
+                j === tramos.length - 1
+            ) {
+                ultimoIndiceValido = j;
+                acumuladoValido = acumulado;
+            }
+        }
+
+        // No existe un tramo completo que pueda entrar.
+        if (ultimoIndiceValido === -1) {
+            alert(
+                "No hay espacio suficiente en la plancha para continuar con un tramo completo."
+            );
+            return;
+        }
+
+        // Construir las marcas de esta plancha.
+        acumulado = 0;
+
+        for (let j = inicio; j <= ultimoIndiceValido; j++) {
+
+            acumulado += tramos[j].medida;
+
+            contenido.push({
+                numero: numeroLocal++,
+                medida: tramos[j].medida,
+                marca: acumulado,
+                corte: j === ultimoIndiceValido
+            });
+        }
+
+        planchas.push({
+            contenido: contenido,
+            ultimoTipo: tramos[ultimoIndiceValido].tipo
+        });
+
+        // Continuar desde el siguiente tramo.
+        indice = ultimoIndiceValido + 1;
+
+        // Si se cortó en el primer lateral,
+        // la siguiente plancha debe completar esa V.
         if (
-            tramos[i].esFondoV &&
-            tramos[i].acumulado <= anchoPlancha
+            tramos[ultimoIndiceValido].tipo === "primerLateral" &&
+            indice < tramos.length
         ) {
-            indiceCorte = i;
+            // Se vuelve a incluir el primer lateral
+            // para formar la V completa en la nueva plancha.
+            indice = ultimoIndiceValido;
         }
     }
-}
 
-    // Tabla de marcas: Medidas / N.º / Marcas.
-    let html = `
-        <div class="fila-marca">
-            <span class="col-datos-medida"><b>MEDIDAS</b></span>
-            <span class="col-datos-num"><b>N.º</b></span>
-            <span class="col-datos-marca"><b>MARCAS</b></span>
-        </div>
-    `;
+    // ------------------------------------------------
+    // MOSTRAR TODAS LAS PLANCHAS
+    // ------------------------------------------------
 
-    tramos.forEach((tramo, indice) => {
-        const resaltar = tramo.numero % 3 === 0
-            ? "font-weight:bold;"
-            : "";
+    let html = "";
 
-        const avisoCorte = indice === indiceCorte
-            ? "<span class='texto-corte'>◀ ✂ CORTE</span>"
-            : "";
+    planchas.forEach((plancha, indicePlancha) => {
+
+        let titulo = `--- PLANCHA ${indicePlancha + 1} ---`;
+
+        if (indicePlancha === planchas.length - 1 && planchas.length > 1) {
+            titulo = `--- PLANCHA ${indicePlancha + 1} (SOBRANTE) ---`;
+        } else if (
+            indicePlancha > 0 &&
+            indicePlancha < planchas.length - 1
+        ) {
+            titulo = `--- PLANCHA ${indicePlancha + 1} ---`;
+        }
+
+        html += `<div class="titulo-plancha">${titulo}</div>`;
 
         html += `
-            <div class="fila-marca" style="${resaltar}">
-                <span class="col-datos-medida">
-                    ${Math.round(tramo.medida)}
-                </span>
-                <span class="col-datos-num">
-                    ${tramo.numero}
-                </span>
-               <span class="col-datos-marca">
-                ${Math.round(tramo.acumulado)}${tramo.esFondoV ? " ←" : ""}
-                </span>
-                ${avisoCorte}
+            <div class="fila-marca">
+                <span class="col-datos-medida"><b>MEDIDAS</b></span>
+                <span class="col-datos-num"><b>N.º</b></span>
+                <span class="col-datos-marca"><b>MARCAS</b></span>
+                <span></span>
             </div>
         `;
-    });
 
-    if (desarrollo > anchoPlancha && indiceCorte === -1) {
-        html += `
-            <p class="texto-corte">
-                No hay un lateral completo de V que quepa antes del límite de la plancha.
-            </p>
-        `;
-    }
+        plancha.contenido.forEach((marca, i) => {
+
+            const resaltar = marca.numero % 3 === 0
+                ? "font-weight:bold;"
+                : "";
+
+            const avisoCorte = marca.corte
+                ? "<span class='texto-corte'>◀ ✂ CORTE</span>"
+                : "";
+
+            html += `
+                <div class="fila-marca" style="${resaltar}">
+                    <span class="col-datos-medida">
+                        ${i === 0 ? "" : Math.round(marca.medida)}
+                    </span>
+
+                    <span class="col-datos-num">
+                        ${marca.numero}
+                    </span>
+
+                    <span class="col-datos-marca">
+                        ${Math.round(marca.marca)}
+                    </span>
+
+                    ${avisoCorte}
+                </div>
+            `;
+        });
+    });
 
     document.getElementById("listaMarcasV").innerHTML = html;
 
@@ -957,77 +1044,4 @@ if (desarrollo > anchoPlancha) {
     ultimoBordeV = bordes;
     ultimoEspesorV = espesor;
 }
-
-
-// Validaciones de los campos Tipo V.
-function verificarMedidaPlanchaV() {
-    const c = document.getElementById("anchoPlanchaV");
-    const v = Number(c.value);
-
-    if (c.value === "" || !Number.isFinite(v) || v < 1) {
-        alert("Medida de plancha inválida.");
-        c.value = ultimaMedidaPlanchaV;
-    } else {
-        ultimaMedidaPlanchaV = v;
-    }
-}
-
-function verificarMedidaFinalV() {
-    const c = document.getElementById("medidaFinalV");
-    const v = Number(c.value);
-
-    if (c.value === "" || !Number.isFinite(v) || v < 1) {
-        alert("Medida final inválida.");
-        c.value = ultimaMedidaFinalV;
-    } else {
-        ultimaMedidaFinalV = v;
-    }
-}
-
-function verificarCanalesV() {
-    const c = document.getElementById("canalesV");
-    const v = Number(c.value);
-
-    if (c.value === "" || !Number.isInteger(v) || v < 1) {
-        alert("La cantidad de V debe ser un entero mayor que cero.");
-        c.value = ultimoCanalCantidadV;
-    } else {
-        ultimoCanalCantidadV = v;
-    }
-}
-
-function verificarProfundidadV() {
-    const c = document.getElementById("profundidadV");
-    const v = Number(c.value);
-
-    if (c.value === "" || !Number.isFinite(v) || v < 1) {
-        alert("Profundidad inválida.");
-        c.value = ultimaProfundidadV;
-    } else {
-        ultimaProfundidadV = v;
-    }
-}
-
-function verificarBordesV() {
-    const c = document.getElementById("bordesV");
-    const v = Number(c.value);
-
-    if (c.value === "" || !Number.isFinite(v) || v < 0) {
-        alert("Bordes inválidos.");
-        c.value = ultimoBordeV;
-    } else {
-        ultimoBordeV = v;
-    }
-}
-
-function verificarEspesorV() {
-    const c = document.getElementById("espesorV");
-    const v = Number(c.value);
-
-    if (c.value === "" || !Number.isFinite(v) || v <= 0) {
-        alert("Espesor inválido.");
-        c.value = ultimoEspesorV;
-    } else {
-        ultimoEspesorV = v;
-    }
 }

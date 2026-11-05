@@ -877,7 +877,7 @@ function calcularTipoV() {
     for (let v = 1; v <= canales; v++) {
         agregarTramo(distanciaReal);
         agregarTramo(lateralReal, true);
-        agregarTramo(lateralReal);
+        agregarTramo(lateralReal, true);
     }
 
     // Espacio final y borde final.
@@ -891,19 +891,19 @@ function calcularTipoV() {
     document.getElementById("desarrolloV").textContent =
         Math.round(desarrollo);
 
-    // Buscar el último lateral completo que cabe en la plancha.
-    let indiceCorte = -1;
+   // Buscar el último lateral inclinado completo que cabe.
+let indiceCorte = -1;
 
-    if (desarrollo > anchoPlancha) {
-        for (let i = 0; i < tramos.length; i++) {
-            if (
-                tramos[i].esLateralV &&
-                tramos[i].acumulado <= anchoPlancha
-            ) {
-                indiceCorte = i;
-            }
+if (desarrollo > anchoPlancha) {
+    for (let i = 0; i < tramos.length; i++) {
+        if (
+            tramos[i].esFondoV &&
+            tramos[i].acumulado <= anchoPlancha
+        ) {
+            indiceCorte = i;
         }
     }
+}
 
     // Tabla de marcas: Medidas / N.º / Marcas.
     let html = `

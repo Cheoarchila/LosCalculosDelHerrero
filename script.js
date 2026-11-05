@@ -885,83 +885,87 @@ function calcularTipoV() {
     agregarTramo(bordes - 1, "borde");
 
     // ------------------------------------------------
-    // FRACCIONAMIENTO DE PLANCHAS TIPO V
     // ------------------------------------------------
+// FRACCIONAMIENTO DE PLANCHAS TIPO V
+// ------------------------------------------------
 
-    let planchas = [];
-    let indice = 0;
+let planchas = [];
+let indice = 0;
+let medidaReferencia = 0;
 
-    while (indice < tramos.length) {
+while (indice < tramos.length) {
 
-        let contenido = [];
-        let acumulado = 0;
-        let numeroLocal = 1;
-        let inicio = indice;
+    let contenido = [];
+    let acumulado = medidaReferencia;
+    let numeroLocal = 1;
+    let inicio = indice;
 
-        // Primera marca de cada plancha: cero.
+    // Primera marca de la plancha.
+    contenido.push({
+        numero: numeroLocal++,
+        medida: 0,
+        marca: medidaReferencia,
+        corte: false
+    });
+
+    let ultimoIndiceValido = -1;
+    let acumuladoValido = 0;
+
+    // Buscar el último punto de corte permitido.
+    for (let j = inicio; j < tramos.length; j++) {
+
+        let nuevaMedida = acumulado + tramos[j].medida;
+
+        if (nuevaMedida > anchoPlancha) {
+            break;
+        }
+
+        acumulado = nuevaMedida;
+
+        if (
+            tramos[j].tipo === "primerLateral" ||
+            tramos[j].tipo === "segundoLateral" ||
+            j === tramos.length - 1
+        ) {
+            ultimoIndiceValido = j;
+            acumuladoValido = acumulado;
+        }
+    }
+
+    if (ultimoIndiceValido === -1) {
+        alert(
+            "No hay espacio suficiente en la plancha para continuar con un tramo completo."
+        );
+        return;
+    }
+
+    // Construir las marcas.
+    acumulado = medidaReferencia;
+
+    for (let j = inicio; j <= ultimoIndiceValido; j++) {
+
+        acumulado += tramos[j].medida;
+
         contenido.push({
             numero: numeroLocal++,
-            medida: 0,
-            marca: 0,
-            corte: false
+            medida: tramos[j].medida,
+            marca: acumulado,
+            corte: j === ultimoIndiceValido
         });
+    }
 
-        let ultimoIndiceValido = -1;
-        let acumuladoValido = 0;
+    planchas.push({
+        contenido: contenido,
+        ultimoTipo: tramos[ultimoIndiceValido].tipo
+    });
 
-        // Buscar el último punto de corte permitido.
-        for (let j = inicio; j < tramos.length; j++) {
+    // La última medida realizada será la referencia
+    // de la siguiente plancha.
+    medidaReferencia = tramos[ultimoIndiceValido].medida;
 
-            let nuevaMedida = acumulado + tramos[j].medida;
-
-            if (nuevaMedida > anchoPlancha) {
-                break;
-            }
-
-            acumulado = nuevaMedida;
-
-            // Se permite cortar al terminar un lateral.
-            if (
-                tramos[j].tipo === "primerLateral" ||
-                tramos[j].tipo === "segundoLateral" ||
-                j === tramos.length - 1
-            ) {
-                ultimoIndiceValido = j;
-                acumuladoValido = acumulado;
-            }
-        }
-
-        // No existe un tramo completo que pueda entrar.
-        if (ultimoIndiceValido === -1) {
-            alert(
-                "No hay espacio suficiente en la plancha para continuar con un tramo completo."
-            );
-            return;
-        }
-
-        // Construir las marcas de esta plancha.
-        acumulado = 0;
-
-        for (let j = inicio; j <= ultimoIndiceValido; j++) {
-
-            acumulado += tramos[j].medida;
-
-            contenido.push({
-                numero: numeroLocal++,
-                medida: tramos[j].medida,
-                marca: acumulado,
-                corte: j === ultimoIndiceValido
-            });
-        }
-
-        planchas.push({
-            contenido: contenido,
-            ultimoTipo: tramos[ultimoIndiceValido].tipo
-        });
-
-        // Continuar desde el siguiente tramo.
-        indice = ultimoIndiceValido + 1;
-
+    // Continuar con el siguiente tramo.
+    indice = ultimoIndiceValido + 1;
+}
         // Si se cortó en el primer lateral,
         // la siguiente plancha debe completar esa V.
         if (

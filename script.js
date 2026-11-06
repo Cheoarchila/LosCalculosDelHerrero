@@ -944,14 +944,15 @@ function calcularTipoV() {
                 }
             }
 
-            // Preferir cortar en el primer lateral
-            // para completar la V en la siguiente plancha.
-            if (ultimoPrimerLateral !== -1) {
-                ultimoIndiceValido = ultimoPrimerLateral;
+            // Priorizar el aprovechamiento del material.
+// Primero intentar cortar después del segundo lateral.
+// Si no cabe, cortar después del primero.
+if (ultimoSegundoLateral !== -1) {
+    ultimoIndiceValido = ultimoSegundoLateral;
 
-            } else if (ultimoSegundoLateral !== -1) {
-                ultimoIndiceValido = ultimoSegundoLateral;
-            }
+} else if (ultimoPrimerLateral !== -1) {
+    ultimoIndiceValido = ultimoPrimerLateral;
+}
         }
 
         if (ultimoIndiceValido === -1) {

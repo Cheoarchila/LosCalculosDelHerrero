@@ -965,13 +965,14 @@ if (ultimoSegundoLateral !== -1) {
 
             acumulado += tramos[j].medida;
 
-            contenido.push({
-                numero: numeroLocal++,
-                medida: tramos[j].medida,
-                marca: acumulado,
-                referencia: false,
-                corte: hayCorte && j === ultimoIndiceValido
-            });
+        contenido.push({
+    numero: numeroLocal++,
+    medida: tramos[j].medida,
+    marca: acumulado,
+    referencia: false,
+    corte: hayCorte && j === ultimoIndiceValido,
+    flecha: tramos[j].tipo === "primerLateral"
+});
         }
 
         planchas.push({
@@ -1009,17 +1010,20 @@ if (ultimoSegundoLateral !== -1) {
             const marca = Math.round(fila.marca);
 
             const marcaHTML =
-                fila.numero % 3 === 0
-                    ? `<strong>${marca}</strong>`
-                    : marca;
+    fila.numero % 3 === 0
+        ? `<strong>${marca}</strong>`
+        : marca;
 
+const flechaHTML = fila.flecha
+    ? ` ←`
+    : "";
             resultadoHTML += `
                 <tr>
                     <td>${medida}</td>
                     <td>${fila.numero}</td>
                     <td>
-                        ${marcaHTML}
-                        ${fila.corte ? "<strong> CORTE</strong>" : ""}
+                       ${marcaHTML}${flechaHTML}
+${fila.corte ? "<strong> CORTE</strong>" : ""}
                     </td>
                 </tr>
             `;

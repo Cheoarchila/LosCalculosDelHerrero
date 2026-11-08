@@ -64,11 +64,11 @@
 </div>
 
 <!-- NUEVO BOTÓN: TIPO DIAMANTADO -->
-<div class="tarjeta">
+<div class="tarjeta" onclick="abrirPantalla('pantallaDiamantado')">
     <div class="icono">💎</div>
     <div>
         <h2>Tipo Diamantado</h2>
-        <p>Próximamente</p>
+        <p>Cálculo de piezas diamantadas</p>
     </div>
 </div>
 </section>
@@ -278,6 +278,56 @@
         <div id="listaMarcasV"></div>
     </div>
 </section>
+
+
+<!-- ====================================== -->
+<!-- PANTALLA 6: TIPO DIAMANTADO            -->
+<!-- ====================================== -->
+
+<section id="pantallaDiamantado" class="oculto">
+
+    <button class="volver" onclick="abrirPantalla('pantallaAcanalados')">
+        ← Volver a Acanalados
+    </button>
+
+    <h2>Calculadora Tipo Diamantado</h2>
+
+    <div class="fila">
+        <label for="anchoDiamantado">Ancho final:</label>
+        <input type="number" id="anchoDiamantado" value="100" min="1" step="1">
+    </div>
+
+    <div class="fila">
+        <label for="largoDiamantado">Largo final:</label>
+        <input type="number" id="largoDiamantado" value="150" min="1" step="1">
+    </div>
+
+    <div class="fila">
+        <label for="alturaDiamantado">Altura de pirámide:</label>
+        <input type="number" id="alturaDiamantado" value="20" min="1" step="1">
+    </div>
+
+    <div class="fila">
+        <label for="espesorDiamantado">Espesor:</label>
+        <input type="number" id="espesorDiamantado" value="1" min="0.1" step="0.1">
+    </div>
+
+    <div class="fila">
+        <label for="pestanaDiamantado">Con pestaña:</label>
+        <input
+            type="checkbox"
+            id="pestanaDiamantado"
+            onchange="document.getElementById('contenedorAlturaPestana').classList.toggle('oculto', !this.checked)"
+        >
+    </div>
+
+    <div class="fila oculto" id="contenedorAlturaPestana">
+        <label for="alturaPestanaDiamantado">Altura de pestaña:</label>
+        <input type="number" id="alturaPestanaDiamantado" value="20" min="1" step="1">
+    </div>
+
+</section>
+
     
     <!-- Vinculación del archivo lógico de programación -->
     <script src="script.js"></script>

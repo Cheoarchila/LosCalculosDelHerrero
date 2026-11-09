@@ -1050,6 +1050,7 @@ ${fila.corte ? "<strong> CORTE</strong>" : ""}
 // CALCULADORA TIPO DIAMANTADO
 // =====================================================
 
+
 function calcularDiamantado() {
 
     // DATOS DE ENTRADA
@@ -1073,7 +1074,7 @@ function calcularDiamantado() {
         return;
     }
 
-    // HIPOTENUSA REDONDEADA
+    // HIPOTENUSA
     const hipotenusaDiamantado = Math.round(
         alturaDiamantado * Math.sqrt(2)
     );
@@ -1102,16 +1103,231 @@ function calcularDiamantado() {
             2 * pestañaReducidaDiamantado;
     }
 
+    // VALIDAR DESARROLLOS
+    if (
+        desarrolloAnchoDiamantado <= 0 ||
+        desarrolloLargoDiamantado <= 0
+    ) {
+        alert("Los desarrollos deben ser mayores que cero.");
+        return;
+    }
+
+    // =====================================================
+    // DIBUJO SIN PESTAÑA
+    // =====================================================
+
+    let dibujoDiamantado = "";
+
+    if (!tienePestanaDiamantado) {
+
+        // MEDIDA DE LOS CUADRADOS DE LAS ESQUINAS
+        const corteDiamantado =
+            (desarrolloAnchoDiamantado - anchoDiamantado) / 2;
+
+        // DIMENSIONES INTERIORES
+        const interiorAnchoDiamantado =
+            desarrolloAnchoDiamantado - (2 * hipotenusaDiamantado);
+
+        const interiorLargoDiamantado =
+            desarrolloLargoDiamantado - (2 * hipotenusaDiamantado);
+
+        if (
+            corteDiamantado <= 0 ||
+            interiorAnchoDiamantado <= 0 ||
+            interiorLargoDiamantado <= 0 ||
+            corteDiamantado * 2 >= desarrolloAnchoDiamantado ||
+            corteDiamantado * 2 >= desarrolloLargoDiamantado
+        ) {
+            alert("Las medidas no permiten construir el dibujo.");
+            return;
+        }
+
+        // ESCALA DEL DIBUJO
+        const escalaDiamantado = Math.min(
+            350 / desarrolloAnchoDiamantado,
+            280 / desarrolloLargoDiamantado
+        );
+
+        const x = 75;
+        const y = 90;
+
+        const ancho = desarrolloAnchoDiamantado * escalaDiamantado;
+        const largo = desarrolloLargoDiamantado * escalaDiamantado;
+
+        const hip = hipotenusaDiamantado * escalaDiamantado;
+        const corte = corteDiamantado * escalaDiamantado;
+
+        // RECTÁNGULO INTERIOR
+        const ix = x + hip;
+        const iy = y + hip;
+        const iw = ancho - (2 * hip);
+        const ih = largo - (2 * hip);
+
+        // CONTORNO CON CUATRO CORTES CUADRADOS
+        const contorno = `
+            M ${x + corte} ${y}
+            L ${x + ancho - corte} ${y}
+            L ${x + ancho - corte} ${y + corte}
+            L ${x + ancho} ${y + corte}
+            L ${x + ancho} ${y + largo - corte}
+            L ${x + ancho - corte} ${y + largo - corte}
+            L ${x + ancho - corte} ${y + largo}
+            L ${x + corte} ${y + largo}
+            L ${x + corte} ${y + largo - corte}
+            L ${x} ${y + largo - corte}
+            L ${x} ${y + corte}
+            L ${x + corte} ${y + corte}
+            Z
+        `;
+
+        dibujoDiamantado = `
+
+        <div style="width:100%; overflow-x:auto; text-align:center;">
+
+            <svg viewBox="0 0 560 450"
+                 style="width:100%; max-width:600px; height:auto;"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <defs>
+                    <marker id="flechaD"
+                        markerWidth="7"
+                        markerHeight="7"
+                        refX="3"
+                        refY="3"
+                        orient="auto-start-reverse">
+                        <path d="M0,0 L6,3 L0,6 Z"
+                              fill="currentColor"/>
+                    </marker>
+                </defs>
+
+                <!-- PLANCHA CON CORTES -->
+                <path d="${contorno}"
+                      fill="#dce8f2"
+                      fill-opacity="0.15"
+                      stroke="#2878b9"
+                      stroke-width="2"/>
+
+                <!-- RECTANGULO INTERIOR PUNTEADO -->
+                <rect
+                    x="${ix}"
+                    y="${iy}"
+                    width="${iw}"
+                    height="${ih}"
+                    fill="none"
+                    stroke="#e09b32"
+                    stroke-width="1.8"
+                    stroke-dasharray="6 5"/>
+
+                <!-- LINEAS DIAGONALES ESQUINA SUPERIOR IZQUIERDA -->
+                <line x1="${ix}" y1="${iy}"
+                      x2="${x + corte}" y2="${y}"
+                      stroke="#2878b9" stroke-width="1.5"/>
+
+                <line x1="${ix}" y1="${iy}"
+                      x2="${x}" y2="${y + corte}"
+                      stroke="#2878b9" stroke-width="1.5"/>
+
+                <!-- ESQUINA SUPERIOR DERECHA -->
+                <line x1="${ix + iw}" y1="${iy}"
+                      x2="${x + ancho - corte}" y2="${y}"
+                      stroke="#2878b9" stroke-width="1.5"/>
+
+                <line x1="${ix + iw}" y1="${iy}"
+                      x2="${x + ancho}" y2="${y + corte}"
+                      stroke="#2878b9" stroke-width="1.5"/>
+
+                <!-- ESQUINA INFERIOR DERECHA -->
+                <line x1="${ix + iw}" y1="${iy + ih}"
+                      x2="${x + ancho}" y2="${y + largo - corte}"
+                      stroke="#2878b9" stroke-width="1.5"/>
+
+                <line x1="${ix + iw}" y1="${iy + ih}"
+                      x2="${x + ancho - corte}" y2="${y + largo}"
+                      stroke="#2878b9" stroke-width="1.5"/>
+
+                <!-- ESQUINA INFERIOR IZQUIERDA -->
+                <line x1="${ix}" y1="${iy + ih}"
+                      x2="${x}" y2="${y + largo - corte}"
+                      stroke="#2878b9" stroke-width="1.5"/>
+
+                <line x1="${ix}" y1="${iy + ih}"
+                      x2="${x + corte}" y2="${y + largo}"
+                      stroke="#2878b9" stroke-width="1.5"/>
+
+                <!-- COTA DEL ANCHO -->
+                <line x1="${x}" y1="48"
+                      x2="${x + ancho}" y2="48"
+                      stroke="currentColor"
+                      marker-start="url(#flechaD)"
+                      marker-end="url(#flechaD)"/>
+
+                <line x1="${x}" y1="48"
+                      x2="${x}" y2="${y}"
+                      stroke="currentColor"/>
+
+                <line x1="${x + ancho}" y1="48"
+                      x2="${x + ancho}" y2="${y}"
+                      stroke="currentColor"/>
+
+                <text x="${x + ancho / 2}" y="35"
+                      text-anchor="middle"
+                      font-size="15"
+                      fill="currentColor"
+                      font-weight="bold">
+                    ${Math.round(desarrolloAnchoDiamantado)} mm
+                </text>
+
+                <!-- COTA DEL LARGO -->
+                <line x1="470" y1="${y}"
+                      x2="470" y2="${y + largo}"
+                      stroke="currentColor"
+                      marker-start="url(#flechaD)"
+                      marker-end="url(#flechaD)"/>
+
+                <line x1="${x + ancho}" y1="${y}"
+                      x2="470" y2="${y}"
+                      stroke="currentColor"/>
+
+                <line x1="${x + ancho}" y1="${y + largo}"
+                      x2="470" y2="${y + largo}"
+                      stroke="currentColor"/>
+
+                <text x="490"
+                      y="${y + largo / 2}"
+                      text-anchor="middle"
+                      font-size="15"
+                      fill="currentColor"
+                      font-weight="bold"
+                      transform="rotate(90 490 ${y + largo / 2})">
+                    ${Math.round(desarrolloLargoDiamantado)} mm
+                </text>
+
+            </svg>
+        </div>
+        `;
+    }
+
+    // =====================================================
     // MOSTRAR RESULTADOS
+    // =====================================================
+
     document.getElementById("resultadoDiamantado").innerHTML = `
+
         <h3>Resultados del desarrollo</h3>
 
-        <p>Hipotenusa: <strong>${hipotenusaDiamantado} mm</strong></p>
+        <p>Hipotenusa:
+        <strong>${hipotenusaDiamantado} mm</strong></p>
 
         <p>Desarrollo del ancho:
         <strong>${Math.round(desarrolloAnchoDiamantado)} mm</strong></p>
 
         <p>Desarrollo del largo:
         <strong>${Math.round(desarrolloLargoDiamantado)} mm</strong></p>
+
+        ${tienePestanaDiamantado ? "" : `
+            <h3>Plancha desplegada</h3>
+            ${dibujoDiamantado}
+        `}
+
     `;
 }

@@ -1283,8 +1283,8 @@ const contorno = `
                 </text>
 
                 <!-- COTA DEL DESARROLLO LARGO -->
-                <line x1="300" y1="${y}"
-                      x2="300" y2="${y + largo}"
+                <line x1="310" y1="${y}"
+                      x2="310" y2="${y + largo}"
                       stroke="currentColor"
                       marker-start="url(#flechaD)"
                       marker-end="url(#flechaD)"/>
@@ -1297,13 +1297,13 @@ const contorno = `
                       x2="440" y2="${y + largo}"
                       stroke="currentColor"/>
 
-                <text x="310"
+                <text x="320"
                       y="${y + largo / 2}"
                       text-anchor="middle"
                       font-size="15"
                       fill="currentColor"
                       font-weight="bold"
-                     transform="rotate(90 310 ${y + largo / 2})">
+                     transform="rotate(90 320 ${y + largo / 2})">
                     ${Math.round(desarrolloLargoDiamantado)} mm
                 </text>
 

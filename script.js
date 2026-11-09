@@ -1045,3 +1045,73 @@ ${fila.corte ? "<strong> CORTE</strong>" : ""}
     ultimoBordeV = bordes;
     ultimoEspesorV = espesor;
 }
+
+// =====================================================
+// CALCULADORA TIPO DIAMANTADO
+// =====================================================
+
+function calcularDiamantado() {
+
+    // DATOS DE ENTRADA
+    const anchoDiamantado = Number(document.getElementById("anchoDiamantado").value);
+    const largoDiamantado = Number(document.getElementById("largoDiamantado").value);
+    const alturaDiamantado = Number(document.getElementById("alturaDiamantado").value);
+    const espesorDiamantado = Number(document.getElementById("espesorDiamantado").value);
+
+    const tienePestanaDiamantado = document.getElementById("pestanaDiamantado").checked;
+    const alturaPestanaDiamantado = Number(document.getElementById("alturaPestanaDiamantado").value);
+
+    // VALIDACIONES
+    if (
+        anchoDiamantado < 1 ||
+        largoDiamantado < 1 ||
+        alturaDiamantado < 1 ||
+        espesorDiamantado <= 0 ||
+        (tienePestanaDiamantado && alturaPestanaDiamantado < 1)
+    ) {
+        alert("Revisa las medidas ingresadas.");
+        return;
+    }
+
+    // HIPOTENUSA REDONDEADA
+    const hipotenusaDiamantado = Math.round(
+        alturaDiamantado * Math.sqrt(2)
+    );
+
+    // DESARROLLO BASE
+    let desarrolloAnchoDiamantado =
+        anchoDiamantado -
+        (2 * alturaDiamantado) +
+        (2 * hipotenusaDiamantado);
+
+    let desarrolloLargoDiamantado =
+        largoDiamantado -
+        (2 * alturaDiamantado) +
+        (2 * hipotenusaDiamantado);
+
+    // COMPENSACIÓN DE PESTAÑA
+    if (tienePestanaDiamantado) {
+
+        const pestañaReducidaDiamantado =
+            alturaPestanaDiamantado - espesorDiamantado;
+
+        desarrolloAnchoDiamantado +=
+            2 * pestañaReducidaDiamantado;
+
+        desarrolloLargoDiamantado +=
+            2 * pestañaReducidaDiamantado;
+    }
+
+    // MOSTRAR RESULTADOS
+    document.getElementById("resultadoDiamantado").innerHTML = `
+        <h3>Resultados del desarrollo</h3>
+
+        <p>Hipotenusa: <strong>${hipotenusaDiamantado} mm</strong></p>
+
+        <p>Desarrollo del ancho:
+        <strong>${Math.round(desarrolloAnchoDiamantado)} mm</strong></p>
+
+        <p>Desarrollo del largo:
+        <strong>${Math.round(desarrolloLargoDiamantado)} mm</strong></p>
+    `;
+}

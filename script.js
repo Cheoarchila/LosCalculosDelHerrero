@@ -1295,7 +1295,7 @@ function calcularDiamantado() {
                       x2="470" y2="${y + largo}"
                       stroke="currentColor"/>
 
-                <text x="490"
+                <text x="460"
                       y="${y + largo / 2}"
                       text-anchor="middle"
                       font-size="15"

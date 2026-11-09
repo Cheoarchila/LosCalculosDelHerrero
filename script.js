@@ -1288,11 +1288,11 @@ function calcularDiamantado() {
                       marker-end="url(#flechaD)"/>
 
                 <line x1="${x + ancho}" y1="${y}"
-                      x2="470" y2="${y}"
+                      x2="440" y2="${y}"
                       stroke="currentColor"/>
 
                 <line x1="${x + ancho}" y1="${y + largo}"
-                      x2="470" y2="${y + largo}"
+                      x2="440" y2="${y + largo}"
                       stroke="currentColor"/>
 
                 <text x="460"

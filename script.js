@@ -1051,6 +1051,7 @@ ${fila.corte ? "<strong> CORTE</strong>" : ""}
 // =====================================================
 
 
+
 function calcularDiamantado() {
 
     // DATOS DE ENTRADA
@@ -1120,7 +1121,7 @@ function calcularDiamantado() {
 
     if (!tienePestanaDiamantado) {
 
-        // MEDIDA DE LOS CUADRADOS DE LAS ESQUINAS
+        // MEDIDA DE LOS CORTES DE LAS ESQUINAS
         const corteDiamantado =
             (desarrolloAnchoDiamantado - anchoDiamantado) / 2;
 
@@ -1163,22 +1164,24 @@ function calcularDiamantado() {
         const iw = ancho - (2 * hip);
         const ih = largo - (2 * hip);
 
-        // CONTORNO CON CUATRO CORTES CUADRADOS
+        // CONTORNO CON CORTES DIAGONALES EN LAS CUATRO ESQUINAS
         const contorno = `
             M ${x + corte} ${y}
             L ${x + ancho - corte} ${y}
-            L ${x + ancho - corte} ${y + corte}
             L ${x + ancho} ${y + corte}
             L ${x + ancho} ${y + largo - corte}
-            L ${x + ancho - corte} ${y + largo - corte}
             L ${x + ancho - corte} ${y + largo}
             L ${x + corte} ${y + largo}
-            L ${x + corte} ${y + largo - corte}
             L ${x} ${y + largo - corte}
             L ${x} ${y + corte}
-            L ${x + corte} ${y + corte}
             Z
         `;
+
+        // POSICIONES DE LAS COTAS
+        const cotaInteriorY = iy - 12;
+        const cotaInteriorX = ix - 15;
+        const cotaFinalY = y + largo + 30;
+        const cotaFinalX = 35;
 
         dibujoDiamantado = `
 
@@ -1200,7 +1203,7 @@ function calcularDiamantado() {
                     </marker>
                 </defs>
 
-                <!-- PLANCHA CON CORTES -->
+                <!-- CONTORNO DE LA PLANCHA -->
                 <path d="${contorno}"
                       fill="#dce8f2"
                       fill-opacity="0.15"
@@ -1218,7 +1221,7 @@ function calcularDiamantado() {
                     stroke-width="1.8"
                     stroke-dasharray="6 5"/>
 
-                <!-- LINEAS DIAGONALES ESQUINA SUPERIOR IZQUIERDA -->
+                <!-- DIAGONALES SUPERIOR IZQUIERDA -->
                 <line x1="${ix}" y1="${iy}"
                       x2="${x + corte}" y2="${y}"
                       stroke="#2878b9" stroke-width="1.5"/>
@@ -1227,7 +1230,7 @@ function calcularDiamantado() {
                       x2="${x}" y2="${y + corte}"
                       stroke="#2878b9" stroke-width="1.5"/>
 
-                <!-- ESQUINA SUPERIOR DERECHA -->
+                <!-- DIAGONALES SUPERIOR DERECHA -->
                 <line x1="${ix + iw}" y1="${iy}"
                       x2="${x + ancho - corte}" y2="${y}"
                       stroke="#2878b9" stroke-width="1.5"/>
@@ -1236,7 +1239,7 @@ function calcularDiamantado() {
                       x2="${x + ancho}" y2="${y + corte}"
                       stroke="#2878b9" stroke-width="1.5"/>
 
-                <!-- ESQUINA INFERIOR DERECHA -->
+                <!-- DIAGONALES INFERIOR DERECHA -->
                 <line x1="${ix + iw}" y1="${iy + ih}"
                       x2="${x + ancho}" y2="${y + largo - corte}"
                       stroke="#2878b9" stroke-width="1.5"/>
@@ -1245,7 +1248,7 @@ function calcularDiamantado() {
                       x2="${x + ancho - corte}" y2="${y + largo}"
                       stroke="#2878b9" stroke-width="1.5"/>
 
-                <!-- ESQUINA INFERIOR IZQUIERDA -->
+                <!-- DIAGONALES INFERIOR IZQUIERDA -->
                 <line x1="${ix}" y1="${iy + ih}"
                       x2="${x}" y2="${y + largo - corte}"
                       stroke="#2878b9" stroke-width="1.5"/>
@@ -1254,7 +1257,7 @@ function calcularDiamantado() {
                       x2="${x + corte}" y2="${y + largo}"
                       stroke="#2878b9" stroke-width="1.5"/>
 
-                <!-- COTA DEL ANCHO -->
+                <!-- COTA DEL DESARROLLO ANCHO -->
                 <line x1="${x}" y1="48"
                       x2="${x + ancho}" y2="48"
                       stroke="currentColor"
@@ -1277,7 +1280,7 @@ function calcularDiamantado() {
                     ${Math.round(desarrolloAnchoDiamantado)} mm
                 </text>
 
-                <!-- COTA DEL LARGO -->
+                <!-- COTA DEL DESARROLLO LARGO -->
                 <line x1="470" y1="${y}"
                       x2="470" y2="${y + largo}"
                       stroke="currentColor"
@@ -1300,6 +1303,104 @@ function calcularDiamantado() {
                       font-weight="bold"
                       transform="rotate(90 490 ${y + largo / 2})">
                     ${Math.round(desarrolloLargoDiamantado)} mm
+                </text>
+
+                <!-- COTA DEL ANCHO INTERIOR PUNTEADO -->
+                <line x1="${ix}" y1="${cotaInteriorY}"
+                      x2="${ix + iw}" y2="${cotaInteriorY}"
+                      stroke="#e09b32"
+                      marker-start="url(#flechaD)"
+                      marker-end="url(#flechaD)"/>
+
+                <line x1="${ix}" y1="${cotaInteriorY}"
+                      x2="${ix}" y2="${iy}"
+                      stroke="#e09b32"/>
+
+                <line x1="${ix + iw}" y1="${cotaInteriorY}"
+                      x2="${ix + iw}" y2="${iy}"
+                      stroke="#e09b32"/>
+
+                <text x="${ix + iw / 2}"
+                      y="${cotaInteriorY - 5}"
+                      text-anchor="middle"
+                      font-size="12"
+                      fill="#e09b32"
+                      font-weight="bold">
+                    ${Math.round(interiorAnchoDiamantado)} mm
+                </text>
+
+                <!-- COTA DEL LARGO INTERIOR PUNTEADO -->
+                <line x1="${cotaInteriorX}" y1="${iy}"
+                      x2="${cotaInteriorX}" y2="${iy + ih}"
+                      stroke="#e09b32"
+                      marker-start="url(#flechaD)"
+                      marker-end="url(#flechaD)"/>
+
+                <line x1="${cotaInteriorX}" y1="${iy}"
+                      x2="${ix}" y2="${iy}"
+                      stroke="#e09b32"/>
+
+                <line x1="${cotaInteriorX}" y1="${iy + ih}"
+                      x2="${ix}" y2="${iy + ih}"
+                      stroke="#e09b32"/>
+
+                <text x="${cotaInteriorX - 5}"
+                      y="${iy + ih / 2}"
+                      text-anchor="middle"
+                      font-size="12"
+                      fill="#e09b32"
+                      font-weight="bold"
+                      transform="rotate(-90 ${cotaInteriorX - 5} ${iy + ih / 2})">
+                    ${Math.round(interiorLargoDiamantado)} mm
+                </text>
+
+                <!-- COTA DE LA MEDIDA FINAL DEL ANCHO -->
+                <line x1="${x + corte}" y1="${cotaFinalY}"
+                      x2="${x + ancho - corte}" y2="${cotaFinalY}"
+                      stroke="currentColor"
+                      marker-start="url(#flechaD)"
+                      marker-end="url(#flechaD)"/>
+
+                <line x1="${x + corte}" y1="${y + largo}"
+                      x2="${x + corte}" y2="${cotaFinalY}"
+                      stroke="currentColor"/>
+
+                <line x1="${x + ancho - corte}" y1="${y + largo}"
+                      x2="${x + ancho - corte}" y2="${cotaFinalY}"
+                      stroke="currentColor"/>
+
+                <text x="${x + ancho / 2}"
+                      y="${cotaFinalY + 15}"
+                      text-anchor="middle"
+                      font-size="13"
+                      fill="currentColor"
+                      font-weight="bold">
+                    Final: ${anchoDiamantado} mm
+                </text>
+
+                <!-- COTA DE LA MEDIDA FINAL DEL LARGO -->
+                <line x1="${cotaFinalX}" y1="${y + corte}"
+                      x2="${cotaFinalX}" y2="${y + largo - corte}"
+                      stroke="currentColor"
+                      marker-start="url(#flechaD)"
+                      marker-end="url(#flechaD)"/>
+
+                <line x1="${cotaFinalX}" y1="${y + corte}"
+                      x2="${x}" y2="${y + corte}"
+                      stroke="currentColor"/>
+
+                <line x1="${cotaFinalX}" y1="${y + largo - corte}"
+                      x2="${x}" y2="${y + largo - corte}"
+                      stroke="currentColor"/>
+
+                <text x="20"
+                      y="${y + largo / 2}"
+                      text-anchor="middle"
+                      font-size="13"
+                      fill="currentColor"
+                      font-weight="bold"
+                      transform="rotate(-90 20 ${y + largo / 2})">
+                    Final: ${largoDiamantado} mm
                 </text>
 
             </svg>

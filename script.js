@@ -1295,13 +1295,13 @@ function calcularDiamantado() {
                       x2="440" y2="${y + largo}"
                       stroke="currentColor"/>
 
-                <text x="460"
+                <text x="350"
                       y="${y + largo / 2}"
                       text-anchor="middle"
                       font-size="15"
                       fill="currentColor"
                       font-weight="bold"
-                     transform="rotate(90 460 ${y + largo / 2})">
+                     transform="rotate(90 350 ${y + largo / 2})">
                     ${Math.round(desarrolloLargoDiamantado)} mm
                 </text>
 

@@ -1281,8 +1281,8 @@ function calcularDiamantado() {
                 </text>
 
                 <!-- COTA DEL DESARROLLO LARGO -->
-                <line x1="400" y1="${y}"
-                      x2="400" y2="${y + largo}"
+                <line x1="300" y1="${y}"
+                      x2="300" y2="${y + largo}"
                       stroke="currentColor"
                       marker-start="url(#flechaD)"
                       marker-end="url(#flechaD)"/>

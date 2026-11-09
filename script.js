@@ -1164,18 +1164,20 @@ function calcularDiamantado() {
         const iw = ancho - (2 * hip);
         const ih = largo - (2 * hip);
 
-        // CONTORNO CON CORTES DIAGONALES EN LAS CUATRO ESQUINAS
-        const contorno = `
-            M ${x + corte} ${y}
-            L ${x + ancho - corte} ${y}
-            L ${x + ancho} ${y + corte}
-            L ${x + ancho} ${y + largo - corte}
-            L ${x + ancho - corte} ${y + largo}
-            L ${x + corte} ${y + largo}
-            L ${x} ${y + largo - corte}
-            L ${x} ${y + corte}
-            Z
-        `;
+       // CONTORNO CON LAS CUATRO ESQUINAS ABIERTAS
+const contorno = `
+    M ${x + corte} ${y}
+    L ${x + ancho - corte} ${y}
+
+    M ${x + ancho} ${y + corte}
+    L ${x + ancho} ${y + largo - corte}
+
+    M ${x + ancho - corte} ${y + largo}
+    L ${x + corte} ${y + largo}
+
+    M ${x} ${y + largo - corte}
+    L ${x} ${y + corte}
+`;
 
         // POSICIONES DE LAS COTAS
         const cotaInteriorY = iy - 12;

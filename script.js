@@ -1164,6 +1164,22 @@ const cotaAnchoX2 = tienePestanaDiamantado
 const cotaAnchoY = tienePestanaDiamantado
     ? y - profundidadPestana - separacionCota
     : y - separacionCota;
+
+const cotaLargoX = tienePestanaDiamantado
+    ? x + ancho + profundidadPestana + separacionCota
+    : x + ancho + separacionCota;
+
+const cotaLargoY1 = tienePestanaDiamantado
+    ? y - profundidadPestana
+    : y;
+
+const cotaLargoY2 = tienePestanaDiamantado
+    ? y + largo + profundidadPestana
+    : y + largo;
+
+const cotaLargoExtremoX = tienePestanaDiamantado
+    ? x + ancho + profundidadPestana
+    : x + ancho;
         
         // RECTÁNGULO INTERIOR
         const ix = x + hip;
@@ -1348,31 +1364,31 @@ ${tienePestanaDiamantado ? `
         : desarrolloAnchoBase)} mm
 </text>
                 <!-- COTA DEL DESARROLLO LARGO -->
-                <line x1="310" y1="${y}"
-                      x2="310" y2="${y + largo}"
-                      stroke="currentColor"
-                      marker-start="url(#flechaD)"
-                      marker-end="url(#flechaD)"/>
+<line x1="${cotaLargoX}" y1="${cotaLargoY1}"
+      x2="${cotaLargoX}" y2="${cotaLargoY2}"
+      stroke="currentColor"
+      marker-start="url(#flechaD)"
+      marker-end="url(#flechaD)"/>
 
-                <line x1="${x + ancho}" y1="${y}"
-                      x2="300" y2="${y}"
-                      stroke="currentColor"/>
+<line x1="${cotaLargoExtremoX}" y1="${cotaLargoY1}"
+      x2="${cotaLargoX}" y2="${cotaLargoY1}"
+      stroke="currentColor"/>
 
-                <line x1="${x + ancho}" y1="${y + largo}"
-                      x2="340" y2="${y + largo}"
-                      stroke="currentColor"/>
+<line x1="${cotaLargoExtremoX}" y1="${cotaLargoY2}"
+      x2="${cotaLargoX}" y2="${cotaLargoY2}"
+      stroke="currentColor"/>
 
-                <text x="320"
-                      y="${y + largo / 2}"
-                      text-anchor="middle"
-                      font-size="15"
-                      fill="currentColor"
-                      font-weight="bold"
-                     transform="rotate(90 320 ${y + largo / 2})">
-                   ${Math.round(desarrolloLargoBase)} mm
-                   
-                </text>
-
+<text x="${cotaLargoX + 10}"
+      y="${(cotaLargoY1 + cotaLargoY2) / 2}"
+      text-anchor="middle"
+      font-size="15"
+      fill="currentColor"
+      font-weight="bold"
+      transform="rotate(90 ${cotaLargoX + 10} ${(cotaLargoY1 + cotaLargoY2) / 2})">
+    ${Math.round(tienePestanaDiamantado
+        ? desarrolloLargoBase + (2 * alturaPestanaDiamantado)
+        : desarrolloLargoBase)} mm
+</text>
                 <!-- COTA DEL ANCHO INTERIOR PUNTEADO -->
                 <line x1="${ix}" y1="${cotaInteriorY}"
                       x2="${ix + iw}" y2="${cotaInteriorY}"

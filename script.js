@@ -1151,7 +1151,7 @@ function calcularDiamantado() {
 const profundidadPestana =
     alturaPestanaDiamantado * escalaDiamantado;
 
-const separacionCota = 5 * escalaDiamantado;
+const separacionCota = 15 * escalaDiamantado;
 
 const cotaAnchoX1 = tienePestanaDiamantado
     ? x - profundidadPestana

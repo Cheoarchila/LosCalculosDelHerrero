@@ -1180,6 +1180,10 @@ const cotaLargoY2 = tienePestanaDiamantado
 const cotaLargoExtremoX = tienePestanaDiamantado
     ? x + ancho + profundidadPestana
     : x + ancho;
+
+const cotaFinalAnchoY = tienePestanaDiamantado
+    ? y + largo + profundidadPestana + separacionCota
+    : y + largo + separacionCota;
         
         // RECTÁNGULO INTERIOR
         const ix = x + hip;
@@ -1207,6 +1211,7 @@ const contorno = `
         const cotaInteriorX = ix - 15;
         const cotaFinalY = y + largo + 30;
         const cotaFinalX = 35;
+        
 
         dibujoDiamantado = `
 
@@ -1439,32 +1444,30 @@ ${tienePestanaDiamantado ? `
                 </text>
 
                 <!-- COTA DE LA MEDIDA FINAL DEL ANCHO -->
-                <line x1="${x + corte}" y1="${cotaFinalY}"
-                      x2="${x + ancho - corte}" y2="${cotaFinalY}"
-                      stroke="currentColor"
-                      marker-start="url(#flechaD)"
-                      marker-end="url(#flechaD)"/>
+<line x1="${x + corte}" y1="${cotaFinalAnchoY}"
+      x2="${x + ancho - corte}" y2="${cotaFinalAnchoY}"
+      stroke="currentColor"
+      marker-start="url(#flechaD)"
+      marker-end="url(#flechaD)"/>
 
-                <line x1="${x + corte}" y1="${y + largo}"
-                      x2="${x + corte}" y2="${cotaFinalY}"
-                      stroke="currentColor"/>
+<line x1="${x + corte}" y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0)}"
+      x2="${x + corte}" y2="${cotaFinalAnchoY}"
+      stroke="currentColor"/>
 
-                <line x1="${x + ancho - corte}" y1="${y + largo}"
-                      x2="${x + ancho - corte}" y2="${cotaFinalY}"
-                      stroke="currentColor"/>
+<line x1="${x + ancho - corte}" y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0)}"
+      x2="${x + ancho - corte}" y2="${cotaFinalAnchoY}"
+      stroke="currentColor"/>
 
-                <text x="${x + ancho / 2}"
-                      y="${cotaFinalY + 15}"
-                      text-anchor="middle"
-                      font-size="13"
-                      fill="currentColor"
-                      font-weight="bold">
-                Final: ${Math.round(tienePestanaDiamantado
-    ? anchoDiamantado - (2 * espesorDiamantado)
-    : anchoDiamantado)} mm
-                    
-                </text>
-
+<text x="${x + ancho / 2}"
+      y="${cotaFinalAnchoY + 15}"
+      text-anchor="middle"
+      font-size="13"
+      fill="currentColor"
+      font-weight="bold">
+    Final: ${Math.round(tienePestanaDiamantado
+        ? anchoDiamantado - (2 * espesorDiamantado)
+        : anchoDiamantado)} mm
+</text>
                 <!-- COTA DE LA MEDIDA FINAL DEL LARGO -->
                 <line x1="${cotaFinalX}" y1="${y + corte}"
                       x2="${cotaFinalX}" y2="${y + largo - corte}"

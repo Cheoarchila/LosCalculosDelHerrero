@@ -1328,7 +1328,7 @@ ${tienePestanaDiamantado ? `
                       font-size="15"
                       fill="currentColor"
                       font-weight="bold">
-                   ${Math.round(desarrolloAnchoBase)} mm
+                   ${Math.round(desarrolloAnchoBase - (2 * espesorDiamantado))} mm
                 </text>
 
                 <!-- COTA DEL DESARROLLO LARGO -->
@@ -1353,7 +1353,7 @@ ${tienePestanaDiamantado ? `
                       fill="currentColor"
                       font-weight="bold"
                      transform="rotate(90 320 ${y + largo / 2})">
-                   ${Math.round(desarrolloLargoBase)} mm
+                   ${Math.round(desarrolloLargoBase - (2 * espesorDiamantado))} mm
                    
                 </text>
 

@@ -1487,10 +1487,8 @@ ${tienePestanaDiamantado ? `
         <p>Desarrollo del largo:
         <strong>${Math.round(desarrolloLargoDiamantado)} mm</strong></p>
 
-        ${tienePestanaDiamantado ? "" : `
-            <h3>Plancha desplegada</h3>
-            ${dibujoDiamantado}
-        `}
+               <h3>Plancha desplegada</h3>
+        ${dibujoDiamantado}
 
     `;
 }

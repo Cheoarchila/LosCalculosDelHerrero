@@ -1414,8 +1414,6 @@ const contorno = `
     // DIBUJO CON CUATRO PESTAÑAS
     // =====================================================
 
-    else {
-
         // MEDIDAS DE LAS PESTAÑAS
         const anchoPestana =
             anchoDiamantado - (2 * espesorDiamantado);

@@ -1119,7 +1119,7 @@ function calcularDiamantado() {
 
     let dibujoDiamantado = "";
 
-    if (!tienePestanaDiamantado) {
+    {
 
         // MEDIDA DE LOS CORTES DE LAS ESQUINAS
         const corteDiamantado =
@@ -1157,6 +1157,9 @@ function calcularDiamantado() {
 
         const hip = hipotenusaDiamantado * escalaDiamantado;
         const corte = corteDiamantado * escalaDiamantado;
+        // PROFUNDIDAD DE LAS PESTAÑAS
+const profundidadPestana =
+    alturaPestanaDiamantado * escalaDiamantado;
 
         // RECTÁNGULO INTERIOR
         const ix = x + hip;
@@ -1258,6 +1261,63 @@ const contorno = `
                 <line x1="${ix}" y1="${iy + ih}"
                       x2="${x + corte}" y2="${y + largo}"
                       stroke="#2878b9" stroke-width="1.5"/>
+
+<!-- PESTAÑAS: SOLO TRES LINEAS ROJAS POR LADO -->
+${tienePestanaDiamantado ? `
+
+    <!-- SUPERIOR -->
+    <line x1="${ix}" y1="${iy - profundidadPestana}"
+          x2="${ix + iw}" y2="${iy - profundidadPestana}"
+          stroke="red" stroke-width="2"/>
+
+    <line x1="${ix}" y1="${iy - profundidadPestana}"
+          x2="${ix}" y2="${iy}"
+          stroke="red" stroke-width="2"/>
+
+    <line x1="${ix + iw}" y1="${iy - profundidadPestana}"
+          x2="${ix + iw}" y2="${iy}"
+          stroke="red" stroke-width="2"/>
+
+    <!-- INFERIOR -->
+    <line x1="${ix}" y1="${iy + ih + profundidadPestana}"
+          x2="${ix + iw}" y2="${iy + ih + profundidadPestana}"
+          stroke="red" stroke-width="2"/>
+
+    <line x1="${ix}" y1="${iy + ih}"
+          x2="${ix}" y2="${iy + ih + profundidadPestana}"
+          stroke="red" stroke-width="2"/>
+
+    <line x1="${ix + iw}" y1="${iy + ih}"
+          x2="${ix + iw}" y2="${iy + ih + profundidadPestana}"
+          stroke="red" stroke-width="2"/>
+
+    <!-- IZQUIERDA -->
+    <line x1="${ix - profundidadPestana}" y1="${iy}"
+          x2="${ix - profundidadPestana}" y2="${iy + ih}"
+          stroke="red" stroke-width="2"/>
+
+    <line x1="${ix - profundidadPestana}" y1="${iy}"
+          x2="${ix}" y2="${iy}"
+          stroke="red" stroke-width="2"/>
+
+    <line x1="${ix - profundidadPestana}" y1="${iy + ih}"
+          x2="${ix}" y2="${iy + ih}"
+          stroke="red" stroke-width="2"/>
+
+    <!-- DERECHA -->
+    <line x1="${ix + iw + profundidadPestana}" y1="${iy}"
+          x2="${ix + iw + profundidadPestana}" y2="${iy + ih}"
+          stroke="red" stroke-width="2"/>
+
+    <line x1="${ix + iw}" y1="${iy}"
+          x2="${ix + iw + profundidadPestana}" y2="${iy}"
+          stroke="red" stroke-width="2"/>
+
+    <line x1="${ix + iw}" y1="${iy + ih}"
+          x2="${ix + iw + profundidadPestana}" y2="${iy + ih}"
+          stroke="red" stroke-width="2"/>
+
+` : ""}
 
                 <!-- COTA DEL DESARROLLO ANCHO -->
                 <line x1="${x}" y1="48"

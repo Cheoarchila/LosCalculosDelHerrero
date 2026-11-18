@@ -1453,7 +1453,7 @@ ${tienePestanaDiamantado ? `
       marker-end="url(#flechaD)"/>
 
 <line x1="${x + corte}"
-      y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0) + (2 * escalaDiamantado)}"
+      y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0) + (10 * escalaDiamantado)}"
       x2="${x + corte}"
       y2="${cotaFinalAnchoY + (3 * escalaDiamantado)}"
       stroke="currentColor"/>

@@ -1119,8 +1119,7 @@ function calcularDiamantado() {
 
     let dibujoDiamantado = "";
 
-    if (!tienePestanaDiamantado) {
-
+   
         // MEDIDA DE LOS CORTES DE LAS ESQUINAS
         const corteDiamantado =
             (desarrolloAnchoDiamantado - anchoDiamantado) / 2;
@@ -1184,6 +1183,14 @@ const contorno = `
         const cotaInteriorX = ix - 15;
         const cotaFinalY = y + largo + 30;
         const cotaFinalX = 35;
+
+    // MEDIDAS DE LAS CUATRO PESTAÑAS
+const anchoPestana = anchoDiamantado - (2 * espesorDiamantado);
+const largoPestana = largoDiamantado - (2 * espesorDiamantado);
+const profundidadPestana = alturaPestanaDiamantado;
+
+const espesorEscala = espesorDiamantado * escalaDiamantado;
+const profundidadEscala = profundidadPestana * escalaDiamantado;
 
         dibujoDiamantado = `
 
@@ -1258,6 +1265,58 @@ const contorno = `
                 <line x1="${ix}" y1="${iy + ih}"
                       x2="${x + corte}" y2="${y + largo}"
                       stroke="#2878b9" stroke-width="1.5"/>
+
+<!-- PESTAÑA SUPERIOR -->
+${tienePestanaDiamantado ? `
+<rect
+    x="${x + corte + espesorEscala}"
+    y="${y + corte - profundidadEscala}"
+    width="${anchoPestana * escalaDiamantado}"
+    height="${profundidadEscala}"
+    fill="#dce8f2"
+    fill-opacity="0.15"
+    stroke="#2878b9"
+    stroke-width="2"/>
+` : ""}
+
+<!-- PESTAÑA INFERIOR -->
+${tienePestanaDiamantado ? `
+<rect
+    x="${x + corte + espesorEscala}"
+    y="${y + corte + largo}"
+    width="${anchoPestana * escalaDiamantado}"
+    height="${profundidadEscala}"
+    fill="#dce8f2"
+    fill-opacity="0.15"
+    stroke="#2878b9"
+    stroke-width="2"/>
+` : ""}
+
+<!-- PESTAÑA IZQUIERDA -->
+${tienePestanaDiamantado ? `
+<rect
+    x="${x + corte - profundidadEscala}"
+    y="${y + corte + espesorEscala}"
+    width="${profundidadEscala}"
+    height="${largoPestana * escalaDiamantado}"
+    fill="#dce8f2"
+    fill-opacity="0.15"
+    stroke="#2878b9"
+    stroke-width="2"/>
+` : ""}
+
+<!-- PESTAÑA DERECHA -->
+${tienePestanaDiamantado ? `
+<rect
+    x="${x + corte + ancho}"
+    y="${y + corte + espesorEscala}"
+    width="${profundidadEscala}"
+    height="${largoPestana * escalaDiamantado}"
+    fill="#dce8f2"
+    fill-opacity="0.15"
+    stroke="#2878b9"
+    stroke-width="2"/>
+` : ""}
 
                 <!-- COTA DEL DESARROLLO ANCHO -->
                 <line x1="${x}" y1="48"
@@ -1408,261 +1467,6 @@ const contorno = `
             </svg>
         </div>
         `;
-    } else {
-        
-    // =====================================================
-    // DIBUJO CON CUATRO PESTAÑAS
-    // =====================================================
-
-        // MEDIDAS DE LAS PESTAÑAS
-        const anchoPestana =
-            anchoDiamantado - (2 * espesorDiamantado);
-
-        const largoPestana =
-            largoDiamantado - (2 * espesorDiamantado);
-
-        const profundidadPestana =
-            alturaPestanaDiamantado;
-
-        // MEDIDAS DEL RECTANGULO CENTRAL
-        const anchoCentral =
-            anchoDiamantado - (2 * alturaDiamantado);
-
-        const largoCentral =
-            largoDiamantado - (2 * alturaDiamantado);
-
-        if (
-            anchoPestana <= 0 ||
-            largoPestana <= 0 ||
-            anchoCentral <= 0 ||
-            largoCentral <= 0
-        ) {
-            alert("Las medidas no permiten construir las pestañas.");
-            return;
-        }
-
-        // DIMENSIONES TOTALES PARA AJUSTAR LA ESCALA
-        const totalAncho =
-            Math.max(anchoCentral, anchoPestana) +
-            (2 * profundidadPestana);
-
-        const totalLargo =
-            Math.max(largoCentral, largoPestana) +
-            (2 * profundidadPestana);
-
-        const escala = Math.min(
-            360 / totalAncho,
-            300 / totalLargo
-        );
-
-        // CUERPO CENTRAL
-        const anchoC = anchoCentral * escala;
-        const largoC = largoCentral * escala;
-        const profundidad = profundidadPestana * escala;
-
-        const x = (560 - totalAncho * escala) / 2
-            + profundidad
-            + ((Math.max(anchoCentral, anchoPestana) - anchoCentral) / 2) * escala;
-
-        const y = (450 - totalLargo * escala) / 2
-            + profundidad
-            + ((Math.max(largoCentral, largoPestana) - largoCentral) / 2) * escala;
-
-        // PESTAÑAS SUPERIOR E INFERIOR
-        const anchoP = anchoPestana * escala;
-
-        const xP = x + (anchoC - anchoP) / 2;
-
-        const ySuperior = y - profundidad;
-        const yInferior = y + largoC;
-
-        // PESTAÑAS LATERALES
-        const largoP = largoPestana * escala;
-
-        const yP = y + (largoC - largoP) / 2;
-
-        const xIzquierda = x - profundidad;
-        const xDerecha = x + anchoC;
-
-        dibujoDiamantado = `
-
-        <div style="width:100%; overflow-x:auto; text-align:center;">
-
-            <svg viewBox="0 0 560 450"
-                 style="width:100%; max-width:600px; height:auto;"
-                 xmlns="http://www.w3.org/2000/svg">
-
-                <defs>
-                    <marker id="flechaP"
-                        markerWidth="7"
-                        markerHeight="7"
-                        refX="3"
-                        refY="3"
-                        orient="auto-start-reverse">
-                        <path d="M0,0 L6,3 L0,6 Z"
-                              fill="currentColor"/>
-                    </marker>
-                </defs>
-
-                <!-- CUERPO CENTRAL -->
-                <rect x="${x}" y="${y}"
-                      width="${anchoC}" height="${largoC}"
-                      fill="#dce8f2"
-                      fill-opacity="0.15"
-                      stroke="#2878b9"
-                      stroke-width="2"/>
-
-                <!-- PESTAÑA SUPERIOR -->
-                <rect x="${xP}" y="${ySuperior}"
-                      width="${anchoP}" height="${profundidad}"
-                      fill="#dce8f2"
-                      fill-opacity="0.15"
-                      stroke="#2878b9"
-                      stroke-width="2"/>
-
-                <!-- PESTAÑA INFERIOR -->
-                <rect x="${xP}" y="${yInferior}"
-                      width="${anchoP}" height="${profundidad}"
-                      fill="#dce8f2"
-                      fill-opacity="0.15"
-                      stroke="#2878b9"
-                      stroke-width="2"/>
-
-                <!-- PESTAÑA IZQUIERDA -->
-                <rect x="${xIzquierda}" y="${yP}"
-                      width="${profundidad}" height="${largoP}"
-                      fill="#dce8f2"
-                      fill-opacity="0.15"
-                      stroke="#2878b9"
-                      stroke-width="2"/>
-
-                <!-- PESTAÑA DERECHA -->
-                <rect x="${xDerecha}" y="${yP}"
-                      width="${profundidad}" height="${largoP}"
-                      fill="#dce8f2"
-                      fill-opacity="0.15"
-                      stroke="#2878b9"
-                      stroke-width="2"/>
-
-                <!-- DIAGONALES SUPERIORES -->
-                <line x1="${x}" y1="${y}"
-                      x2="${xP}" y2="${y}"
-                      stroke="#2878b9" stroke-width="1.5"/>
-
-                <line x1="${x + anchoC}" y1="${y}"
-                      x2="${xP + anchoP}" y2="${y}"
-                      stroke="#2878b9" stroke-width="1.5"/>
-
-                <!-- DIAGONALES INFERIORES -->
-                <line x1="${x}" y1="${y + largoC}"
-                      x2="${xP}" y2="${y + largoC}"
-                      stroke="#2878b9" stroke-width="1.5"/>
-
-                <line x1="${x + anchoC}" y1="${y + largoC}"
-                      x2="${xP + anchoP}" y2="${y + largoC}"
-                      stroke="#2878b9" stroke-width="1.5"/>
-
-                <!-- DIAGONALES LATERALES -->
-                <line x1="${x}" y1="${y}"
-                      x2="${x}" y2="${yP}"
-                      stroke="#2878b9" stroke-width="1.5"/>
-
-                <line x1="${x}" y1="${y + largoC}"
-                      x2="${x}" y2="${yP + largoP}"
-                      stroke="#2878b9" stroke-width="1.5"/>
-
-                <line x1="${x + anchoC}" y1="${y}"
-                      x2="${x + anchoC}" y2="${yP}"
-                      stroke="#2878b9" stroke-width="1.5"/>
-
-                <line x1="${x + anchoC}" y1="${y + largoC}"
-                      x2="${x + anchoC}" y2="${yP + largoP}"
-                      stroke="#2878b9" stroke-width="1.5"/>
-
-                <!-- COTA ANCHO PESTAÑA SUPERIOR -->
-                <line x1="${xP}" y1="${ySuperior - 12}"
-                      x2="${xP + anchoP}" y2="${ySuperior - 12}"
-                      stroke="currentColor"
-                      marker-start="url(#flechaP)"
-                      marker-end="url(#flechaP)"/>
-
-                <text x="${xP + anchoP / 2}"
-                      y="${ySuperior - 17}"
-                      text-anchor="middle"
-                      font-size="12"
-                      fill="currentColor">
-                    ${anchoPestana} mm
-                </text>
-
-                <!-- COTA PROFUNDIDAD PESTAÑA SUPERIOR -->
-                <line x1="${xP + anchoP + 12}" y1="${ySuperior}"
-                      x2="${xP + anchoP + 12}" y2="${y}"
-                      stroke="currentColor"
-                      marker-start="url(#flechaP)"
-                      marker-end="url(#flechaP)"/>
-
-                <text x="${xP + anchoP + 17}"
-                      y="${ySuperior + profundidad / 2}"
-                      font-size="11"
-                      fill="currentColor">
-                    ${profundidadPestana} mm
-                </text>
-
-                <!-- COTA ANCHO PESTAÑA INFERIOR -->
-                <line x1="${xP}" y1="${yInferior + profundidad + 15}"
-                      x2="${xP + anchoP}" y2="${yInferior + profundidad + 15}"
-                      stroke="currentColor"
-                      marker-start="url(#flechaP)"
-                      marker-end="url(#flechaP)"/>
-
-                <text x="${xP + anchoP / 2}"
-                      y="${yInferior + profundidad + 30}"
-                      text-anchor="middle"
-                      font-size="12"
-                      fill="currentColor">
-                    ${anchoPestana} mm
-                </text>
-
-                <!-- COTA LARGO PESTAÑAS LATERALES -->
-                <line x1="${xIzquierda - 12}" y1="${yP}"
-                      x2="${xIzquierda - 12}" y2="${yP + largoP}"
-                      stroke="currentColor"
-                      marker-start="url(#flechaP)"
-                      marker-end="url(#flechaP)"/>
-
-                <text x="${xIzquierda - 17}"
-                      y="${yP + largoP / 2}"
-                      text-anchor="middle"
-                      font-size="12"
-                      fill="currentColor"
-                      transform="rotate(-90 ${xIzquierda - 17} ${yP + largoP / 2})">
-                    ${largoPestana} mm
-                </text>
-
-                <!-- COTA ANCHO CUERPO CENTRAL -->
-                <text x="${x + anchoC / 2}"
-                      y="${y + largoC / 2 - 5}"
-                      text-anchor="middle"
-                      font-size="12"
-                      fill="currentColor">
-                    ${anchoCentral} mm
-                </text>
-
-                <!-- COTA LARGO CUERPO CENTRAL -->
-                <text x="${x + anchoC / 2}"
-                      y="${y + largoC / 2 + 12}"
-                      text-anchor="middle"
-                      font-size="12"
-                      fill="currentColor">
-                    ${largoCentral} mm
-                </text>
-
-            </svg>
-        </div>
-        `;
-    }
-
-
     // =====================================================
     // MOSTRAR RESULTADOS
     // =====================================================

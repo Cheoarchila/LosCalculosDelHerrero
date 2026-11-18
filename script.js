@@ -1256,59 +1256,58 @@ const contorno = `
 ${tienePestanaDiamantado ? `
 
     <!-- SUPERIOR -->
-    <line x1="${ix}" y1="${iy - profundidadPestana}"
-          x2="${ix + iw}" y2="${iy - profundidadPestana}"
+    <line x1="${x + corte}" y1="${y - profundidadPestana}"
+          x2="${x + ancho - corte}" y2="${y - profundidadPestana}"
           stroke="red" stroke-width="2"/>
 
-    <line x1="${ix}" y1="${iy - profundidadPestana}"
-          x2="${ix}" y2="${iy}"
+    <line x1="${x + corte}" y1="${y - profundidadPestana}"
+          x2="${x + corte}" y2="${y}"
           stroke="red" stroke-width="2"/>
 
-    <line x1="${ix + iw}" y1="${iy - profundidadPestana}"
-          x2="${ix + iw}" y2="${iy}"
+    <line x1="${x + ancho - corte}" y1="${y - profundidadPestana}"
+          x2="${x + ancho - corte}" y2="${y}"
           stroke="red" stroke-width="2"/>
 
     <!-- INFERIOR -->
-    <line x1="${ix}" y1="${iy + ih + profundidadPestana}"
-          x2="${ix + iw}" y2="${iy + ih + profundidadPestana}"
+    <line x1="${x + corte}" y1="${y + largo + profundidadPestana}"
+          x2="${x + ancho - corte}" y2="${y + largo + profundidadPestana}"
           stroke="red" stroke-width="2"/>
 
-    <line x1="${ix}" y1="${iy + ih}"
-          x2="${ix}" y2="${iy + ih + profundidadPestana}"
+    <line x1="${x + corte}" y1="${y + largo}"
+          x2="${x + corte}" y2="${y + largo + profundidadPestana}"
           stroke="red" stroke-width="2"/>
 
-    <line x1="${ix + iw}" y1="${iy + ih}"
-          x2="${ix + iw}" y2="${iy + ih + profundidadPestana}"
+    <line x1="${x + ancho - corte}" y1="${y + largo}"
+          x2="${x + ancho - corte}" y2="${y + largo + profundidadPestana}"
           stroke="red" stroke-width="2"/>
 
     <!-- IZQUIERDA -->
-    <line x1="${ix - profundidadPestana}" y1="${iy}"
-          x2="${ix - profundidadPestana}" y2="${iy + ih}"
+    <line x1="${x - profundidadPestana}" y1="${y + corte}"
+          x2="${x - profundidadPestana}" y2="${y + largo - corte}"
           stroke="red" stroke-width="2"/>
 
-    <line x1="${ix - profundidadPestana}" y1="${iy}"
-          x2="${ix}" y2="${iy}"
+    <line x1="${x - profundidadPestana}" y1="${y + corte}"
+          x2="${x}" y2="${y + corte}"
           stroke="red" stroke-width="2"/>
 
-    <line x1="${ix - profundidadPestana}" y1="${iy + ih}"
-          x2="${ix}" y2="${iy + ih}"
+    <line x1="${x - profundidadPestana}" y1="${y + largo - corte}"
+          x2="${x}" y2="${y + largo - corte}"
           stroke="red" stroke-width="2"/>
 
     <!-- DERECHA -->
-    <line x1="${ix + iw + profundidadPestana}" y1="${iy}"
-          x2="${ix + iw + profundidadPestana}" y2="${iy + ih}"
+    <line x1="${x + ancho + profundidadPestana}" y1="${y + corte}"
+          x2="${x + ancho + profundidadPestana}" y2="${y + largo - corte}"
           stroke="red" stroke-width="2"/>
 
-    <line x1="${ix + iw}" y1="${iy}"
-          x2="${ix + iw + profundidadPestana}" y2="${iy}"
+    <line x1="${x + ancho}" y1="${y + corte}"
+          x2="${x + ancho + profundidadPestana}" y2="${y + corte}"
           stroke="red" stroke-width="2"/>
 
-    <line x1="${ix + iw}" y1="${iy + ih}"
-          x2="${ix + iw + profundidadPestana}" y2="${iy + ih}"
+    <line x1="${x + ancho}" y1="${y + largo - corte}"
+          x2="${x + ancho + profundidadPestana}" y2="${y + largo - corte}"
           stroke="red" stroke-width="2"/>
 
 ` : ""}
-
                 <!-- COTA DEL DESARROLLO ANCHO -->
                 <line x1="${x}" y1="48"
                       x2="${x + ancho}" y2="48"

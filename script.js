@@ -1151,6 +1151,20 @@ function calcularDiamantado() {
 const profundidadPestana =
     alturaPestanaDiamantado * escalaDiamantado;
 
+const separacionCota = 5 * escalaDiamantado;
+
+const cotaAnchoX1 = tienePestanaDiamantado
+    ? x - profundidadPestana
+    : x;
+
+const cotaAnchoX2 = tienePestanaDiamantado
+    ? x + ancho + profundidadPestana
+    : x + ancho;
+
+const cotaAnchoY = tienePestanaDiamantado
+    ? y - profundidadPestana - separacionCota
+    : y - separacionCota;
+        
         // RECTÁNGULO INTERIOR
         const ix = x + hip;
         const iy = y + hip;
@@ -1309,28 +1323,30 @@ ${tienePestanaDiamantado ? `
 
 ` : ""}
                 <!-- COTA DEL DESARROLLO ANCHO -->
-                <line x1="${x}" y1="48"
-                      x2="${x + ancho}" y2="48"
-                      stroke="currentColor"
-                      marker-start="url(#flechaD)"
-                      marker-end="url(#flechaD)"/>
+<line x1="${cotaAnchoX1}" y1="${cotaAnchoY}"
+      x2="${cotaAnchoX2}" y2="${cotaAnchoY}"
+      stroke="currentColor"
+      marker-start="url(#flechaD)"
+      marker-end="url(#flechaD)"/>
 
-                <line x1="${x}" y1="48"
-                      x2="${x}" y2="${y}"
-                      stroke="currentColor"/>
+<line x1="${cotaAnchoX1}" y1="${cotaAnchoY}"
+      x2="${cotaAnchoX1}" y2="${tienePestanaDiamantado ? y - profundidadPestana : y}"
+      stroke="currentColor"/>
 
-                <line x1="${x + ancho}" y1="48"
-                      x2="${x + ancho}" y2="${y}"
-                      stroke="currentColor"/>
+<line x1="${cotaAnchoX2}" y1="${cotaAnchoY}"
+      x2="${cotaAnchoX2}" y2="${tienePestanaDiamantado ? y - profundidadPestana : y}"
+      stroke="currentColor"/>
 
-                <text x="${x + ancho / 2}" y="35"
-                      text-anchor="middle"
-                      font-size="15"
-                      fill="currentColor"
-                      font-weight="bold">
-                   ${Math.round(desarrolloAnchoBase)} mm
-                </text>
-
+<text x="${(cotaAnchoX1 + cotaAnchoX2) / 2}"
+      y="${cotaAnchoY - 10}"
+      text-anchor="middle"
+      font-size="15"
+      fill="currentColor"
+      font-weight="bold">
+    ${Math.round(tienePestanaDiamantado
+        ? desarrolloAnchoBase + (2 * alturaPestanaDiamantado)
+        : desarrolloAnchoBase)} mm
+</text>
                 <!-- COTA DEL DESARROLLO LARGO -->
                 <line x1="310" y1="${y}"
                       x2="310" y2="${y + largo}"

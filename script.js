@@ -1427,7 +1427,7 @@ ${tienePestanaDiamantado ? `
                       font-size="13"
                       fill="currentColor"
                       font-weight="bold">
-                    Final: ${anchoDiamantado - (2 *espesor)} mm
+                    Final: ${anchoDiamantado} mm
                     
                 </text>
 
@@ -1453,7 +1453,7 @@ ${tienePestanaDiamantado ? `
                       fill="currentColor"
                       font-weight="bold"
                       transform="rotate(-90 20 ${y + largo / 2})">
-                    Final: ${largoDiamantado- (2 *espesor)} mm
+                    Final: ${largoDiamantado} mm
                 </text>
 
             </svg>

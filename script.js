@@ -1328,7 +1328,7 @@ ${tienePestanaDiamantado ? `
                       font-size="15"
                       fill="currentColor"
                       font-weight="bold">
-                   ${Math.round(desarrolloAnchoBase - (2 * espesorDiamantado))} mm
+                   ${Math.round(desarrolloAnchoBase)} mm
                 </text>
 
                 <!-- COTA DEL DESARROLLO LARGO -->
@@ -1353,7 +1353,7 @@ ${tienePestanaDiamantado ? `
                       fill="currentColor"
                       font-weight="bold"
                      transform="rotate(90 320 ${y + largo / 2})">
-                   ${Math.round(desarrolloLargoBase - (2 * espesorDiamantado))} mm
+                   ${Math.round(desarrolloLargoBase)} mm
                    
                 </text>
 
@@ -1427,7 +1427,8 @@ ${tienePestanaDiamantado ? `
                       font-size="13"
                       fill="currentColor"
                       font-weight="bold">
-                    Final: ${anchoDiamantado} mm
+                    Final: ${anchoDiamantado - (2 *espesor)} mm
+                    
                 </text>
 
                 <!-- COTA DE LA MEDIDA FINAL DEL LARGO -->
@@ -1452,7 +1453,7 @@ ${tienePestanaDiamantado ? `
                       fill="currentColor"
                       font-weight="bold"
                       transform="rotate(-90 20 ${y + largo / 2})">
-                    Final: ${largoDiamantado} mm
+                    Final: ${largoDiamantado- (2 *espesor)} mm
                 </text>
 
             </svg>

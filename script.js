@@ -1119,7 +1119,8 @@ function calcularDiamantado() {
 
     let dibujoDiamantado = "";
 
-   
+    if (!tienePestanaDiamantado) {
+
         // MEDIDA DE LOS CORTES DE LAS ESQUINAS
         const corteDiamantado =
             (desarrolloAnchoDiamantado - anchoDiamantado) / 2;
@@ -1183,14 +1184,6 @@ const contorno = `
         const cotaInteriorX = ix - 15;
         const cotaFinalY = y + largo + 30;
         const cotaFinalX = 35;
-
-    // MEDIDAS DE LAS CUATRO PESTAÑAS
-const anchoPestana = anchoDiamantado - (2 * espesorDiamantado);
-const largoPestana = largoDiamantado - (2 * espesorDiamantado);
-const profundidadPestana = alturaPestanaDiamantado;
-
-const espesorEscala = espesorDiamantado * escalaDiamantado;
-const profundidadEscala = profundidadPestana * escalaDiamantado;
 
         dibujoDiamantado = `
 
@@ -1265,58 +1258,6 @@ const profundidadEscala = profundidadPestana * escalaDiamantado;
                 <line x1="${ix}" y1="${iy + ih}"
                       x2="${x + corte}" y2="${y + largo}"
                       stroke="#2878b9" stroke-width="1.5"/>
-
-<!-- PESTAÑA SUPERIOR -->
-${tienePestanaDiamantado ? `
-<rect
-    x="${x + corte + espesorEscala}"
-    y="${y + corte - profundidadEscala}"
-    width="${anchoPestana * escalaDiamantado}"
-    height="${profundidadEscala}"
-    fill="#dce8f2"
-    fill-opacity="0.15"
-    stroke="#2878b9"
-    stroke-width="2"/>
-` : ""}
-
-<!-- PESTAÑA INFERIOR -->
-${tienePestanaDiamantado ? `
-<rect
-    x="${x + corte + espesorEscala}"
-    y="${y + corte + largo}"
-    width="${anchoPestana * escalaDiamantado}"
-    height="${profundidadEscala}"
-    fill="#dce8f2"
-    fill-opacity="0.15"
-    stroke="#2878b9"
-    stroke-width="2"/>
-` : ""}
-
-<!-- PESTAÑA IZQUIERDA -->
-${tienePestanaDiamantado ? `
-<rect
-    x="${x + corte - profundidadEscala}"
-    y="${y + corte + espesorEscala}"
-    width="${profundidadEscala}"
-    height="${largoPestana * escalaDiamantado}"
-    fill="#dce8f2"
-    fill-opacity="0.15"
-    stroke="#2878b9"
-    stroke-width="2"/>
-` : ""}
-
-<!-- PESTAÑA DERECHA -->
-${tienePestanaDiamantado ? `
-<rect
-    x="${x + corte + ancho}"
-    y="${y + corte + espesorEscala}"
-    width="${profundidadEscala}"
-    height="${largoPestana * escalaDiamantado}"
-    fill="#dce8f2"
-    fill-opacity="0.15"
-    stroke="#2878b9"
-    stroke-width="2"/>
-` : ""}
 
                 <!-- COTA DEL DESARROLLO ANCHO -->
                 <line x1="${x}" y1="48"
@@ -1467,6 +1408,8 @@ ${tienePestanaDiamantado ? `
             </svg>
         </div>
         `;
+    }
+
     // =====================================================
     // MOSTRAR RESULTADOS
     // =====================================================
@@ -1484,10 +1427,10 @@ ${tienePestanaDiamantado ? `
         <p>Desarrollo del largo:
         <strong>${Math.round(desarrolloLargoDiamantado)} mm</strong></p>
 
-      ${dibujoDiamantado ? `
-    <h3>Plancha desplegada</h3>
-    ${dibujoDiamantado}
-` : ""}
+        ${tienePestanaDiamantado ? "" : `
+            <h3>Plancha desplegada</h3>
+            ${dibujoDiamantado}
+        `}
 
     `;
 }

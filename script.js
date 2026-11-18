@@ -1082,14 +1082,12 @@ function calcularDiamantado() {
 
     // DESARROLLO BASE
     let desarrolloAnchoDiamantado =
-        anchoDiamantado -
-        (2 * alturaDiamantado) +
-        (2 * hipotenusaDiamantado);
+        anchoDiamantado - (2 * alturaDiamantado) + (2 * hipotenusaDiamantado);
 
-    let desarrolloLargoDiamantado =
-        largoDiamantado -
-        (2 * alturaDiamantado) +
-        (2 * hipotenusaDiamantado);
+    let desarrolloLargoDiamantado = largoDiamantado - (2 * alturaDiamantado) + (2 * hipotenusaDiamantado);
+
+    const desarrolloAnchoBase = desarrolloAnchoDiamantado;
+    const desarrolloLargoBase = desarrolloLargoDiamantado;
 
     // COMPENSACIÓN DE PESTAÑA
     if (tienePestanaDiamantado) {
@@ -1122,16 +1120,12 @@ function calcularDiamantado() {
     {
 
         // MEDIDA DE LOS CORTES DE LAS ESQUINAS
-        const corteDiamantado =
-            (desarrolloAnchoDiamantado - anchoDiamantado) / 2;
+       const corteDiamantado = (desarrolloAnchoBase - anchoDiamantado) / 2;
 
         // DIMENSIONES INTERIORES
-        const interiorAnchoDiamantado =
-            desarrolloAnchoDiamantado - (2 * hipotenusaDiamantado);
-
-        const interiorLargoDiamantado =
-            desarrolloLargoDiamantado - (2 * hipotenusaDiamantado);
-
+        const interiorAnchoDiamantado = desarrolloAnchoBase - (2 * hipotenusaDiamantado);
+        const interiorLargoDiamantado = desarrolloLargoBase - (2 * hipotenusaDiamantado);
+        
         if (
             corteDiamantado <= 0 ||
             interiorAnchoDiamantado <= 0 ||
@@ -1144,16 +1138,12 @@ function calcularDiamantado() {
         }
 
         // ESCALA DEL DIBUJO
-        const escalaDiamantado = Math.min(
-            350 / desarrolloAnchoDiamantado,
-            280 / desarrolloLargoDiamantado
-        );
-
+        const escalaDiamantado = Math.min(350 / desarrolloAnchoBase, 280 / desarrolloLargoBase);
         const x = 75;
         const y = 90;
 
-        const ancho = desarrolloAnchoDiamantado * escalaDiamantado;
-        const largo = desarrolloLargoDiamantado * escalaDiamantado;
+        const ancho = desarrolloAnchoBase * escalaDiamantado;
+        const largo = desarrolloLargoBase * escalaDiamantado;
 
         const hip = hipotenusaDiamantado * escalaDiamantado;
         const corte = corteDiamantado * escalaDiamantado;
@@ -1339,7 +1329,7 @@ ${tienePestanaDiamantado ? `
                       font-size="15"
                       fill="currentColor"
                       font-weight="bold">
-                    ${Math.round(desarrolloAnchoDiamantado)} mm
+                   ${Math.round(desarrolloAnchoBase)} mm
                 </text>
 
                 <!-- COTA DEL DESARROLLO LARGO -->
@@ -1364,7 +1354,8 @@ ${tienePestanaDiamantado ? `
                       fill="currentColor"
                       font-weight="bold"
                      transform="rotate(90 320 ${y + largo / 2})">
-                    ${Math.round(desarrolloLargoDiamantado)} mm
+                   ${Math.round(desarrolloLargoBase)} mm
+                   
                 </text>
 
                 <!-- COTA DEL ANCHO INTERIOR PUNTEADO -->
@@ -1485,7 +1476,7 @@ ${tienePestanaDiamantado ? `
         <strong>${Math.round(desarrolloAnchoDiamantado)} mm</strong></p>
 
         <p>Desarrollo del largo:
-        <strong>${Math.round(desarrolloLargoDiamantado)} mm</strong></p>
+        <strong>${Math.round(desarrolloLargoBase)} mm</strong></p>
 
                <h3>Plancha desplegada</h3>
         ${dibujoDiamantado}

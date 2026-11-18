@@ -1459,7 +1459,7 @@ ${tienePestanaDiamantado ? `
       stroke="currentColor"/>
 
 <line x1="${x + ancho - corte}"
-      y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0) + (2 * escalaDiamantado)}"
+      y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0) + (10 * escalaDiamantado)}"
       x2="${x + ancho - corte}"
       y2="${cotaFinalAnchoY + (3 * escalaDiamantado)}"
       stroke="currentColor"/>

@@ -1452,14 +1452,18 @@ ${tienePestanaDiamantado ? `
       marker-start="url(#flechaD)"
       marker-end="url(#flechaD)"/>
 
-<line x1="${x + corte}" y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0)}"
-      x2="${x + corte}" y2="${cotaFinalAnchoY}"
+<line x1="${x + corte}"
+      y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0) + (2 * escalaDiamantado)}"
+      x2="${x + corte}"
+      y2="${cotaFinalAnchoY + (3 * escalaDiamantado)}"
       stroke="currentColor"/>
 
-<line x1="${x + ancho - corte}" y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0)}"
-      x2="${x + ancho - corte}" y2="${cotaFinalAnchoY}"
+<line x1="${x + ancho - corte}"
+      y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0) + (2 * escalaDiamantado)}"
+      x2="${x + ancho - corte}"
+      y2="${cotaFinalAnchoY + (3 * escalaDiamantado)}"
       stroke="currentColor"/>
-
+      
 <text x="${x + ancho / 2}"
       y="${cotaFinalAnchoY + 15}"
       text-anchor="middle"

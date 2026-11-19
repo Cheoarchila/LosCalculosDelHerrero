@@ -1165,7 +1165,7 @@ const cotaAnchoY = tienePestanaDiamantado
     ? Math.max(10, y - profundidadPestana - (separacionCota + 25 * escalaDiamantado))
     : y - (separacionCota + 25 * escalaDiamantado);
         
-const cotaLargoX = tienePestanaDiamantado
+const cotaFinalX = tienePestanaDiamantado
     ? x + ancho + profundidadPestana + separacionCota
     : x + ancho + separacionCota;
 
@@ -1181,7 +1181,7 @@ const cotaLargoExtremoX = tienePestanaDiamantado
     ? x + ancho + profundidadPestana
     : x + ancho;
         
-const cotaFinalX = cotaLargoX + (25 * escalaDiamantado);
+const cotaLargoX = cotaFinalX + (25 * escalaDiamantado);
 const cotaFinalAnchoY = cotaAnchoY + (25 * escalaDiamantado);
         
         // RECTÁNGULO INTERIOR

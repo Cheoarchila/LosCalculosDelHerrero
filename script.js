@@ -1162,8 +1162,6 @@ const cotaAnchoX2 = tienePestanaDiamantado
     : x + ancho;
 
 const cotaAnchoY = tienePestanaDiamantado
-    const inicioVistaY = Math.min(0, cotaAnchoY - 20);
-    const altoVista = 450 - inicioVistaY;
     ? y - profundidadPestana - (separacionCota + 25 * escalaDiamantado)
     : y - (separacionCota + 25 * escalaDiamantado);
         
@@ -1214,7 +1212,7 @@ const desplazamientoY = 0;
 
         <div style="width:100%; overflow-x:auto;">
 
-    <svg viewBox="0 ${inicioVistaY} 560 ${altoVista}"
+    <svg viewBox="0 0 560 450"
          style="display:block; width:100%; max-width:560px; height:auto; margin:0 auto;"
          xmlns="http://www.w3.org/2000/svg">
 

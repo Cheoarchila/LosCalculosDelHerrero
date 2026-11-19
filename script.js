@@ -1206,13 +1206,40 @@ const contorno = `
     M ${x} ${y + largo - corte}
     L ${x} ${y + corte}
 `;
-const desplazamientoX = 75;
-const desplazamientoY = 0;
-       dibujoDiamantado = `
+// CENTRADO AUTOMÁTICO DE TODO EL DIBUJO
+const margenDibujo = 25;
+
+const limiteIzquierdo = Math.min(
+    x - (tienePestanaDiamantado ? profundidadPestana : 0),
+    cotaInteriorX - 20,
+    cotaAnchoX1
+);
+
+const limiteDerecho = Math.max(
+    x + ancho + (tienePestanaDiamantado ? profundidadPestana : 0),
+    cotaFinalX + 30
+);
+
+const limiteSuperior = Math.min(
+    cotaAnchoY - 25,
+    cotaInteriorY - 20,
+    y - (tienePestanaDiamantado ? profundidadPestana : 0)
+);
+
+const limiteInferior = Math.max(
+    y + largo + (tienePestanaDiamantado ? profundidadPestana : 0),
+    cotaLargoY2
+);
+
+const desplazamientoX =
+    280 - ((limiteIzquierdo + limiteDerecho) / 2);
+
+const desplazamientoY =
+    225 - ((limiteSuperior + limiteInferior) / 2);       dibujoDiamantado = `
 
         <div style="width:100%; overflow-x:auto;">
 
-    <svg viewBox="0 -150 560 600"
+    <svg viewBox="0 0 560 450"
          style="display:block; width:100%; max-width:560px; height:auto; margin:0 auto;"
          xmlns="http://www.w3.org/2000/svg">
 

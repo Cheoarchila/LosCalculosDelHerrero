@@ -1506,11 +1506,11 @@ ${tienePestanaDiamantado ? `
       marker-end="url(#flechaD)"/>
 
 <line x1="${cotaFinalX}" y1="${y + corte}"
-      x2="${cotaFinalX - (separacionCota + 25 * escalaDiamantado)}" y2="${y + corte}"
+      x2="${cotaFinalX - (separacionCota + 5 * escalaDiamantado)}" y2="${y + corte}"
       stroke="currentColor"/>
 
 <line x1="${cotaFinalX}" y1="${y + largo - corte}"
-      x2="${cotaFinalX - (separacionCota + 25 * escalaDiamantado)}" y2="${y + largo - corte}"
+      x2="${cotaFinalX - (separacionCota + 5 * escalaDiamantado)}" y2="${y + largo - corte}"
       stroke="currentColor"/>
 
 <text x="${cotaFinalX - 10}"

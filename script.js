@@ -1519,7 +1519,7 @@ ${tienePestanaDiamantado ? `
       font-size="13"
       fill="currentColor"
       font-weight="bold"
-      transform="rotate(-90 ${cotaFinalX - 10} ${y + largo / 2})">
+      transform="rotate(90 ${cotaFinalX - 10} ${y + largo / 2})">
     Final: ${Math.round(tienePestanaDiamantado
         ? largoDiamantado - (2 * espesorDiamantado)
         : largoDiamantado)} mm

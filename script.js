@@ -1204,70 +1204,7 @@ const contorno = `
     L ${x} ${y + corte}
 `;
 
-        // POSICIONES DE LAS COTAS
-        const cotaInteriorY = iy - 12;
-        const cotaInteriorX = ix - 15;
-        const cotaFinalY = y + largo + 30;
-     <!-- COTA DE LA MEDIDA FINAL DEL LARGO -->
-<line x1="${cotaFinalX}" y1="${y + corte}"
-      x2="${cotaFinalX}" y2="${y + largo - corte}"
-      stroke="currentColor"
-      marker-start="url(#flechaD)"
-      marker-end="url(#flechaD)"/>
-
-<line x1="${cotaFinalX}" y1="${y + corte}"
-      x2="${(tienePestanaDiamantado ? x + ancho + profundidadPestana : x + ancho) + (10 * escalaDiamantado)}"
-      y2="${y + corte}"
-      stroke="currentColor"/>
-
-<line x1="${cotaFinalX}" y1="${y + largo - corte}"
-      x2="${(tienePestanaDiamantado ? x + ancho + profundidadPestana : x + ancho) + (10 * escalaDiamantado)}"
-      y2="${y + largo - corte}"
-      stroke="currentColor"/>
-
-<text x="${cotaFinalX + 10}"
-      y="${y + largo / 2}"
-      text-anchor="middle"
-      font-size="13"
-      fill="currentColor"
-      font-weight="bold"
-      transform="rotate(90 ${cotaFinalX + 10} ${y + largo / 2})">
-    Final: ${Math.round(tienePestanaDiamantado
-        ? largoDiamantado - (2 * espesorDiamantado)
-        : largoDiamantado)} mm
-</text>
-
-// CENTRADO DE TODO EL DIBUJO
-const margenDibujo = 30;
-
-const limiteIzquierdo = Math.min(
-    cotaFinalX - 25,
-    x - (tienePestanaDiamantado ? profundidadPestana : 0)
-);
-
-const limiteDerecho = Math.max(
-    cotaLargoX + 35,
-    x + ancho + (tienePestanaDiamantado ? profundidadPestana : 0)
-);
-
-const limiteSuperior = Math.min(
-    cotaAnchoY - 25,
-    y - (tienePestanaDiamantado ? profundidadPestana : 0)
-);
-
-const limiteInferior = Math.max(
-    cotaFinalAnchoY + 25,
-    y + largo + (tienePestanaDiamantado ? profundidadPestana : 0)
-);
-
-const desplazamientoX =
-    280 - ((limiteIzquierdo + limiteDerecho) / 2);
-
-const desplazamientoY =
-    225 - ((limiteSuperior + limiteInferior) / 2);
-        
-
-        dibujoDiamantado = `
+       dibujoDiamantado = `
 
         <div style="width:100%; overflow-x:auto; text-align:center;">
 

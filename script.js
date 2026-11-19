@@ -1212,7 +1212,7 @@ const desplazamientoY = 0;
 
         <div style="width:100%; overflow-x:auto;">
 
-    <svg viewBox="0 0 560 450"
+    <svg viewBox="0 -150 560 600"
          style="display:block; width:100%; max-width:560px; height:auto; margin:0 auto;"
          xmlns="http://www.w3.org/2000/svg">
 

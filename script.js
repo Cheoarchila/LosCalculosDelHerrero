@@ -1180,12 +1180,15 @@ const cotaLargoY2 = tienePestanaDiamantado
 const cotaLargoExtremoX = tienePestanaDiamantado
     ? x + ancho + profundidadPestana
     : x + ancho;
-
+        
+const cotaFinalX = cotaLargoX + (25 * escalaDiamantado);
 const cotaFinalAnchoY = cotaAnchoY + (25 * escalaDiamantado);
         
         // RECTÁNGULO INTERIOR
         const ix = x + hip;
         const iy = y + hip;
+        const cotaInteriorY = iy - 12;
+        const cotaInteriorX = ix - 15;
         const iw = ancho - (2 * hip);
         const ih = largo - (2 * hip);
 
@@ -1203,7 +1206,8 @@ const contorno = `
     M ${x} ${y + largo - corte}
     L ${x} ${y + corte}
 `;
-
+const desplazamientoX = 0;
+const desplazamientoY = 0;
        dibujoDiamantado = `
 
         <div style="width:100%; overflow-x:auto; text-align:center;">

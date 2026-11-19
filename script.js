@@ -1474,7 +1474,7 @@ ${tienePestanaDiamantado ? `
                     ${Math.round(interiorLargoDiamantado)} mm
                 </text>
 
-                <!-- COTA DE LA MEDIDA FINAL DEL ANCHO -->
+               <!-- COTA DE LA MEDIDA FINAL DEL ANCHO -->
 <line x1="${x + corte}" y1="${cotaFinalAnchoY}"
       x2="${x + ancho - corte}" y2="${cotaFinalAnchoY}"
       stroke="currentColor"
@@ -1482,19 +1482,19 @@ ${tienePestanaDiamantado ? `
       marker-end="url(#flechaD)"/>
 
 <line x1="${x + corte}"
-      y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0) + (10 * escalaDiamantado)}"
+      y1="${y - (tienePestanaDiamantado ? profundidadPestana : 0) - (10 * escalaDiamantado)}"
       x2="${x + corte}"
       y2="${cotaFinalAnchoY + (3 * escalaDiamantado)}"
       stroke="currentColor"/>
 
 <line x1="${x + ancho - corte}"
-      y1="${y + largo + (tienePestanaDiamantado ? profundidadPestana : 0) + (10 * escalaDiamantado)}"
+      y1="${y - (tienePestanaDiamantado ? profundidadPestana : 0) - (10 * escalaDiamantado)}"
       x2="${x + ancho - corte}"
       y2="${cotaFinalAnchoY + (3 * escalaDiamantado)}"
       stroke="currentColor"/>
-      
+
 <text x="${x + ancho / 2}"
-      y="${cotaFinalAnchoY + 15}"
+      y="${cotaFinalAnchoY - 10}"
       text-anchor="middle"
       font-size="13"
       fill="currentColor"

@@ -1213,6 +1213,35 @@ const contorno = `
       const cotaFinalX = tienePestanaDiamantado
     ? x - profundidadPestana - separacionCota
     : x - separacionCota;
+
+// CENTRADO DE TODO EL DIBUJO
+const margenDibujo = 30;
+
+const limiteIzquierdo = Math.min(
+    cotaFinalX - 25,
+    x - (tienePestanaDiamantado ? profundidadPestana : 0)
+);
+
+const limiteDerecho = Math.max(
+    cotaLargoX + 35,
+    x + ancho + (tienePestanaDiamantado ? profundidadPestana : 0)
+);
+
+const limiteSuperior = Math.min(
+    cotaAnchoY - 25,
+    y - (tienePestanaDiamantado ? profundidadPestana : 0)
+);
+
+const limiteInferior = Math.max(
+    cotaFinalAnchoY + 25,
+    y + largo + (tienePestanaDiamantado ? profundidadPestana : 0)
+);
+
+const desplazamientoX =
+    280 - ((limiteIzquierdo + limiteDerecho) / 2);
+
+const desplazamientoY =
+    225 - ((limiteSuperior + limiteInferior) / 2);
         
 
         dibujoDiamantado = `
@@ -1234,6 +1263,8 @@ const contorno = `
                               fill="currentColor"/>
                     </marker>
                 </defs>
+
+                <g transform="translate(${desplazamientoX}, ${desplazamientoY})">
 
                 <!-- CONTORNO DE LA PLANCHA -->
                 <path d="${contorno}"
@@ -1500,6 +1531,9 @@ ${tienePestanaDiamantado ? `
         ? largoDiamantado - (2 * espesorDiamantado)
         : largoDiamantado)} mm
 </text>
+
+</g>
+
             </svg>
         </div>
         `;

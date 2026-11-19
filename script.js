@@ -1478,7 +1478,7 @@ ${tienePestanaDiamantado ? `
 
 <!-- COTA DE LA MEDIDA FINAL DEL ANCHO -->
 <line x1="${x + corte}" y1="${cotaFinalAnchoY}"
-      x2="${x + ancho - corte}" y2="${cotaFinalAnchoY + (13 * escalaDiamantado)}"
+      x2="${x + ancho - corte}" y2="${cotaFinalAnchoY}"
       stroke="currentColor"
       marker-start="url(#flechaD)"
       marker-end="url(#flechaD)"/>
@@ -1486,7 +1486,7 @@ ${tienePestanaDiamantado ? `
 <line x1="${x + corte}"
       y1="${y - (tienePestanaDiamantado ? profundidadPestana : 0) - (10 * escalaDiamantado)}"
       x2="${x + corte}"
-      y2="${cotaFinalAnchoY + (13 * escalaDiamantado)}"
+      y2="${cotaFinalAnchoY}"
       stroke="currentColor"/>
 
 <line x1="${x + ancho - corte}"

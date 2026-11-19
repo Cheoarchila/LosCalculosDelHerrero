@@ -1210,11 +1210,11 @@ const desplazamientoX = 0;
 const desplazamientoY = 0;
        dibujoDiamantado = `
 
-        <div style="width:100%; overflow-x:auto; text-align:center;">
+        <div style="width:100%; overflow-x:auto;">
 
-            <svg viewBox="0 0 560 450"
-                 style="width:100%; max-width:600px; height:auto;"
-                 xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 560 450"
+         style="display:block; width:100%; max-width:560px; height:auto; margin:0 auto;"
+         xmlns="http://www.w3.org/2000/svg">
 
                 <defs>
                     <marker id="flechaD"

@@ -1206,7 +1206,7 @@ const contorno = `
     M ${x} ${y + largo - corte}
     L ${x} ${y + corte}
 `;
-const desplazamientoX = 0;
+const desplazamientoX = 75;
 const desplazamientoY = 0;
        dibujoDiamantado = `
 

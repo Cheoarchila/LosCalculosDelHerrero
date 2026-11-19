@@ -1208,9 +1208,34 @@ const contorno = `
         const cotaInteriorY = iy - 12;
         const cotaInteriorX = ix - 15;
         const cotaFinalY = y + largo + 30;
-      const cotaFinalX = tienePestanaDiamantado
-    ? x - profundidadPestana - separacionCota
-    : x - separacionCota;
+     <!-- COTA DE LA MEDIDA FINAL DEL LARGO -->
+<line x1="${cotaFinalX}" y1="${y + corte}"
+      x2="${cotaFinalX}" y2="${y + largo - corte}"
+      stroke="currentColor"
+      marker-start="url(#flechaD)"
+      marker-end="url(#flechaD)"/>
+
+<line x1="${cotaFinalX}" y1="${y + corte}"
+      x2="${(tienePestanaDiamantado ? x + ancho + profundidadPestana : x + ancho) + (10 * escalaDiamantado)}"
+      y2="${y + corte}"
+      stroke="currentColor"/>
+
+<line x1="${cotaFinalX}" y1="${y + largo - corte}"
+      x2="${(tienePestanaDiamantado ? x + ancho + profundidadPestana : x + ancho) + (10 * escalaDiamantado)}"
+      y2="${y + largo - corte}"
+      stroke="currentColor"/>
+
+<text x="${cotaFinalX + 10}"
+      y="${y + largo / 2}"
+      text-anchor="middle"
+      font-size="13"
+      fill="currentColor"
+      font-weight="bold"
+      transform="rotate(90 ${cotaFinalX + 10} ${y + largo / 2})">
+    Final: ${Math.round(tienePestanaDiamantado
+        ? largoDiamantado - (2 * espesorDiamantado)
+        : largoDiamantado)} mm
+</text>
 
 // CENTRADO DE TODO EL DIBUJO
 const margenDibujo = 30;

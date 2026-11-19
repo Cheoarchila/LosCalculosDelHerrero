@@ -1162,9 +1162,9 @@ const cotaAnchoX2 = tienePestanaDiamantado
     : x + ancho;
 
 const cotaAnchoY = tienePestanaDiamantado
-    ? y - profundidadPestana - separacionCota
-    : y - separacionCota;
-
+    ? y - profundidadPestana - (separacionCota + 25 * escalaDiamantado)
+    : y - (separacionCota + 25 * escalaDiamantado);
+        
 const cotaLargoX = tienePestanaDiamantado
     ? x + ancho + profundidadPestana + separacionCota
     : x + ancho + separacionCota;

@@ -1271,7 +1271,7 @@ const desplazamientoY =
                     width="${iw}"
                     height="${ih}"
                     fill="none"
-                    stroke="#e09b32"
+                    stroke="currentColor"
                     stroke-width="1.8"
                     stroke-dasharray="6 5"/>
 
@@ -1423,23 +1423,23 @@ ${tienePestanaDiamantado ? `
                 <!-- COTA DEL ANCHO INTERIOR PUNTEADO -->
                 <line x1="${ix}" y1="${cotaInteriorY}"
                       x2="${ix + iw}" y2="${cotaInteriorY}"
-                      stroke="#e09b32"
+                      stroke="currentColor"
                       marker-start="url(#flechaD)"
                       marker-end="url(#flechaD)"/>
 
                 <line x1="${ix}" y1="${cotaInteriorY}"
                       x2="${ix}" y2="${iy}"
-                      stroke="#e09b32"/>
+                      stroke="currentColor"/>
 
                 <line x1="${ix + iw}" y1="${cotaInteriorY}"
                       x2="${ix + iw}" y2="${iy}"
-                      stroke="#e09b32"/>
+                      stroke="currentColor"/>
 
                 <text x="${ix + iw / 2}"
                       y="${cotaInteriorY - 5}"
                       text-anchor="middle"
                       font-size="12"
-                      fill="#e09b32"
+                      fill="currentColor"
                       font-weight="bold">
                     ${Math.round(interiorAnchoDiamantado)} mm
                 </text>
@@ -1447,23 +1447,23 @@ ${tienePestanaDiamantado ? `
                 <!-- COTA DEL LARGO INTERIOR PUNTEADO -->
                 <line x1="${cotaInteriorX}" y1="${iy}"
                       x2="${cotaInteriorX}" y2="${iy + ih}"
-                      stroke="#e09b32"
+                      stroke="currentColor"
                       marker-start="url(#flechaD)"
                       marker-end="url(#flechaD)"/>
 
                 <line x1="${cotaInteriorX}" y1="${iy}"
                       x2="${ix}" y2="${iy}"
-                      stroke="#e09b32"/>
+                      stroke="currentColor"/>
 
                 <line x1="${cotaInteriorX}" y1="${iy + ih}"
                       x2="${ix}" y2="${iy + ih}"
-                      stroke="#e09b32"/>
+                      stroke="currentColor"/>
 
                 <text x="${cotaInteriorX - 5}"
                       y="${iy + ih / 2}"
                       text-anchor="middle"
                       font-size="12"
-                      fill="#e09b32"
+                      fill="currentColor"
                       font-weight="bold"
                       transform="rotate(-90 ${cotaInteriorX - 5} ${iy + ih / 2})">
                     ${Math.round(interiorLargoDiamantado)} mm

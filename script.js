@@ -1524,7 +1524,6 @@ ${tienePestanaDiamantado ? `
         ? largoDiamantado - (2 * espesorDiamantado)
         : largoDiamantado)} mm
 </text>
-
 </g>
 
             </svg>

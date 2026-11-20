@@ -1513,7 +1513,7 @@ ${tienePestanaDiamantado ? `
       x2="${cotaFinalX - (separacionCota + 5 * escalaDiamantado)}" y2="${y + largo - corte}"
       stroke="currentColor"/>
 
-<text x="${cotaFinalX - 10}"
+<text x="${cotaFinalX + 10}"
       y="${y + largo / 2}"
       text-anchor="middle"
       font-size="13"
